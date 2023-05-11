@@ -18,7 +18,7 @@ const items = [
   {
     key: '/admin/home',
     icon: <HomeOutlined />,
-    label: '首页测试',
+    label: '首页',
   },
   {
     key: '/admin/article',
