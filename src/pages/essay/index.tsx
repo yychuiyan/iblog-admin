@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form, Image, Input, message, Modal, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, ExclamationCircleOutlined, EditOutlined } from '@ant-design/icons';
@@ -8,8 +8,8 @@ import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import './index.less';
 import dayjs from 'dayjs';
-import TextArea from 'antd/es/input/TextArea';
-import UploadImage from '@/components/upload';
+import UploadImage from '@/components/uploadMany';
+import Editor from 'for-editor';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
@@ -28,13 +28,13 @@ const Essay = (props: any) => {
         return <p className='essay_content' style={{ width: '12rem' }}>{record.content}</p>;
       },
     },
-    {
-      title: '封面',
-      dataIndex: 'cover',
-      render: (_, record: any) => {
-        return <Image width={50} height={50} src={record.cover}></Image>;
-      },
-    },
+    // {
+    //   title: '封面',
+    //   dataIndex: 'cover',
+    //   render: (_, record: any) => {
+    //     return <Image width={50} height={50} src={record.cover}></Image>;
+    //   },
+    // },
     {
       title: '创建时间',
       dataIndex: 'createTime',
@@ -97,11 +97,13 @@ const Essay = (props: any) => {
   // 更新窗口
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
   // 图片
-  const [imageList, setImageList] = useState<any>();
+  const [imageList, setImageList] = useState<any>([]);
   // 图片地址
   const [imgUrl, setImgUrl] = useState<any>([]);
   // 保存当前更新的数据
   const [editData, setEditData] = useState({});
+  // 定义ref
+  const editorRef = useRef<any>();
   // 获取随笔列表数据
   useEffect(() => {
     props.BlogActions.asyncEssayListAction(currentPage, pageSize, '').then((res: any) => {
@@ -123,14 +125,23 @@ const Essay = (props: any) => {
     // 校验form值 校验通过后获取值
     await form.validateFields();
     // 获取表单值
-    const data = form.getFieldsValue();
-    if (typeof imageList === 'object') {
-      data.cover = imageList.url;
-    } else {
-      data.cover = imageList;
+    const datas = form.getFieldsValue();
+
+    datas.cover = imageList
+
+    let coverArray = datas.cover.map((item: any) => {
+      return {
+        name: item.name,
+        thumbUrl: item.thumbUrl
+      }
+    })
+    let newData = {
+      content: datas.content,
+      cover: coverArray
     }
+
     props.BlogActions.asyncEssayInsertAction({
-      ...data,
+      ...newData,
     }).then((res: any) => {
       message.success('新增随笔成功!')
       setImageList('')
@@ -154,34 +165,29 @@ const Essay = (props: any) => {
     setIsModalUpdateOpen(false);
   };
   const EssayUpdate = (item: any) => {
-    let data = item.cover === undefined ? '' : item.cover;
-    let start = data.indexOf('images');
-    let name = data.substring(start);
-    item.cover = [
-      {
-        name: name,
-        thumbUrl: item.cover,
-      },
-    ];
+    setImageList(item)
     setImgUrl(item.cover);
     setIsModalUpdateOpen(true);
     updateForm.setFieldsValue(item);
     setEditData(item);
   };
+  // 提交更新
   const handleUpdateConfirm = () => {
-    let value = updateForm.getFieldsValue();
-    if (typeof imageList === 'object') {
-      value.cover = imageList.url;
-    } else {
-      value.cover = imageList;
-    }
-    if (imageList === undefined) {
-      value.cover = imgUrl[0].thumbUrl;
+    let data = updateForm.getFieldsValue();
+
+    let coverArray = imageList.cover.map((item: any) => {
+      return {
+        name: item.name,
+        thumbUrl: item.thumbUrl
+      }
+    })
+    let newData = {
+      content: data.content,
+      cover: coverArray
     }
 
     props.BlogActions.asyncEssayUpdateAction({
-      content: value.content,
-      cover: value.cover,
+      ...newData,
       //@ts-ignore
       id: editData._id,
     }).then((res: any) => {
@@ -243,15 +249,37 @@ const Essay = (props: any) => {
       setPageSize(pageSize);
     });
   };
+
   // 获取图片信息
   const handleChange = (data: any) => {
-    setImageList(data);
+    let newData = {
+      name: data.name,
+      thumbUrl: data.url
+    }
+    imageList?.cover ? imageList.cover.push(newData) : imageList.push(newData)
+    setImageList(imageList)
   };
   // 获取移除的图片信息
   const handleRemove = (val: any) => {
-    setImageList('')
-    setImgUrl([])
+    let newImageList = imageList?.cover ? imageList.cover.filter((item: any) => item.name !== val.name) : imageList.filter((item: any) => item.name !== val.name)
+    // imageList.push('')
+    setImageList({
+      ...imageList,
+      cover: newImageList
+    })
   }
+  // 添加图片
+  const addImg = (file: any) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    // 上传图片接口
+    props.BlogActions.asyncFileUploadAction(formData).then((res: any) => {
+      if (res) {
+        // 如果返回值
+        editorRef.current.$img2Url(file.name, res.url);
+      }
+    });
+  };
   return (
     <div>
       <div className="cate_title">
@@ -268,6 +296,7 @@ const Essay = (props: any) => {
       </div>
       <Modal
         open={isModalOpen}
+        className='modal-essay'
         title={<div style={{ textAlign: 'left' }}>添加随笔</div>}
         okText="新增"
         cancelText="取消"
@@ -279,14 +308,20 @@ const Essay = (props: any) => {
         <Form form={form} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item
             name="content"
-            label="随笔"
+            // label="随笔"
             rules={[{ required: true, message: '随笔不能为空' }]}
           >
-            <TextArea autoSize={{ minRows: 6 }} />
+            <Editor
+              preview={false}
+              subfield={false}
+              placeholder="请撰写文章"
+              ref={editorRef}
+              addImg={file => addImg(file)}
+            />
           </Form.Item>
           <Form.Item
             name="cover"
-            label="随笔图片"
+            // label="随笔图片"
           >
             {/* @ts-ignore */}
             <UploadImage handleChange={handleChange} handleRemove={handleRemove} />
@@ -297,6 +332,7 @@ const Essay = (props: any) => {
         open={isModalUpdateOpen}
         title={<div style={{ textAlign: 'left' }}>更新随笔</div>}
         okText="更新"
+        className='modal-essay'
         cancelText="取消"
         onCancel={handleUpdateCancel}
         onOk={() => {
@@ -306,14 +342,20 @@ const Essay = (props: any) => {
         <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item
             name="content"
-            label="随笔"
+            // label="随笔"
             rules={[{ required: true, message: '随笔不能为空' }]}
           >
-            <TextArea autoSize={{ minRows: 6 }} />
+            <Editor
+              preview={false}
+              subfield={false}
+              placeholder="请撰写文章"
+              ref={editorRef}
+              addImg={file => addImg(file)}
+            />
           </Form.Item>
           <Form.Item
             name="cover"
-            label="文章封面"
+            // label="文章封面"
           >
             {/* @ts-ignore */}
             <UploadImage imgUrlArr={imgUrl} handleChange={handleChange} handleRemove={handleRemove} />
