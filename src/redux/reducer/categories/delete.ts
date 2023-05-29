@@ -1,8 +1,9 @@
 import { CATEGORY_DELETE } from '@/redux/constants';
+import { Action } from '@/types/comm';
 const userState = {
-  categoryId: '',
+  categoryId: String,
 };
-export const CategoryDeleteReducer = (state = userState, action: any) => {
+export const CategoryDeleteReducer = (state = userState, action: Action) => {
   switch (action.type) {
     case CATEGORY_DELETE:
       return {

@@ -1,8 +1,9 @@
 import { TAG_DELETE } from '@/redux/constants';
+import { Action } from '@/types/comm';
 const userState = {
-  tagId: '',
+  tagId: String,
 };
-export const TagDeleteReducer = (state = userState, action: any) => {
+export const TagDeleteReducer = (state = userState, action: Action) => {
   switch (action.type) {
     case TAG_DELETE:
       return {

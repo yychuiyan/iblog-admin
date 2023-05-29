@@ -1,5 +1,13 @@
 import axios from '@/utils/http';
-import { Api } from '@/types/api';
+import {
+  AboutAdd,
+  AboutUpdate,
+  Api,
+  CategoryUpdate,
+  MessageStatus,
+  TagsUpdate,
+  TagsUpdateStatus,
+} from '@/types/api';
 
 const baseURL = `/api/v1`;
 // 接口请求
@@ -21,83 +29,89 @@ const api: Api = {
     return axios.get(`${baseURL}/categories?page=${page}&&pageSize=${pageSize}&&name=${name}`);
   },
   // 新增分类
-  categoryAdd(title: any) {
-    return axios.post(`${baseURL}/categories`, title);
+  categoryAdd(name: string) {
+    return axios.post(`${baseURL}/categories`, name);
   },
   // 删除分类
-  categoryDelete(id: any) {
+  categoryDelete(id: string) {
     return axios.delete(`${baseURL}/categories/${id}`);
   },
   // 更新分类
-  categoryUpdate(params: any) {
+  categoryUpdate(params: CategoryUpdate) {
     return axios.put(`${baseURL}/categories/${params.id}`, params);
   },
   // 获取标签列表
-  getTagList(page: any, pageSize: any, name: any) {
+  getTagList(page: number, pageSize: number, name: string) {
     return axios.get(`${baseURL}/tags?page=${page}&&pageSize=${pageSize}&&name=${name}`);
   },
   // 新增标签
-  tagAdd(params: any) {
-    return axios.post(`${baseURL}/tags`, params);
+  tagAdd(name: string) {
+    return axios.post(`${baseURL}/tags`, name);
   },
   // 删除标签
-  tagDelete(id: any) {
+  tagDelete(id: string) {
     return axios.delete(`${baseURL}/tags/${id}`);
   },
   // 更新标签
-  tagUpdate(params: any) {
+  tagUpdate(params: TagsUpdate) {
     return axios.put(`${baseURL}/tags/${params.id}`, params);
   },
   // 更新标签状态
-  tagStatusUpdate(params: any) {
+  tagStatusUpdate(params: TagsUpdateStatus) {
     return axios.put(`${baseURL}/tags/status/${params.id}`, params);
   },
   // 获取关于信息
-  getAboutList(params: any) {
-    return axios.get(`${baseURL}/about?checked=${params}`);
+  getAboutList(checked: boolean) {
+    return axios.get(`${baseURL}/about?checked=${checked}`);
   },
   // 新增关于
-  aboutAdd(params: any) {
+  aboutAdd(params: AboutAdd) {
     return axios.post(`${baseURL}/about`, params);
   },
   // 修改关于
-  aboutUpdate(params: any) {
+  aboutUpdate(params: AboutUpdate) {
     return axios.put(`${baseURL}/about/${params.id}`, params);
   },
   // 用户列表
-  getUserInfo(page: any, pageSize: any, nickName: any) {
+  getUserInfo(page: number, pageSize: number, nickName: string) {
     return axios.get(`${baseURL}/user?page=${page}&&pageSize=${pageSize}&&nickName=${nickName}`);
   },
   // 删除用户
-  userDelete(id: any) {
+  userDelete(id: string) {
     return axios.delete(`${baseURL}/user/${id}`);
   },
   // 评论列表
-  getComments(page: any, pageSize: any, articleTitle: any) {
+  getComments(page: number, pageSize: number, articleTitle: string) {
     return axios.get(
       `${baseURL}/comment?page=${page}&&pageSize=${pageSize}&&articleTitle=${articleTitle}`
     );
   },
   // 删除评论
-  commentDelete(id: any) {
+  commentDelete(id: string) {
     return axios.delete(`${baseURL}/comment/${id}`);
   },
   // 留言列表
-  getMessages(page: any, pageSize: any, auditStatus: any) {
+  getMessages(page: number, pageSize: number, auditStatus: boolean) {
     return axios.get(
       `${baseURL}/message?page=${page}&&pageSize=${pageSize}&&auditStatus=${auditStatus}`
     );
   },
   // 修改审核状态
-  messageStatusUpdate(params: any) {
+  messageStatusUpdate(params: MessageStatus) {
     return axios.put(`${baseURL}/message/${params.id}`, params);
   },
   // 删除留言
-  messageDelete(id: any) {
+  messageDelete(id: string) {
     return axios.delete(`${baseURL}/message/${id}`);
   },
   // 文章列表
-  getArticleList(page: any, pageSize: any, title: any, status: any, publishStatus: any) {
+  getArticleList(
+    page: number,
+    pageSize: number,
+    title: string,
+    status: boolean,
+    publishStatus: boolean
+  ) {
     return axios.get(
       `${baseURL}/articles?page=${page}&&pageSize=${pageSize}&&title=${title}&&status=${status}&&publishStatus=${publishStatus}`
     );

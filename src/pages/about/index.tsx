@@ -3,27 +3,38 @@ import { Form, Row, Col, message, Switch } from 'antd';
 import './index.less';
 import Save from '@/components/save';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import Editor from 'for-editor';
+import { AxiosResponse } from 'axios';
+interface DataConter {
+  _id: string;
+  isChecked: boolean;
+  updateTime: string;
+  createTime: string;
+  content: string;
+}
+interface AboutData {
+  data: DataConter[];
+}
 const About = (props: any) => {
   // 表单数据
   const [form] = Form.useForm();
   // 获取接口数据
-  const [aboutData, setAboutData] = useState<any>();
+  const [aboutData, setAboutData] = useState<DataConter[]>([]);
   // 定义ref
-  const editorRef = useRef<any>();
+  const editorRef = useRef<Editor>(null);
   // 上次保存时间
-  const [updateTime, setUpdateTime] = useState();
+  const [updateTime, setUpdateTime] = useState<string>();
   // 是否选中
   const [isChecked, setIsChecked] = useState(false);
   // 关于列表
   useEffect(() => {
-    props.BlogActions.asyncAboutListAction(isChecked).then((res: any) => {
+    props.BlogActions.asyncAboutListAction(isChecked).then((res: AxiosResponse<AboutData>) => {
       let { data } = res.data;
-      let updateTime = data.map((item: any) => item.updateTime).join('');
-      let createTime = data.map((item: any) => item.createTime).join('');
-      let content = data.map((item: any) => item.content).join('');
+      let updateTime = data.map((item) => item.updateTime).join('');
+      let createTime = data.map((item) => item.createTime).join('');
+      let content = data.map((item) => item.content).join('');
       setTimeout(() => {
         form.setFieldsValue({ content: content });
       }, 500);
@@ -42,13 +53,13 @@ const About = (props: any) => {
           id: aboutData[0]._id,
           content: val.content,
           checked: isChecked,
-        }).then((res: any) => {
+      }).then(() => {
           message.success('更新成功');
-          props.BlogActions.asyncAboutListAction(isChecked).then((res: any) => {
-            let { data } = res.data;
-            let updateTime = data.map((item: any) => item.updateTime).join('');
-            let createTime = data.map((item: any) => item.createTime).join('');
-            let content = data.map((item: any) => item.content).join('');
+        props.BlogActions.asyncAboutListAction(isChecked).then((res: AxiosResponse<AboutData>) => {
+          let { data } = res.data;
+          let updateTime = data.map((item) => item.updateTime).join('');
+          let createTime = data.map((item) => item.createTime).join('');
+          let content = data.map((item) => item.content).join('');
             setTimeout(() => {
               form.setFieldsValue({ content: content });
             }, 500);
@@ -59,13 +70,13 @@ const About = (props: any) => {
       : props.BlogActions.asyncAboutAddAction({
           checked: isChecked,
           content: val.content,
-        }).then((res: any) => {
+      }).then(() => {
           message.success('新增成功');
-          props.BlogActions.asyncAboutListAction(isChecked).then((res: any) => {
-            let { data } = res.data;
-            let updateTime = data.map((item: any) => item.updateTime).join('');
-            let createTime = data.map((item: any) => item.createTime).join('');
-            let content = data.map((item: any) => item.content).join('');
+        props.BlogActions.asyncAboutListAction(isChecked).then((res: AxiosResponse<AboutData>) => {
+          let { data } = res.data;
+          let updateTime = data.map((item) => item.updateTime).join('');
+          let createTime = data.map((item) => item.createTime).join('');
+          let content = data.map((item) => item.content).join('');
             setTimeout(() => {
               form.setFieldsValue({ content: content });
             }, 500);
@@ -77,7 +88,7 @@ const About = (props: any) => {
   // 点击刷新时重新调用接口
   const onRefresh = () => {
     message.success('刷新成功');
-    props.BlogActions.asyncAboutListAction().then((res: any) => {
+    props.BlogActions.asyncAboutListAction().then((res: AboutData) => {
       // 将值设置进表单数据中
       form.setFieldsValue(res.data);
     });
@@ -127,7 +138,7 @@ const About = (props: any) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     BlogActions: bindActionCreators(BlogActions, dispatch),
   };

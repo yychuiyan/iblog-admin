@@ -1,8 +1,9 @@
 import { ABOUT_ADD } from '@/redux/constants';
+import { Action } from '@/types/comm';
 const userState = {
-  about: {},
+  about: [],
 };
-export const AboutAddReducer = (state = userState, action: any) => {
+export const AboutAddReducer = (state = userState, action: Action) => {
   switch (action.type) {
     case ABOUT_ADD:
       return {

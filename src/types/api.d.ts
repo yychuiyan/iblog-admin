@@ -23,36 +23,67 @@ interface UserRegister {
   password: string;
   verifyPassword: string;
 }
-
+interface CategoryUpdate {
+  id: string;
+  name: string;
+  articleNum: number;
+  createTime: string;
+  updateTime: string;
+}
+interface TagsUpdate {
+  id: string;
+  name: string;
+}
+interface TagsUpdateStatus {
+  status: boolean;
+  id: string;
+}
+interface AboutAdd {
+  isChecked: boolean;
+  updateTime: string;
+  createTime: string;
+  content: string;
+}
+interface AboutUpdate {
+  id: string;
+  isChecked: boolean;
+  updateTime: string;
+  createTime: string;
+  content: string;
+}
+interface MessageStatus {
+  id: string;
+  auditStatus: boolean;
+}
 export interface Api {
   Login(params: LoginParams): Promise<ApiResponse>;
   userRegister(params: UserRegister): Promise<ApiResponse>;
   loginOut(): Promise<ApiResponse>;
   getCategories(page: number, pageSize: number, name: string): Promise<ApiResponse>;
-  categoryAdd(title: string): Promise<ApiResponse>;
-  categoryDelete(id: number): Promise<ApiResponse>;
-  categoryUpdate(params: any): Promise<ApiResponse>;
+  categoryAdd(name: string): Promise<ApiResponse>;
+  categoryDelete(id: string): Promise<ApiResponse>;
+  categoryUpdate(params: CategoryUpdate): Promise<ApiResponse>;
   getTagList(page: number, pageSize: number, name: string): Promise<ApiResponse>;
-  tagAdd(params: any): Promise<ApiResponse>;
-  tagDelete(id: number): Promise<ApiResponse>;
-  tagUpdate(params: any): Promise<ApiResponse>;
-  tagStatusUpdate(params: any): Promise<ApiResponse>;
-  getAboutList(params: boolean): Promise<ApiResponse>;
-  aboutAdd(params: any): Promise<ApiResponse>;
-  aboutUpdate(params: any): Promise<ApiResponse>;
+  tagAdd(name: string): Promise<ApiResponse>;
+  tagDelete(id: string): Promise<ApiResponse>;
+  tagUpdate(params: TagsUpdate): Promise<ApiResponse>;
+  tagStatusUpdate(params: TagsUpdateStatus): Promise<ApiResponse>;
+  getAboutList(checked: boolean): Promise<ApiResponse>;
+  aboutAdd(params: AboutAdd): Promise<ApiResponse>;
+  aboutUpdate(params: AboutUpdate): Promise<ApiResponse>;
   getUserInfo(page: number, pageSize: number, nickName: string): Promise<ApiResponse>;
-  userDelete(id: number): Promise<ApiResponse>;
+  userDelete(id: string): Promise<ApiResponse>;
   getComments(page: number, pageSize: number, articleTitle: string): Promise<ApiResponse>;
-  commentDelete(id: number): Promise<ApiResponse>;
-  getMessages(page: number, pageSize: number, auditStatus: string): Promise<ApiResponse>;
-  messageStatusUpdate(params: any): Promise<ApiResponse>;
-  messageDelete(id: number): Promise<ApiResponse>;
+  commentDelete(id: string): Promise<ApiResponse>;
+  getMessages(page: number, pageSize: number, auditStatus: boolean): Promise<ApiResponse>;
+  messageStatusUpdate(params: MessageStatus): Promise<ApiResponse>;
+  messageDelete(id: string): Promise<ApiResponse>;
   getArticleList(
     page: number,
     pageSize: number,
     title: string,
-    status: string,
-    publishStatus: string
+    status: boolean,
+    publishStatus: boolean
   ): Promise<ApiResponse>;
   getArticleListAll(status: string, publishStatus: string): Promise<ApiResponse>;
   articleAdd(params: any): Promise<ApiResponse>;

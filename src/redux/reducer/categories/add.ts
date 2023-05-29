@@ -1,7 +1,7 @@
 import { CATEGORY_ADD } from '@/redux/constants';
 import { Action } from '@/types/comm';
 const userState = {
-  categories: {},
+  categories: String,
 };
 export const CategoryAddReducer = (state = userState, action: Action) => {
   switch (action.type) {

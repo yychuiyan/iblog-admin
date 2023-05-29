@@ -8,7 +8,7 @@ import {
   CloseOutlined,
 } from '@ant-design/icons';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import './index.less';
@@ -16,13 +16,26 @@ import dayjs from 'dayjs';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
-  key: React.Key;
+  key?: React.Key;
   _id: string;
   name: string;
-  articleNum: Number;
-  createTime: string;
-  updateTime: string;
-  status: boolean;
+  articleNum?: Number;
+  createTime?: string;
+  updateTime?: string;
+  status?: Boolean;
+
+}
+interface TagsData {
+  status: boolean | undefined;
+  _id: string;
+  code: number;
+  name: string | undefined;
+  data: {
+    data: DataType[];
+    totalCount: number;
+    page: number;
+    pageSize: number;
+  };
 }
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 interface EditableRowProps {
@@ -109,14 +122,10 @@ const EditableCell: React.FC<EditableCellProps> = ({
   return <td {...restProps}>{childNode}</td>;
 };
 
-interface DataType {
-  key: React.Key;
-  name: string;
-}
 const ArticleTag = (props: any) => {
   // 保存
-  const handleSave = (record: any) => {
-    let rawData: any = list.map((item: any) => {
+  const handleSave = (record: DataType) => {
+    let rawData = list.map((item: DataType) => {
       if (item._id === record._id) {
         return {
           _id: item._id,
@@ -136,7 +145,7 @@ const ArticleTag = (props: any) => {
       id: record._id,
     }).then(() => {
       // 刷新列表数据
-      props.BlogActions.asyncTagsAction(currentPage, pageSize, '').then((res: any) => {
+      props.BlogActions.asyncTagsAction(currentPage, pageSize, '').then((res: TagsData) => {
         // 获取标签
         let { data, totalCount, page, pageSize } = res.data;
         setList(data);
@@ -146,12 +155,12 @@ const ArticleTag = (props: any) => {
       });
     });
   };
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<DataType | TagsData> = [
     {
       title: '标签名称(点击可编辑)',
       dataIndex: 'name',
       key: 'name',
-      onCell: (record: DataType) => ({
+      onCell: (record) => ({
         record,
         editable: record.status,
         dataIndex: 'name',
@@ -219,7 +228,7 @@ const ArticleTag = (props: any) => {
   // 表单数据
   const [form] = Form.useForm();
   // 标签列表
-  const [list, setList] = useState([]);
+  const [list, setList] = useState<DataType[]>([]);
   // 分页总数
   const [total, setTotal] = useState(0);
   // 当前第几页
@@ -230,7 +239,7 @@ const ArticleTag = (props: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // 获取标签列表数据
   useEffect(() => {
-    props.BlogActions.asyncTagsAction(currentPage, pageSize, '').then((res: any) => {
+    props.BlogActions.asyncTagsAction(currentPage, pageSize, '').then((res: TagsData) => {
       // 获取标签
       let { data, totalCount, page, pageSize } = res.data;
       setList(data);
@@ -255,34 +264,34 @@ const ArticleTag = (props: any) => {
     setIsModalOpen(false);
     props.BlogActions.asyncTagAddAction({
       name: data.title,
-    }).then((res: any) => {
+    }).then(() => {
       // 重新调用查询接口
-      props.BlogActions.asyncTagsAction(currentPage, pageSize, '').then((res: any) => {
+      props.BlogActions.asyncTagsAction(currentPage, pageSize, '').then((res: TagsData) => {
         let { data } = res.data;
         setList(data);
       });
     });
   };
   // 关闭窗口
-  const handleCancel = (e: any) => {
+  const handleCancel = () => {
     form.resetFields();
     setIsModalOpen(false);
   };
   // 删除标签
-  const TagDelete = (item: any) => {
+  const TagDelete = (item: DataType) => {
     confirm({
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
-        props.BlogActions.asyncTagDeleteAction(item._id).then((res: any) => {
+        props.BlogActions.asyncTagDeleteAction(item._id).then((res: TagsData) => {
           if (res.code === 40001) {
             message.error('文章中有关联该标签信息，请解绑后再次执行删除操作');
             return false;
           }
           // 先将要删除的数据过滤掉再调用接口
-          setList(list.filter((it: any) => it._id !== item._id));
+          setList(list.filter((it) => it._id !== item._id));
           message.success('标签删除成功');
-          props.BlogActions.asyncTagsAction(currentPage, pageSize, '').then((res: any) => {
+          props.BlogActions.asyncTagsAction(currentPage, pageSize, '').then((res: TagsData) => {
             // 获取标签
             let { data, totalCount, page, pageSize } = res.data;
             setList(data);
@@ -295,11 +304,11 @@ const ArticleTag = (props: any) => {
     });
   };
   // 更新标签状态
-  const onChangeStatus = (checked: any, row: any) => {
+  const onChangeStatus = (checked: boolean, row: TagsData) => {
     props.BlogActions.asyncTagStatusUpdateAction({
       status: row.status,
       id: row._id,
-    }).then((res: any) => {
+    }).then((res: TagsData) => {
       if (res.code === 40001) {
         message.error('文章中有关联该标签信息，请解绑后再次执行状态变更操作');
         return false;
@@ -314,7 +323,7 @@ const ArticleTag = (props: any) => {
   };
   // 搜索
   const onSearch = (value: string) => {
-    props.BlogActions.asyncTagsAction(currentPage, pageSize, value).then((res: any) => {
+    props.BlogActions.asyncTagsAction(currentPage, pageSize, value).then((res: TagsData) => {
       let { data, totalCount, page, pageSize } = res.data;
       setList(data);
       setTotal(totalCount);
@@ -323,9 +332,9 @@ const ArticleTag = (props: any) => {
     });
   };
   // 跳转页数据显示
-  const onChangePage = (page: any, pageSize: any, params = '') => {
+  const onChangePage = (page: number, pageSize: number, params = '') => {
     // 重新调用接口将参数传递过去
-    props.BlogActions.asyncTagsAction(page, pageSize, params).then((res: any) => {
+    props.BlogActions.asyncTagsAction(page, pageSize, params).then((res: TagsData) => {
       // 获取列表数据
       let { data } = res.data;
       setList(data);
@@ -372,7 +381,7 @@ const ArticleTag = (props: any) => {
       <Table
         columns={columns}
         dataSource={list}
-        rowKey={(item: any) => {
+        rowKey={(item) => {
           return item._id + Date.now();
         }}
         pagination={false}
@@ -393,7 +402,7 @@ const ArticleTag = (props: any) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     BlogActions: bindActionCreators(BlogActions, dispatch),
   };

@@ -1,8 +1,9 @@
 import { TAG_STATUS_UPDATE } from '@/redux/constants';
+import { Action } from '@/types/comm';
 const userState = {
-  tags: [],
+  tags: Boolean,
 };
-export const TagStatusUpdateReducer = (state = userState, action: any) => {
+export const TagStatusUpdateReducer = (state = userState, action: Action) => {
   switch (action.type) {
     case TAG_STATUS_UPDATE:
       return {

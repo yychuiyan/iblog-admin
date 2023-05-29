@@ -24,7 +24,7 @@ import {
   CloudDownloadOutlined,
 } from '@ant-design/icons';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import dayjs from 'dayjs';
@@ -33,40 +33,51 @@ import { statusPublish } from '@/utils/constants';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
+  isTop: boolean | undefined;
+  introduction?: string;
+  title?: string;
+  cover: string | undefined;
   key: React.Key;
-  _id?: string;
+  _id: string;
   username?: string;
   avatar?: string;
   articleIds?: string[];
-  tags?: string[];
+  tags: string[];
   views?: number;
   comment?: number;
   like?: number;
   collect?: number;
-  publishStatus?: number;
+  publishStatus: number;
   createTime: string;
   updateTime: string;
+}
+interface ArticleData {
+  msg: string;
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  data: DataType[];
 }
 const ArticleList = (props: any) => {
   const columns: ColumnsType<DataType> = [
     {
       title: '文章标题',
       dataIndex: 'title',
-      render: (_, record: any) => {
+      render: (_, record) => {
         return <p className='introduction' style={{ width: '8rem' }}>{record.title}</p>;
       },
     },
     {
       title: '封面',
       dataIndex: 'cover',
-      render: (_, record: any) => {
+      render: (_, record) => {
         return <Image width={50} height={50} src={record.cover}></Image>;
       },
     },
     {
       title: '简介',
       dataIndex: 'introduction',
-      render: (_, record: any) => {
+      render: (_, record) => {
         return <p className='introduction' style={{ width: '20rem' }}>{record.introduction}</p>;
       },
     },
@@ -77,7 +88,7 @@ const ArticleList = (props: any) => {
     {
       title: '标签',
       dataIndex: 'tags',
-      render: (_, record: any) => {
+      render: (_, record) => {
         let result = [];
         for (let i = 0; i < record.tags.length; i += 3) {
           result.push(record.tags.slice(i, i + 3)); // i=0 0-3 i=3 3-6
@@ -85,7 +96,7 @@ const ArticleList = (props: any) => {
         return result.map((item, index) => {
           return (
             <div style={{ marginBottom: 10 }} key={index}>
-              {item.map((sub: any) => (
+              {item.map((sub) => (
                 <Tag style={{ marginRight: 10 }} key={sub}>
                   {sub}
                 </Tag>
@@ -115,7 +126,7 @@ const ArticleList = (props: any) => {
     {
       title: '置顶',
       dataIndex: 'isTop',
-      render: (_, record: any) => {
+      render: (_, record) => {
         return (
           <Switch
             checkedChildren={<CheckOutlined />}
@@ -129,7 +140,7 @@ const ArticleList = (props: any) => {
     {
       title: '发布状态',
       dataIndex: 'publishStatus',
-      render: (_, record: any) => {
+      render: (_, record) => {
         const published: any = {
           1: '已发布',
           2: '未发布',
@@ -220,7 +231,7 @@ const ArticleList = (props: any) => {
   // 表单数据
   const [form] = Form.useForm();
   // 文章列表
-  const [list, setList] = useState([]);
+  const [list, setList] = useState<DataType[]>([]);
   // 分页总数
   const [total, setTotal] = useState(0);
   // 当前第几页
@@ -231,9 +242,9 @@ const ArticleList = (props: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // 获取文章列表数据
   useEffect(() => {
-    props.BlogActions.asyncArticleListAction(currentPage, pageSize, '', 0, 0).then((res: any) => {
+    props.BlogActions.asyncArticleListAction(currentPage, pageSize, '', 0, 0).then((res: ArticleData) => {
       // 获取文章
-      let { data, totalCount, page, pageSize } = res.data;
+      let { data, totalCount, page, pageSize } = res.data as unknown as ArticleData;
       setList(data);
       setTotal(totalCount);
       setCurrentPage(page);
@@ -256,21 +267,21 @@ const ArticleList = (props: any) => {
     setIsModalOpen(false);
     props.BlogActions.asyncCategoryAddAction({
       name: data.title,
-    }).then((res: any) => {
+    }).then(() => {
       // 重新调用查询接口
-      props.BlogActions.asyncArticleListAction(currentPage, pageSize, '', 0, 0).then((res: any) => {
-        let { data } = res.data;
+      props.BlogActions.asyncArticleListAction(currentPage, pageSize, '', 0, 0).then((res: ArticleData) => {
+        let { data } = res.data as unknown as ArticleData;
         setList(data);
       });
     });
   };
   // 关闭窗口
-  const handleCancel = (e: any) => {
+  const handleCancel = () => {
     form.resetFields();
     setIsModalOpen(false);
   };
   // 发布
-  const onChangePublishStatus = (record: any) => {
+  const onChangePublishStatus = (record: DataType) => {
     if (record.publishStatus === 2) {
       record.publishStatus = 1;
       // 修改发布状态
@@ -291,30 +302,30 @@ const ArticleList = (props: any) => {
     }
   };
   // 更新文章置顶状态
-  const onChangeStatus = (checked: any, row: any) => {
+  const onChangeStatus = (checked: boolean, row: DataType) => {
     row.isTop = checked
     setList([...list]);
     props.BlogActions.asyncArticleTopStatusUpdateAction({
       isTop: checked,
       id: row._id,
-    }).then((res: any) => {
+    }).then((res: ArticleData) => {
       message.success(res.msg)
     });
   };
   // 删除文章
-  const categoryDelete = (item: any) => {
+  const categoryDelete = (item: DataType) => {
     confirm({
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
         // 先将要删除的数据过滤掉再调用接口
-        setList(list.filter((it: any) => it._id !== item._id));
+        setList(list.filter((it) => it._id !== item._id));
         message.success('文章删除成功');
         props.BlogActions.asyncArticleDeleteAction(item._id).then(() => {
           props.BlogActions.asyncArticleListAction(currentPage, pageSize, '', 0, 0).then(
-            (res: any) => {
+            (res: ArticleData) => {
               // 获取文章
-              let { data, totalCount, page, pageSize } = res.data;
+              let { data, totalCount, page, pageSize } = res.data as unknown as ArticleData;
               setList(data);
               setTotal(totalCount);
               setCurrentPage(page);
@@ -328,8 +339,8 @@ const ArticleList = (props: any) => {
   // 搜索
   const onSearch = (value: string) => {
     props.BlogActions.asyncArticleListAction(currentPage, pageSize, value, 0, 0).then(
-      (res: any) => {
-        let { data, totalCount, page, pageSize } = res.data;
+      (res: ArticleData) => {
+        let { data, totalCount, page, pageSize } = res.data as unknown as ArticleData;
         setList(data);
         setTotal(totalCount);
         setCurrentPage(page);
@@ -338,10 +349,10 @@ const ArticleList = (props: any) => {
     );
   };
   // 发布状态搜索
-  const handleChange = (publishStatus: number, a: any) => {
+  const handleChange = (publishStatus: number) => {
     props.BlogActions.asyncArticleListAction(currentPage, pageSize, '', 0, publishStatus).then(
-      (res: any) => {
-        let { data, totalCount, page, pageSize } = res.data;
+      (res: ArticleData) => {
+        let { data, totalCount, page, pageSize } = res.data as unknown as ArticleData;
         setList(data);
         setTotal(totalCount);
         setCurrentPage(page);
@@ -350,11 +361,11 @@ const ArticleList = (props: any) => {
     );
   };
   // 跳转页数据显示
-  const onChangePage = (page: any, pageSize: any) => {
+  const onChangePage = (page: number, pageSize: number) => {
     // 重新调用接口将参数传递过去
-    props.BlogActions.asyncArticleListAction(page, pageSize, '', '', '').then((res: any) => {
+    props.BlogActions.asyncArticleListAction(page, pageSize, '', '', '').then((res: ArticleData) => {
       // 获取列表数据
-      let { data } = res.data;
+      let { data } = res.data as unknown as ArticleData;
       setList(data);
       // 切换行
       setCurrentPage(page);
@@ -410,7 +421,7 @@ const ArticleList = (props: any) => {
       <Table
         columns={columns}
         dataSource={list}
-        rowKey={(item: any) => {
+        rowKey={(item) => {
           return item._id + Date.now();
         }}
         pagination={false}
@@ -425,7 +436,7 @@ const ArticleList = (props: any) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     BlogActions: bindActionCreators(BlogActions, dispatch),
   };

@@ -46,7 +46,16 @@ import {
   ESSAY_UPDATE,
 } from '@/redux/constants';
 import jwtDecode from 'jwt-decode';
-import { LoginParams, UserRegister } from '@/types/api';
+import {
+  AboutAdd,
+  AboutUpdate,
+  CategoryUpdate,
+  LoginParams,
+  MessageStatus,
+  TagsUpdate,
+  TagsUpdateStatus,
+  UserRegister,
+} from '@/types/api';
 // 登录
 export function asyncLoginAction(data: LoginParams) {
   return async (dispatch: Dispatch) => {
@@ -120,8 +129,8 @@ export const asyncCategoryAddAction = (data: string) => {
   };
 };
 // 删除分类
-export const asyncCategoryDeleteAction = (id: any) => {
-  return async (dispatch: any) => {
+export const asyncCategoryDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.categoryDelete(id);
     dispatch({
       type: CATEGORY_DELETE,
@@ -131,8 +140,8 @@ export const asyncCategoryDeleteAction = (id: any) => {
   };
 };
 // 更新分类
-export const asyncCategoryUpdateAction = (params: any) => {
-  return async (dispatch: any) => {
+export const asyncCategoryUpdateAction = (params: CategoryUpdate) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.categoryUpdate(params);
     dispatch({
       type: CATEGORY_UPDATE,
@@ -142,8 +151,8 @@ export const asyncCategoryUpdateAction = (params: any) => {
   };
 };
 // 获取标签
-export const asyncTagsAction = (page: any, pageSize: any, name: any) => {
-  return async (dispatch: any) => {
+export const asyncTagsAction = (page: number, pageSize: number, name: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.getTagList(page, pageSize, name);
     dispatch({
       type: TAG_LIST,
@@ -153,8 +162,8 @@ export const asyncTagsAction = (page: any, pageSize: any, name: any) => {
   };
 };
 // 新增标签
-export const asyncTagAddAction = (data: any) => {
-  return async (dispatch: any) => {
+export const asyncTagAddAction = (data: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.tagAdd(data);
     dispatch({
       type: TAG_ADD,
@@ -164,8 +173,8 @@ export const asyncTagAddAction = (data: any) => {
   };
 };
 // 删除标签
-export const asyncTagDeleteAction = (id: any) => {
-  return async (dispatch: any) => {
+export const asyncTagDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.tagDelete(id);
     dispatch({
       type: TAG_DELETE,
@@ -175,8 +184,8 @@ export const asyncTagDeleteAction = (id: any) => {
   };
 };
 // 更新标签
-export const asyncTagUpdateAction = (params: any) => {
-  return async (dispatch: any) => {
+export const asyncTagUpdateAction = (params: TagsUpdate) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.tagUpdate(params);
     dispatch({
       type: TAG_UPDATE,
@@ -186,8 +195,8 @@ export const asyncTagUpdateAction = (params: any) => {
   };
 };
 // 更新状态
-export const asyncTagStatusUpdateAction = (params: any) => {
-  return async (dispatch: any) => {
+export const asyncTagStatusUpdateAction = (params: TagsUpdateStatus) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.tagStatusUpdate(params);
     dispatch({
       type: TAG_STATUS_UPDATE,
@@ -197,9 +206,9 @@ export const asyncTagStatusUpdateAction = (params: any) => {
   };
 };
 // 获取关于信息
-export const asyncAboutListAction = (params: any) => {
-  return async (dispatch: any) => {
-    const res = await api.getAboutList(params);
+export const asyncAboutListAction = (checked: boolean) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.getAboutList(checked);
     dispatch({
       type: ABOUT_LIST,
       about: res.data,
@@ -208,8 +217,8 @@ export const asyncAboutListAction = (params: any) => {
   };
 };
 // 新增关于
-export const asyncAboutAddAction = (data: any) => {
-  return async (dispatch: any) => {
+export const asyncAboutAddAction = (data: AboutAdd) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.aboutAdd(data);
     dispatch({
       type: ABOUT_ADD,
@@ -219,8 +228,8 @@ export const asyncAboutAddAction = (data: any) => {
   };
 };
 // 更新标签
-export const asyncAboutUpdateAction = (params: any) => {
-  return async (dispatch: any) => {
+export const asyncAboutUpdateAction = (params: AboutUpdate) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.aboutUpdate(params);
     dispatch({
       type: ABOUT_UPDATE,
@@ -230,8 +239,8 @@ export const asyncAboutUpdateAction = (params: any) => {
   };
 };
 // 用户列表
-export const asyncUserListAction = (page: any, pageSize: any, name: any) => {
-  return async (dispatch: any) => {
+export const asyncUserListAction = (page: number, pageSize: number, name: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.getUserInfo(page, pageSize, name);
     dispatch({
       type: USER_LIST,
@@ -241,8 +250,8 @@ export const asyncUserListAction = (page: any, pageSize: any, name: any) => {
   };
 };
 // 删除用户
-export const asyncUserDeleteAction = (id: any) => {
-  return async (dispatch: any) => {
+export const asyncUserDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.userDelete(id);
     dispatch({
       type: USER_DELETE,
@@ -252,8 +261,8 @@ export const asyncUserDeleteAction = (id: any) => {
   };
 };
 // 评论列表
-export const asyncCommentsAction = (page: any, pageSize: any, articleTitle: any) => {
-  return async (dispatch: any) => {
+export const asyncCommentsAction = (page: number, pageSize: number, articleTitle: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.getComments(page, pageSize, articleTitle);
     dispatch({
       type: ARTICLE_COMMENT,
@@ -263,8 +272,8 @@ export const asyncCommentsAction = (page: any, pageSize: any, articleTitle: any)
   };
 };
 // 删除评论
-export const asyncCommentDeleteAction = (id: any) => {
-  return async (dispatch: any) => {
+export const asyncCommentDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.commentDelete(id);
     dispatch({
       type: COMMENT_DELETE,
@@ -274,8 +283,8 @@ export const asyncCommentDeleteAction = (id: any) => {
   };
 };
 // 留言列表
-export const asyncMessageListAction = (page: any, pageSize: any, auditStatus: any) => {
-  return async (dispatch: any) => {
+export const asyncMessageListAction = (page: number, pageSize: number, auditStatus: boolean) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.getMessages(page, pageSize, auditStatus);
     dispatch({
       type: MESSAGE_LIST,
@@ -285,8 +294,8 @@ export const asyncMessageListAction = (page: any, pageSize: any, auditStatus: an
   };
 };
 // 留言审核状态
-export const asyncMessageStatusUpdateAction = (params: any) => {
-  return async (dispatch: any) => {
+export const asyncMessageStatusUpdateAction = (params: MessageStatus) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.messageStatusUpdate(params);
     dispatch({
       type: MESSAGE_AUDIT_STATUS,
@@ -296,8 +305,8 @@ export const asyncMessageStatusUpdateAction = (params: any) => {
   };
 };
 // 删除留言
-export const asyncMessageDeleteAction = (id: any) => {
-  return async (dispatch: any) => {
+export const asyncMessageDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.messageDelete(id);
     dispatch({
       type: MESSAGE_DELETE,
@@ -308,11 +317,11 @@ export const asyncMessageDeleteAction = (id: any) => {
 };
 // 文章列表
 export const asyncArticleListAction = (
-  page: any,
-  pageSize: any,
-  title: any,
-  status: any,
-  publishStatus: any
+  page: number,
+  pageSize: number,
+  title: string,
+  status: boolean,
+  publishStatus: boolean
 ) => {
   return async (dispatch: any) => {
     const res = await api.getArticleList(page, pageSize, title, status, publishStatus);

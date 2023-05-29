@@ -3,7 +3,7 @@ import { Badge, Button, Form, message, Modal, Radio, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, ExclamationCircleOutlined, AuditOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import { auditStatusOptions } from '@/utils/constants';
@@ -11,13 +11,20 @@ import dayjs from 'dayjs';
 import './index.less';
 const { confirm } = Modal;
 interface DataType {
-  key: React.Key;
-  _id?: string;
+  key?: React.Key;
+  _id: string;
   nickName?: string;
   avatar?: string;
   messageTime: string;
   auditTime: string;
-  children?: DataType[];
+  children?: DataType[] | string | undefined;
+}
+interface MessageData {
+  _id: string;
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  data: DataType[];
 }
 const Message = (props: any) => {
   const columns: ColumnsType<DataType> = [
@@ -111,7 +118,7 @@ const Message = (props: any) => {
   ];
 
   // 留言列表
-  const [list, setList] = useState([]);
+  const [list, setList] = useState<DataType[]>([]);
   // 分页总数
   const [total, setTotal] = useState(0);
   // 当前第几页
@@ -128,9 +135,9 @@ const Message = (props: any) => {
   const [auditContent, setAuditContent] = useState<any>();
   // 获取留言列表数据
   useEffect(() => {
-    props.BlogActions.asyncMessageListAction(currentPage, pageSize, 0).then((res: any) => {
+    props.BlogActions.asyncMessageListAction(currentPage, pageSize, 0).then((res: MessageData) => {
       // 获取留言
-      let { data, totalCount, page, pageSize } = res.data;
+      let { data, totalCount, page, pageSize } = res.data as unknown as MessageData;
       // 无子节点情况下，按钮
       data.forEach((item: any) => {
         if (item.children.length === 0) {
@@ -145,18 +152,18 @@ const Message = (props: any) => {
   }, [currentPage, pageSize, props.BlogActions]);
 
   // 删除留言
-  const messageDelete = (item: any) => {
+  const messageDelete = (item: { _id: string; }) => {
     confirm({
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
         // 先将要删除的数据过滤掉再调用接口
-        setList(list.filter((it: any) => it._id !== item._id));
+        setList(list.filter((it) => it._id !== item._id));
         message.success('留言删除成功');
         props.BlogActions.asyncMessageDeleteAction(item._id).then(() => {
-          props.BlogActions.asyncMessageListAction(currentPage, pageSize, 0).then((res: any) => {
+          props.BlogActions.asyncMessageListAction(currentPage, pageSize, 0).then((res: MessageData) => {
             // 获取留言
-            let { data, totalCount, page, pageSize } = res.data;
+            let { data, totalCount, page, pageSize } = res.data as unknown as MessageData;
             setList(data);
             setTotal(totalCount);
             setCurrentPage(page);
@@ -167,7 +174,7 @@ const Message = (props: any) => {
     });
   };
   // 审核
-  const messageAudit = (item: any) => {
+  const messageAudit = (item: { _id: any; auditStatus?: any; }) => {
     setTimeout(() => {
       form.setFieldsValue({
         auditStatus: +item.auditStatus,
@@ -192,9 +199,9 @@ const Message = (props: any) => {
         auditStatus: val.auditStatus,
         id: id,
       }).then(() => {
-        props.BlogActions.asyncMessageListAction(currentPage, pageSize, 0).then((res: any) => {
+        props.BlogActions.asyncMessageListAction(currentPage, pageSize, 0).then((res: MessageData) => {
           // 获取留言
-          let { data, totalCount, page, pageSize } = res.data;
+          let { data, totalCount, page, pageSize } = res.data as unknown as MessageData;
           setList(data);
           setTotal(totalCount);
           setCurrentPage(page);
@@ -206,7 +213,7 @@ const Message = (props: any) => {
       });
     } else {
       if (auditContent.children) {
-        auditContent?.children.map((audit: any) =>
+        auditContent?.children.map((audit: MessageData) =>
           props.BlogActions.asyncMessageStatusUpdateAction({
             auditStatus: val.auditStatus,
             id: audit._id,
@@ -217,9 +224,9 @@ const Message = (props: any) => {
           auditStatus: val.auditStatus,
           id: id,
         }).then(() => {
-          props.BlogActions.asyncMessageListAction(currentPage, pageSize, 0).then((res: any) => {
+          props.BlogActions.asyncMessageListAction(currentPage, pageSize, 0).then((res: MessageData) => {
             // 获取留言
-            let { data, totalCount, page, pageSize } = res.data;
+            let { data, totalCount, page, pageSize } = res.data as unknown as MessageData;
             setList(data);
             setTotal(totalCount);
             setCurrentPage(page);
@@ -235,9 +242,9 @@ const Message = (props: any) => {
           auditStatus: val.auditStatus,
           id: id,
         }).then(() => {
-          props.BlogActions.asyncMessageListAction(currentPage, pageSize, 0).then((res: any) => {
+          props.BlogActions.asyncMessageListAction(currentPage, pageSize, 0).then((res: MessageData) => {
             // 获取留言
-            let { data, totalCount, page, pageSize } = res.data;
+            let { data, totalCount, page, pageSize } = res.data as unknown as MessageData;
             setList(data);
             setTotal(totalCount);
             setCurrentPage(page);
@@ -251,17 +258,17 @@ const Message = (props: any) => {
     }
   };
   // 关闭窗口
-  const handleCancel = (e: any) => {
+  const handleCancel = () => {
     form.resetFields();
     setIsModalOpen(false);
   };
 
   // 跳转页数据显示
-  const onChangePage = (page: any, pageSize: any, params = '') => {
+  const onChangePage = (page: number, pageSize: number, params = '') => {
     // 重新调用接口将参数传递过去
-    props.BlogActions.asyncCommentsAction(page, pageSize, params).then((res: any) => {
+    props.BlogActions.asyncCommentsAction(page, pageSize, params).then((res: MessageData) => {
       // 获取列表数据
-      let { data } = res.data;
+      let { data } = res.data as unknown as MessageData;
       setList(data);
       // 切换行
       setCurrentPage(page);
@@ -300,7 +307,7 @@ const Message = (props: any) => {
         </Form>
       </Modal>
       <Table
-        rowKey={(item: any) => {
+        rowKey={(item) => {
           return item._id;
         }}
         columns={columns}
@@ -319,7 +326,7 @@ const Message = (props: any) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     BlogActions: bindActionCreators(BlogActions, dispatch),
   };
