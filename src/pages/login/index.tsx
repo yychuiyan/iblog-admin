@@ -4,15 +4,14 @@ import { Button, Form, Input, Card, message } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as authActions from '@/redux/actionCreator';
+import { LoginFormValues } from '@/types/login';
 import './index.less';
 function Login(props: any) {
-  const onFinish = (values: any) => {
-    props.authActions
-      .asyncLoginAction({
+  const onFinish = (values: LoginFormValues) => {
+    props.authActions.asyncLoginAction({
         username: values.username,
         password: values.password,
-      })
-      .then((res: any) => {
+    }).then((res: { code: number; }) => {
         if (res.code === 0) {
           message.success('登录成功，跳转到首页');
           props.history.replace('/admin/home');
@@ -25,7 +24,7 @@ function Login(props: any) {
     props.history.push('/admin/register');
   };
   // 用户名校验
-  const validateName = (_rule: any, value: any, callback: any) => {
+  const validateName = (_rule: any, value: string, callback: (error?: string) => void): Promise<void> => {
     if (value === '') {
       return Promise.reject('用户名不能为空');
     } else if (value.length < 2 || value.length > 20) {
@@ -40,7 +39,7 @@ function Login(props: any) {
     }
   };
   // 密码校验
-  const validatePassword = (_rule: any, value: any, callback: any) => {
+  const validatePassword = (_rule: any, value: string, callback: (error?: string) => void): Promise<void> => {
     if (value === '') {
       return Promise.reject('密码不能为空');
     } else if (value.length < 6 || value.length > 20) {

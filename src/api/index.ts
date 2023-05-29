@@ -1,22 +1,15 @@
 import axios from '@/utils/http';
-declare module 'axios' {
-  interface AxiosResponse {
-    error: number;
-    msg: string;
-    code: number;
-    // 这里追加你的参数
-  }
-  export function create(config?: AxiosRequestConfig): AxiosInstance;
-}
+import { Api } from '@/types/api';
+
 const baseURL = `/api/v1`;
 // 接口请求
-const api = {
+const api: Api = {
   // 登录
-  Login(params: any) {
+  Login(params) {
     return axios.post(`${baseURL}/admin/login`, params);
   },
   // 注册
-  userRegister(params: any) {
+  userRegister(params) {
     return axios.post(`${baseURL}/register`, params);
   },
   // 退出登录
@@ -24,12 +17,12 @@ const api = {
     return axios.post(`${baseURL}/admin/logout`);
   },
   // 获取分类列表
-  getCategories(page: any, pageSize: any, name: any) {
+  getCategories(page, pageSize, name) {
     return axios.get(`${baseURL}/categories?page=${page}&&pageSize=${pageSize}&&name=${name}`);
   },
   // 新增分类
-  categoryAdd(params: any) {
-    return axios.post(`${baseURL}/categories`, params);
+  categoryAdd(title: any) {
+    return axios.post(`${baseURL}/categories`, title);
   },
   // 删除分类
   categoryDelete(id: any) {

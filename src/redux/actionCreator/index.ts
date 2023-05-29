@@ -1,5 +1,6 @@
 import { message } from 'antd';
 import api from '@/api';
+import { Dispatch } from 'redux';
 import {
   USER_LOGIN,
   USER_REGISTER,
@@ -45,9 +46,10 @@ import {
   ESSAY_UPDATE,
 } from '@/redux/constants';
 import jwtDecode from 'jwt-decode';
+import { LoginParams, UserRegister } from '@/types/api';
 // 登录
-export function asyncLoginAction(data: any) {
-  return async (dispatch: any) => {
+export function asyncLoginAction(data: LoginParams) {
+  return async (dispatch: Dispatch) => {
     const res = await api.Login(data);
     if (res.data === null) {
       message.error('用户名或密码错误，请再次确认');
@@ -66,8 +68,8 @@ export function asyncLoginAction(data: any) {
   };
 }
 // 注册
-export const asyncRegisterAction = (data: any) => {
-  return async (dispatch: any) => {
+export const asyncRegisterAction = (data: UserRegister) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.userRegister(data);
     dispatch({
       type: USER_REGISTER,
@@ -78,7 +80,7 @@ export const asyncRegisterAction = (data: any) => {
 };
 // 登出
 export const asyncLoginOutAction = () => {
-  return async (dispatch: any) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.loginOut();
     dispatch({
       type: LOGINOUT,
@@ -88,15 +90,15 @@ export const asyncLoginOutAction = () => {
 };
 // 侧边栏展示和隐藏
 export const changeCollapsed = () => {
-  return (dispatch: any) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: CHANGE_COLLAPSED,
     });
   };
 };
 // 获取分类
-export const asyncCategoriesAction = (page: any, pageSize: any, name: any) => {
-  return async (dispatch: any) => {
+export const asyncCategoriesAction = (page: number, pageSize: number, name: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.getCategories(page, pageSize, name);
     dispatch({
       type: CATEGORY_LIST,
@@ -107,8 +109,8 @@ export const asyncCategoriesAction = (page: any, pageSize: any, name: any) => {
 };
 
 // 新增分类
-export const asyncCategoryAddAction = (data: any) => {
-  return async (dispatch: any) => {
+export const asyncCategoryAddAction = (data: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.categoryAdd(data);
     dispatch({
       type: CATEGORY_ADD,
