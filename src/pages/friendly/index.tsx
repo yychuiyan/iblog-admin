@@ -3,7 +3,7 @@ import { Button, Form, Image, Input, message, Modal, Table, Tooltip } from 'antd
 import type { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, ExclamationCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import './index.less';
@@ -13,12 +13,20 @@ const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
   key: React.Key;
-  _id?: string;
+  _id: string;
   username?: string;
   avatar?: string;
   articleIds?: string[];
   createTime: string;
   updateTime: string;
+}
+interface FriendlyData {
+  avatar: any;
+  _id: string;
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  data: DataType[];
 }
 const UserInfo = (props: any) => {
   const columns: ColumnsType<DataType> = [
@@ -95,7 +103,7 @@ const UserInfo = (props: any) => {
   // 更新表单
   const [updateForm] = Form.useForm();
   // 友链列表
-  const [list, setList] = useState([]);
+  const [list, setList] = useState<DataType[]>([]);
   // 分页总数
   const [total, setTotal] = useState(0);
   // 当前第几页
@@ -114,9 +122,9 @@ const UserInfo = (props: any) => {
   const [imgUrl, setImgUrl] = useState<any>([]);
   // 获取友链列表数据
   useEffect(() => {
-    props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: any) => {
+    props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: FriendlyData) => {
       // 获取友链
-      let { data, totalCount, page, pageSize } = res.data;
+      let { data, totalCount, page, pageSize } = res.data as unknown as FriendlyData;
       setList(data);
       setTotal(totalCount);
       setCurrentPage(page);
@@ -141,10 +149,10 @@ const UserInfo = (props: any) => {
     }
     props.BlogActions.asyncFriendlyInsertAction({
       ...data,
-    }).then((res: any) => {
+    }).then(() => {
       // 重新调用查询接口
-      props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: any) => {
-        let { data, totalCount, page, pageSize } = res.data;
+      props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: FriendlyData) => {
+        let { data, totalCount, page, pageSize } = res.data as unknown as FriendlyData;
         setList(data);
         setTotal(totalCount);
         setCurrentPage(page);
@@ -155,17 +163,17 @@ const UserInfo = (props: any) => {
     setIsModalOpen(false);
   };
   // 关闭窗口
-  const handleCancel = (e: any) => {
+  const handleCancel = () => {
     form.resetFields();
     setIsModalOpen(false);
   };
   // 关闭窗口
-  const handleUpdateCancel = (e: any) => {
+  const handleUpdateCancel = () => {
     updateForm.resetFields();
     setIsModalUpdateOpen(false);
   };
   // 点击更新
-  const friendlyUpdate = (item: any) => {
+  const friendlyUpdate = (item: FriendlyData) => {
     setIsModalUpdateOpen(true);
     updateForm.setFieldsValue(item);
 
@@ -200,11 +208,11 @@ const UserInfo = (props: any) => {
       desc: value.desc,
       //@ts-ignore
       id: editData._id,
-    }).then((res: any) => {
+    }).then(() => {
       message.success('更新成功');
-      props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: any) => {
+      props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: FriendlyData) => {
         // 获取友链
-        let { data, totalCount, page, pageSize } = res.data;
+        let { data, totalCount, page, pageSize } = res.data as unknown as FriendlyData;
         setList(data);
         setTotal(totalCount);
         setCurrentPage(page);
@@ -215,18 +223,18 @@ const UserInfo = (props: any) => {
     });
   };
   // 删除友链
-  const friendlyDelete = (item: any) => {
+  const friendlyDelete = (item: FriendlyData) => {
     confirm({
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
         // 先将要删除的数据过滤掉再调用接口
-        setList(list.filter((it: any) => it._id !== item._id));
+        setList(list.filter((it) => it._id !== item._id));
         message.success('友链删除成功');
         props.BlogActions.asyncFriendlyDeleteAction(item._id).then(() => {
-          props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: any) => {
+          props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: FriendlyData) => {
             // 获取友链
-            let { data, totalCount, page, pageSize } = res.data;
+            let { data, totalCount, page, pageSize } = res.data as unknown as FriendlyData;
             setList(data);
             setTotal(totalCount);
             setCurrentPage(page);
@@ -238,8 +246,8 @@ const UserInfo = (props: any) => {
   };
   // 搜索
   const onSearch = (value: string) => {
-    props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, value).then((res: any) => {
-      let { data, totalCount, page, pageSize } = res.data;
+    props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, value).then((res: FriendlyData) => {
+      let { data, totalCount, page, pageSize } = res.data as unknown as FriendlyData;
       setList(data);
       setTotal(totalCount);
       setCurrentPage(page);
@@ -247,11 +255,11 @@ const UserInfo = (props: any) => {
     });
   };
   // 跳转页数据显示
-  const onChangePage = (page: any, pageSize: any, params = '') => {
+  const onChangePage = (page: number, pageSize: number, params = '') => {
     // 重新调用接口将参数传递过去
-    props.BlogActions.asyncUserListAction(page, pageSize, params).then((res: any) => {
+    props.BlogActions.asyncUserListAction(page, pageSize, params).then((res: FriendlyData) => {
       // 获取列表数据
-      let { data } = res.data;
+      let { data } = res.data as unknown as FriendlyData;
       setList(data);
       // 切换行
       setCurrentPage(page);
@@ -260,7 +268,7 @@ const UserInfo = (props: any) => {
     });
   };
   // 获取图片信息
-  const handleChange = (data: any) => {
+  const handleChange = (data: string) => {
     setImageList(data);
   };
   return (
@@ -341,7 +349,7 @@ const UserInfo = (props: any) => {
       <Table
         columns={columns}
         dataSource={list}
-        rowKey={(item: any) => {
+        rowKey={(item) => {
           return item._id + Date.now();
         }}
         pagination={false}
@@ -356,7 +364,7 @@ const UserInfo = (props: any) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     BlogActions: bindActionCreators(BlogActions, dispatch),
   };

@@ -34,7 +34,6 @@ import {
   ARTICLE_UPDATE,
   ARTICLE_DETAIL,
   ARTICLE_DELETE,
-  ARTICLE_COLLECT_UPDATE,
   FILE_UPLOAD,
   FRIENDLY_LIST,
   FRIENDLY_DELETE,
@@ -49,12 +48,21 @@ import jwtDecode from 'jwt-decode';
 import {
   AboutAdd,
   AboutUpdate,
+  IArticleAdd,
   CategoryUpdate,
   LoginParams,
   MessageStatus,
   TagsUpdate,
   TagsUpdateStatus,
   UserRegister,
+  IArticleStatus,
+  IArticleTopStatus,
+  IArticlePublishStatus,
+  IArticleUpdate,
+  FriendlyAdd,
+  FriendlyUpdate,
+  EssayAdd,
+  EssayUpdate,
 } from '@/types/api';
 // 登录
 export function asyncLoginAction(data: LoginParams) {
@@ -320,8 +328,8 @@ export const asyncArticleListAction = (
   page: number,
   pageSize: number,
   title: string,
-  status: boolean,
-  publishStatus: boolean
+  status: number,
+  publishStatus: number
 ) => {
   return async (dispatch: any) => {
     const res = await api.getArticleList(page, pageSize, title, status, publishStatus);
@@ -333,8 +341,8 @@ export const asyncArticleListAction = (
   };
 };
 // 全部文章列表
-export const asyncArticleListAllAction = (status: any, publishStatus: any) => {
-  return async (dispatch: any) => {
+export const asyncArticleListAllAction = (status: number, publishStatus: number) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.getArticleListAll(status, publishStatus);
     dispatch({
       type: ARTICLE_LIST_ALL,
@@ -344,8 +352,8 @@ export const asyncArticleListAllAction = (status: any, publishStatus: any) => {
   };
 };
 // 新增文章
-export const asyncArticleAddAction = (data: any) => {
-  return async (dispatch: any) => {
+export const asyncArticleAddAction = (data: IArticleAdd) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.articleAdd(data);
     dispatch({
       type: ARTICLE_ADD,
@@ -355,8 +363,8 @@ export const asyncArticleAddAction = (data: any) => {
   };
 };
 // 修改文章状态
-export const asyncArticleStatusUpdateAction = (params: any) => {
-  return async (dispatch: any) => {
+export const asyncArticleStatusUpdateAction = (params: IArticleStatus) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.articleStatusUpdate(params);
     dispatch({
       type: ARTICLE_STATUS_UPDATE,
@@ -366,8 +374,8 @@ export const asyncArticleStatusUpdateAction = (params: any) => {
   };
 };
 // 修改文章置顶状态
-export const asyncArticleTopStatusUpdateAction = (params: any) => {
-  return async (dispatch: any) => {
+export const asyncArticleTopStatusUpdateAction = (params: IArticleTopStatus) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.articleTopStatusUpdate(params);
     dispatch({
       type: ARTICLE_STATUS_TOP_UPDATE,
@@ -377,8 +385,8 @@ export const asyncArticleTopStatusUpdateAction = (params: any) => {
   };
 };
 // 修改文章发布状态
-export const asyncArticlePublishStatusUpdateAction = (params: any) => {
-  return async (dispatch: any) => {
+export const asyncArticlePublishStatusUpdateAction = (params: IArticlePublishStatus) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.articlePublishStatusUpdate(params);
     dispatch({
       type: ARTICLE_PUBLISH_STATUS_UPDATE,
@@ -388,8 +396,8 @@ export const asyncArticlePublishStatusUpdateAction = (params: any) => {
   };
 };
 // 文章修改
-export const asyncArticleUpdateAction = (params: any) => {
-  return async (dispatch: any) => {
+export const asyncArticleUpdateAction = (params: IArticleUpdate) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.articleUpdate(params);
     dispatch({
       type: ARTICLE_UPDATE,
@@ -399,8 +407,8 @@ export const asyncArticleUpdateAction = (params: any) => {
   };
 };
 // 获取文章详情
-export const asyncArticleDetailAction = (id: any) => {
-  return async (dispatch: any) => {
+export const asyncArticleDetailAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.articleDetail(id);
     dispatch({
       type: ARTICLE_DETAIL,
@@ -410,8 +418,8 @@ export const asyncArticleDetailAction = (id: any) => {
   };
 };
 // 删除文章
-export const asyncArticleDeleteAction = (id: any) => {
-  return async (dispatch: any) => {
+export const asyncArticleDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.articleDelete(id);
     dispatch({
       type: ARTICLE_DELETE,
@@ -420,20 +428,10 @@ export const asyncArticleDeleteAction = (id: any) => {
     return res;
   };
 };
-// 文章开启关闭收藏
-export const asyncArticleCollectUpdateAction = (params: any) => {
-  return async (dispatch: any) => {
-    const res = await api.articleCollectUpdate(params);
-    dispatch({
-      type: ARTICLE_COLLECT_UPDATE,
-      collect: res,
-    });
-    return res;
-  };
-};
+
 // 上传文件
-export const asyncFileUploadAction = (params: any) => {
-  return async (dispatch: any) => {
+export const asyncFileUploadAction = (params: FormData) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.upload(params);
     dispatch({
       type: FILE_UPLOAD,
@@ -443,8 +441,8 @@ export const asyncFileUploadAction = (params: any) => {
   };
 };
 // 友链列表
-export const asyncFriendlyListAction = (page: any, pageSize: any, name: any) => {
-  return async (dispatch: any) => {
+export const asyncFriendlyListAction = (page: number, pageSize: number, name: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.getFriendlyList(page, pageSize, name);
     dispatch({
       type: FRIENDLY_LIST,
@@ -454,8 +452,8 @@ export const asyncFriendlyListAction = (page: any, pageSize: any, name: any) => 
   };
 };
 // 删除友链
-export const asyncFriendlyDeleteAction = (id: any) => {
-  return async (dispatch: any) => {
+export const asyncFriendlyDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.friendlyDelete(id);
     dispatch({
       type: FRIENDLY_DELETE,
@@ -465,8 +463,8 @@ export const asyncFriendlyDeleteAction = (id: any) => {
   };
 };
 // 新增友链
-export const asyncFriendlyInsertAction = (data: any) => {
-  return async (dispatch: any) => {
+export const asyncFriendlyInsertAction = (data: FriendlyAdd) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.friendlyInsert(data);
     dispatch({
       type: FRIENDLY_INSERT,
@@ -476,8 +474,8 @@ export const asyncFriendlyInsertAction = (data: any) => {
   };
 };
 // 修改友链
-export const asyncFriendlyUpdateAction = (params: any) => {
-  return async (dispatch: any) => {
+export const asyncFriendlyUpdateAction = (params: FriendlyUpdate) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.friendlyUpdate(params);
     dispatch({
       type: FRIENDLY_UPDATE,
@@ -486,9 +484,9 @@ export const asyncFriendlyUpdateAction = (params: any) => {
     return res;
   };
 };
-// 友链列表
-export const asyncEssayListAction = (page: any, pageSize: any, content: any) => {
-  return async (dispatch: any) => {
+// 随笔列表
+export const asyncEssayListAction = (page: number, pageSize: number, content: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.getEssaylyList(page, pageSize, content);
     dispatch({
       type: ESSAY_LIST,
@@ -497,9 +495,9 @@ export const asyncEssayListAction = (page: any, pageSize: any, content: any) => 
     return res;
   };
 };
-// 删除友链
-export const asyncEssayDeleteAction = (id: any) => {
-  return async (dispatch: any) => {
+// 删除随笔
+export const asyncEssayDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.essayDelete(id);
     dispatch({
       type: ESSAY_DELETE,
@@ -508,9 +506,9 @@ export const asyncEssayDeleteAction = (id: any) => {
     return res;
   };
 };
-// 新增友链
-export const asyncEssayInsertAction = (data: any) => {
-  return async (dispatch: any) => {
+// 新增随笔
+export const asyncEssayInsertAction = (data: EssayAdd) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.essayInsert(data);
     dispatch({
       type: ESSAY_INSERT,
@@ -519,9 +517,9 @@ export const asyncEssayInsertAction = (data: any) => {
     return res;
   };
 };
-// 修改友链
-export const asyncEssayUpdateAction = (params: any) => {
-  return async (dispatch: any) => {
+// 修改随笔
+export const asyncEssayUpdateAction = (params: EssayUpdate) => {
+  return async (dispatch: Dispatch) => {
     const res = await api.essayUpdate(params);
     dispatch({
       type: ESSAY_UPDATE,

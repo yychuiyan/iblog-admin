@@ -1,8 +1,9 @@
 import { ARTICLE_STATUS_UPDATE } from '@/redux/constants';
+import { Action } from '@/types/comm';
 const userState = {
   articleStatus: [],
 };
-export const ArticleStatusUpdateReducer = (state = userState, action: any) => {
+export const ArticleStatusUpdateReducer = (state = userState, action: Action) => {
   switch (action.type) {
     case ARTICLE_STATUS_UPDATE:
       return {

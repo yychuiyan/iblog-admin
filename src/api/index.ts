@@ -3,10 +3,19 @@ import {
   AboutAdd,
   AboutUpdate,
   Api,
+  IArticleAdd,
   CategoryUpdate,
   MessageStatus,
   TagsUpdate,
   TagsUpdateStatus,
+  IArticleStatus,
+  IArticleTopStatus,
+  IArticlePublishStatus,
+  IArticleUpdate,
+  FriendlyAdd,
+  FriendlyUpdate,
+  EssayAdd,
+  EssayUpdate,
 } from '@/types/api';
 
 const baseURL = `/api/v1`;
@@ -109,8 +118,8 @@ const api: Api = {
     page: number,
     pageSize: number,
     title: string,
-    status: boolean,
-    publishStatus: boolean
+    status: number,
+    publishStatus: number
   ) {
     return axios.get(
       `${baseURL}/articles?page=${page}&&pageSize=${pageSize}&&title=${title}&&status=${status}&&publishStatus=${publishStatus}`
@@ -123,39 +132,35 @@ const api: Api = {
     );
   },
   // 新增文章
-  articleAdd(params: any) {
+  articleAdd(params: IArticleAdd) {
     return axios.post(`${baseURL}/articles`, params);
   },
   // 修改文章状态
-  articleStatusUpdate(params: any) {
+  articleStatusUpdate(params: IArticleStatus) {
     return axios.put(`${baseURL}/articles/status/${params.id}`, params);
   },
   // 修改文章置顶状态
-  articleTopStatusUpdate(params: any) {
+  articleTopStatusUpdate(params: IArticleTopStatus) {
     return axios.put(`${baseURL}/articles/top/${params.id}`, params);
   },
   // 修改文章发布状态
-  articlePublishStatusUpdate(params: any) {
+  articlePublishStatusUpdate(params: IArticlePublishStatus) {
     return axios.put(`${baseURL}/articles/publishStatus/${params.id}`, params);
   },
   // 文章修改
-  articleUpdate(params: any) {
+  articleUpdate(params: IArticleUpdate) {
     return axios.put(`${baseURL}/articles/${params.id}`, params);
   },
   // 获取文章详情
-  articleDetail(id: any) {
+  articleDetail(id: string) {
     return axios.get(`${baseURL}/articles/${id}/edit`);
   },
   // 删除文章
-  articleDelete(id: any) {
+  articleDelete(id: string) {
     return axios.delete(`${baseURL}/articles/${id}`);
   },
-  // 是否开启收藏
-  articleCollectUpdate(params: any) {
-    return axios.post(`${baseURL}/articles/collectStatus`, params);
-  },
   // 上传文件接口
-  upload(params: any) {
+  upload(params) {
     return axios.post(`${baseURL}/upload`, params, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -163,35 +168,35 @@ const api: Api = {
     });
   },
   // 友链列表
-  getFriendlyList(page: any, pageSize: any, name: any) {
+  getFriendlyList(page: number, pageSize: number, name: string) {
     return axios.get(`${baseURL}/friendly?page=${page}&&pageSize=${pageSize}&&name=${name}`);
   },
   // 删除友链
-  friendlyDelete(id: any) {
+  friendlyDelete(id: string) {
     return axios.delete(`${baseURL}/friendly/${id}`);
   },
   // 新增友链
-  friendlyInsert(params: any) {
+  friendlyInsert(params: FriendlyAdd) {
     return axios.post(`${baseURL}/friendly`, params);
   },
   // 修改友链
-  friendlyUpdate(params: any) {
+  friendlyUpdate(params: FriendlyUpdate) {
     return axios.put(`${baseURL}/friendly/${params.id}`, params);
   },
   // 随笔列表
-  getEssaylyList(page: any, pageSize: any, content: any) {
+  getEssaylyList(page: number, pageSize: number, content: string) {
     return axios.get(`${baseURL}/essay?page=${page}&&pageSize=${pageSize}&&content=${content}`);
   },
   // 删除随笔
-  essayDelete(id: any) {
+  essayDelete(id: string) {
     return axios.delete(`${baseURL}/essay/${id}`);
   },
   // 新增随笔
-  essayInsert(params: any) {
+  essayInsert(params: EssayAdd) {
     return axios.post(`${baseURL}/essay`, params);
   },
   // 修改随笔
-  essayUpdate(params: any) {
+  essayUpdate(params: EssayUpdate) {
     return axios.put(`${baseURL}/essay/${params.id}`, params);
   },
 };

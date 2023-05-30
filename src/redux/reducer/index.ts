@@ -32,7 +32,6 @@ import { ArticlePublishStatusUpdateReducer } from './articles/article_publish_st
 import { ArticleDetailReducer } from './articles/detail';
 import { ArticleUpdateReducer } from './articles/update';
 import { ArticleDeleteReducer } from './articles/delete';
-import { ArticleCollectUpdateReducer } from './articles/article_collect';
 import { FileUploadReducer } from './upload/index';
 import { FriendlyListReducer } from './friendly/list';
 import { FriendlyDeleteReducer } from './friendly/delete';
@@ -75,7 +74,6 @@ const RootReducer = combineReducers({
   ArticleUpdateReducer,
   ArticleStatusTopUpdateReducer,
   ArticleDeleteReducer,
-  ArticleCollectUpdateReducer,
   FileUploadReducer,
   ArticleAddReducer,
   FriendlyListReducer,

@@ -64,8 +64,6 @@ export const ARTICLE_UPDATE = 'ARTICLE_UPDATE';
 export const ARTICLE_DETAIL = 'ARTICLE_DETAIL';
 // 删除文章
 export const ARTICLE_DELETE = 'ARTICLE_DELETE';
-// 文章开启关闭收藏
-export const ARTICLE_COLLECT_UPDATE = 'ARTICLE_COLLECT_UPDATE';
 // 上传文件
 export const FILE_UPLOAD = 'FILE_UPLOAD';
 // 友链列表

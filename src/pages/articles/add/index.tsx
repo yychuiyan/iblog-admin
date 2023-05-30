@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Form, Input, Row, Col, Switch, Select, notification, message } from 'antd';
 import Save from '@/components/save';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import UploadImage from '@/components/upload';
-// import MarkDown from '@/components/markdown/MarkDown';
 import Editor from 'for-editor';
 const { TextArea } = Input;
 const { Option } = Select;
@@ -25,12 +24,43 @@ const formItemLayoutTwo = {
     span: 24,
   },
 };
+interface DataType {
+  name: string;
+  _id: string | null | undefined;
+  publishStatus: number;
+  status: number;
+  views: number;
+  comment: number;
+  like: number;
+  categories: string;
+  content: string;
+  cover: string;
+  introduction: string;
+  isComment: boolean;
+  isLike: boolean;
+  isTop: boolean;
+  tags: string[];
+  title: string;
+}
+interface ArticleData {
+  url(name: string, url: string): unknown;
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  data: DataType[];
+}
+interface ResData {
+  code: number;
+  data: string[];
+  msg: string;
+  res: DataType[]
+}
 const ArticleAdd = (props: any) => {
   const [form] = Form.useForm();
   // 标签信息
-  const [tagsList, setTagsList] = useState([]);
+  const [tagsList, setTagsList] = useState<DataType[]>([]);
   // 分类信息
-  const [categoryList, setCategoryList] = useState([]);
+  const [categoryList, setCategoryList] = useState<DataType[]>([]);
   // 当前第几页
   const [currentPage] = useState(0);
   // 每页显示条数
@@ -49,15 +79,15 @@ const ArticleAdd = (props: any) => {
   const [imageList, setImageList] = useState<any>();
   // 获取分类列表
   useEffect(() => {
-    props.BlogActions.asyncCategoriesAction(currentPage, pageSize, '').then((res: any) => {
-      let { data } = res.data;
+    props.BlogActions.asyncCategoriesAction(currentPage, pageSize, '').then((res: ArticleData) => {
+      let { data } = res.data as unknown as ArticleData;
       setCategoryList(data);
     });
   }, [currentPage, pageSize, props.BlogActions]);
   // 获取标签列表
   useEffect(() => {
-    props.BlogActions.asyncTagsAction(currentPage, pageSize, '').then((res: any) => {
-      let { data } = res.data;
+    props.BlogActions.asyncTagsAction(currentPage, pageSize, '').then((res: ArticleData) => {
+      let { data } = res.data as unknown as ArticleData;
       setTagsList(data);
     });
   }, [currentPage, pageSize, props.BlogActions]);
@@ -66,7 +96,7 @@ const ArticleAdd = (props: any) => {
     const formData = new FormData();
     formData.append('file', file);
     // 上传图片接口
-    props.BlogActions.asyncFileUploadAction(formData).then((res: any) => {
+    props.BlogActions.asyncFileUploadAction(formData).then((res: ArticleData) => {
       if (res) {
         // 如果返回值
         editorRef.current.$img2Url(file.name, res.url);
@@ -82,6 +112,7 @@ const ArticleAdd = (props: any) => {
       formData.cover = imageList.url;
     }
     formData.cover = imageList;
+
     props.BlogActions.asyncArticleAddAction({
       ...formData,
       publishStatus: 2,
@@ -92,7 +123,7 @@ const ArticleAdd = (props: any) => {
       isComment: isComment,
       isLike: isLike,
       isTop: isTop,
-    }).then((res: any) => {
+    }).then(() => {
       notification.info({
         message: '新增成功-保存到草稿',
         description: `跳转到文章列表`,
@@ -106,7 +137,6 @@ const ArticleAdd = (props: any) => {
   const onPublish = async () => {
     await form.validateFields();
     let formData = form.getFieldsValue();
-
     // 获取表单值
     if (typeof imageList === 'object') {
       formData.cover = imageList.url;
@@ -123,8 +153,7 @@ const ArticleAdd = (props: any) => {
       isComment: isComment,
       isLike: isLike,
       isTop: isTop,
-    }).then((res: any) => {
-      console.log("res", res);
+    }).then((res: ResData) => {
       if (res.msg === "该文章已存在") {
         message.warning("文章已存在，请查看后再次提交！")
         return false;
@@ -140,23 +169,23 @@ const ArticleAdd = (props: any) => {
     });
   };
   // 评论开启关闭
-  const onCommentChange = (record: any) => {
+  const onCommentChange = (record: boolean) => {
     setIsComment(record);
   };
   // 点赞开启关闭
-  const onLikeChange = (record: any) => {
+  const onLikeChange = (record: boolean) => {
     setIsLike(record);
   };
   // 置顶开启关闭
-  const onTopChange = (record: any) => {
+  const onTopChange = (record: boolean) => {
     setIsTop(record);
   };
   // 获取图片信息
-  const handleChange = (data: any) => {
+  const handleChange = (data: string[]) => {
     setImageList(data);
   };
   // 获取移除的图片信息
-  const handleRemove = (val: any) => {
+  const handleRemove = () => {
     setImageList('');
   };
   return (
@@ -192,7 +221,7 @@ const ArticleAdd = (props: any) => {
                   placeholder="请选择分类信息"
                   optionFilterProp="children"
                 >
-                  {categoryList.map((item: any) => (
+                  {categoryList.map((item) => (
                     <Option value={item.name} key={item._id}>
                       {item.name}
                     </Option>
@@ -211,7 +240,7 @@ const ArticleAdd = (props: any) => {
                   placeholder="请选择对应的标签"
                   optionLabelProp="label"
                 >
-                  {tagsList.map((item: any) => (
+                  {tagsList.map((item) => (
                     <Option value={item.name} key={item._id} label={item.name}>
                       {item.name}
                     </Option>
@@ -268,7 +297,7 @@ const ArticleAdd = (props: any) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     BlogActions: bindActionCreators(BlogActions, dispatch),
   };

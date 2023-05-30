@@ -55,6 +55,77 @@ interface MessageStatus {
   id: string;
   auditStatus: boolean;
 }
+interface IArticleAdd {
+  publishStatus: number;
+  status: number;
+  views: number;
+  comment: number;
+  like: number;
+  categories: string;
+  content: string;
+  cover: string;
+  introduction: string;
+  isComment: boolean;
+  isLike: boolean;
+  isTop: boolean;
+  tags: string[];
+  title: string;
+}
+interface IArticleStatus {
+  status: number;
+  id: string;
+}
+interface IArticleTopStatus {
+  isTop: boolean;
+  id: string;
+}
+interface IArticlePublishStatus {
+  isTop: boolean;
+  id: string;
+}
+interface IArticleUpdate {
+  id: string;
+  publishStatus: number;
+  status: number;
+  views: number;
+  comment: number;
+  like: number;
+  categories: string;
+  content: string;
+  cover: string;
+  introduction: string;
+  isComment: boolean;
+  isLike: boolean;
+  isTop: boolean;
+  tags: string[];
+  title: string;
+}
+interface FriendlyAdd {
+  avatar: string;
+  desc: string;
+  link: string;
+  name: string;
+}
+interface FriendlyUpdate {
+  id: string;
+  avatar: string;
+  desc: string;
+  link: string;
+  name: string;
+}
+interface CoverData {
+  name: string;
+  thumbUrl: string;
+}
+interface EssayAdd {
+  content: string;
+  cover: CoverData[];
+}
+interface EssayUpdate {
+  id: string;
+  content: string;
+  cover: CoverData[];
+}
 export interface Api {
   Login(params: LoginParams): Promise<ApiResponse>;
   userRegister(params: UserRegister): Promise<ApiResponse>;
@@ -82,25 +153,24 @@ export interface Api {
     page: number,
     pageSize: number,
     title: string,
-    status: boolean,
-    publishStatus: boolean
+    status: number,
+    publishStatus: number
   ): Promise<ApiResponse>;
-  getArticleListAll(status: string, publishStatus: string): Promise<ApiResponse>;
-  articleAdd(params: any): Promise<ApiResponse>;
-  articleStatusUpdate(params: any): Promise<ApiResponse>;
-  articleTopStatusUpdate(params: any): Promise<ApiResponse>;
-  articlePublishStatusUpdate(params: any): Promise<ApiResponse>;
-  articleUpdate(params: any): Promise<ApiResponse>;
-  articleDetail(id: number): Promise<ApiResponse>;
-  articleDelete(id: number): Promise<ApiResponse>;
-  articleCollectUpdate(params: any): Promise<ApiResponse>;
+  getArticleListAll(status: number, publishStatus: number): Promise<ApiResponse>;
+  articleAdd(params: IArticleAdd): Promise<ApiResponse>;
+  articleStatusUpdate(params: IArticleStatus): Promise<ApiResponse>;
+  articleTopStatusUpdate(params: IArticleTopStatus): Promise<ApiResponse>;
+  articlePublishStatusUpdate(params: IArticlePublishStatus): Promise<ApiResponse>;
+  articleUpdate(params: IArticleUpdate): Promise<ApiResponse>;
+  articleDetail(id: string): Promise<ApiResponse>;
+  articleDelete(id: string): Promise<ApiResponse>;
   upload(params: FormData): Promise<ApiResponse>;
   getFriendlyList(page: number, pageSize: number, name: string): Promise<ApiResponse>;
-  friendlyDelete(id: number): Promise<ApiResponse>;
-  friendlyInsert(params: any): Promise<ApiResponse>;
-  friendlyUpdate(params: any): Promise<ApiResponse>;
+  friendlyDelete(id: string): Promise<ApiResponse>;
+  friendlyInsert(params: FriendlyAdd): Promise<ApiResponse>;
+  friendlyUpdate(params: FriendlyUpdate): Promise<ApiResponse>;
   getEssaylyList(page: number, pageSize: number, content: string): Promise<ApiResponse>;
-  essayDelete(id: number): Promise<ApiResponse>;
-  essayInsert(params: any): Promise<ApiResponse>;
-  essayUpdate(params: any): Promise<ApiResponse>;
+  essayDelete(id: string): Promise<ApiResponse>;
+  essayInsert(params: EssayAdd): Promise<ApiResponse>;
+  essayUpdate(params: EssayUpdate): Promise<ApiResponse>;
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Form, Input, Row, Col, message, Switch, Select, notification } from 'antd';
 import Save from '@/components/save';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import UploadImage from '@/components/upload';
 import Editor from 'for-editor';
@@ -24,6 +24,30 @@ const formItemLayoutTwo = {
     span: 24,
   },
 };
+interface CoverData {
+  name: string;
+  thumbUrl: string;
+}
+interface DataType {
+  url: any;
+  data: any;
+  name: string;
+  _id: string | null | undefined;
+  publishStatus: number;
+  status: number;
+  views: number;
+  comment: number;
+  like: number;
+  categories: string;
+  content: string;
+  cover: CoverData;
+  introduction: string;
+  isComment: boolean;
+  isLike: boolean;
+  isTop: boolean;
+  tags: string[];
+  title: string;
+}
 const ArticleUpdate = (props: any) => {
   const [form] = Form.useForm();
   // 标签信息
@@ -59,7 +83,7 @@ const ArticleUpdate = (props: any) => {
   useEffect(() => {
     let ids = props.match.params.id;
     setIds(ids);
-    props.BlogActions.asyncArticleDetailAction(props.match.params.id).then((res: any) => {
+    props.BlogActions.asyncArticleDetailAction(props.match.params.id).then((res: DataType) => {
       let data = res.data.cover === undefined ? '' : res.data.cover;
       let start = data.indexOf('images');
       let name = data.substring(start);
@@ -82,14 +106,14 @@ const ArticleUpdate = (props: any) => {
 
   // 获取分类列表
   useEffect(() => {
-    props.BlogActions.asyncCategoriesAction(currentPage, pageSize, '').then((res: any) => {
+    props.BlogActions.asyncCategoriesAction(currentPage, pageSize, '').then((res: DataType) => {
       let { data } = res.data;
       setCategoryList(data);
     });
   }, [currentPage, pageSize, props.BlogActions]);
   // 获取标签列表
   useEffect(() => {
-    props.BlogActions.asyncTagsAction(currentPage, pageSize, '').then((res: any) => {
+    props.BlogActions.asyncTagsAction(currentPage, pageSize, '').then((res: DataType) => {
       let { data } = res.data;
       setTagsList(data);
     });
@@ -99,7 +123,7 @@ const ArticleUpdate = (props: any) => {
     const formData = new FormData();
     formData.append('file', file);
     // 上传图片接口
-    props.BlogActions.asyncFileUploadAction(formData).then((res: any) => {
+    props.BlogActions.asyncFileUploadAction(formData).then((res: DataType) => {
       if (res) {
         // 如果返回值
         editorRef.current.$img2Url(file.name, res.url);
@@ -110,7 +134,7 @@ const ArticleUpdate = (props: any) => {
   const onRefresh = () => {
     message.success('刷新成功');
     // 重新调用接口
-    props.BlogActions.asyncArticleDetailAction(props.match.params.id).then((res: any) => {
+    props.BlogActions.asyncArticleDetailAction(props.match.params.id).then((res: DataType) => {
       res.data.cover = [
         {
           imgUrl: res.data.cover,
@@ -334,7 +358,7 @@ const ArticleUpdate = (props: any) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     BlogActions: bindActionCreators(BlogActions, dispatch),
   };

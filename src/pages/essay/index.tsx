@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Form, Image, Input, message, Modal, Table } from 'antd';
+import { Button, Form, Input, message, Modal, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, ExclamationCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import './index.less';
@@ -12,29 +12,34 @@ import UploadImage from '@/components/uploadMany';
 import Editor from 'for-editor';
 const { confirm } = Modal;
 const { Search } = Input;
+interface CoverData {
+  url: string;
+  name: string;
+  thumbUrl: string;
+}
 interface DataType {
   key: React.Key;
-  _id?: string;
+  _id: string;
   content?: string;
   createTime: string;
   updateTime: string;
+}
+interface EssayData {
+  cover: string;
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  data: DataType[];
 }
 const Essay = (props: any) => {
   const columns: ColumnsType<DataType> = [
     {
       title: '随笔',
       dataIndex: 'content',
-      render: (_, record: any) => {
+      render: (_, record) => {
         return <p className='essay_content' style={{ width: '12rem' }}>{record.content}</p>;
       },
     },
-    // {
-    //   title: '封面',
-    //   dataIndex: 'cover',
-    //   render: (_, record: any) => {
-    //     return <Image width={50} height={50} src={record.cover}></Image>;
-    //   },
-    // },
     {
       title: '创建时间',
       dataIndex: 'createTime',
@@ -85,7 +90,7 @@ const Essay = (props: any) => {
   // 更新表单
   const [updateForm] = Form.useForm();
   // 随笔列表
-  const [list, setList] = useState([]);
+  const [list, setList] = useState<DataType[]>([]);
   // 分页总数
   const [total, setTotal] = useState(0);
   // 当前第几页
@@ -106,9 +111,9 @@ const Essay = (props: any) => {
   const editorRef = useRef<any>();
   // 获取随笔列表数据
   useEffect(() => {
-    props.BlogActions.asyncEssayListAction(currentPage, pageSize, '').then((res: any) => {
+    props.BlogActions.asyncEssayListAction(currentPage, pageSize, '').then((res: EssayData) => {
       // 获取随笔
-      let { data, totalCount, page, pageSize } = res.data;
+      let { data, totalCount, page, pageSize } = res.data as unknown as EssayData;
       setList(data);
       setTotal(totalCount);
       setCurrentPage(page);
@@ -129,7 +134,7 @@ const Essay = (props: any) => {
 
     datas.cover = imageList
 
-    let coverArray = datas.cover.map((item: any) => {
+    let coverArray = datas.cover.map((item: CoverData) => {
       return {
         name: item.name,
         thumbUrl: item.thumbUrl
@@ -142,29 +147,29 @@ const Essay = (props: any) => {
 
     props.BlogActions.asyncEssayInsertAction({
       ...newData,
-    }).then((res: any) => {
+    }).then(() => {
       message.success('新增随笔成功!')
       setImageList('')
       form.resetFields();
       setIsModalOpen(false);
       // 重新调用查询接口
-      props.BlogActions.asyncEssayListAction(currentPage, pageSize, '').then((res: any) => {
-        let { data } = res.data;
+      props.BlogActions.asyncEssayListAction(currentPage, pageSize, '').then((res: EssayData) => {
+        let { data } = res.data as unknown as EssayData;
         setList(data);
       });
     });
   };
   // 关闭窗口
-  const handleCancel = (e: any) => {
+  const handleCancel = () => {
     form.resetFields();
     setIsModalOpen(false);
   };
   // 关闭窗口
-  const handleUpdateCancel = (e: any) => {
+  const handleUpdateCancel = () => {
     updateForm.resetFields();
     setIsModalUpdateOpen(false);
   };
-  const EssayUpdate = (item: any) => {
+  const EssayUpdate = (item: EssayData) => {
     setImageList(item)
     setImgUrl(item.cover);
     setIsModalUpdateOpen(true);
@@ -175,7 +180,7 @@ const Essay = (props: any) => {
   const handleUpdateConfirm = () => {
     let data = updateForm.getFieldsValue();
 
-    let coverArray = imageList.cover.map((item: any) => {
+    let coverArray = imageList.cover.map((item: CoverData) => {
       return {
         name: item.name,
         thumbUrl: item.thumbUrl
@@ -190,11 +195,11 @@ const Essay = (props: any) => {
       ...newData,
       //@ts-ignore
       id: editData._id,
-    }).then((res: any) => {
+    }).then(() => {
       message.success('更新成功');
-      props.BlogActions.asyncEssayListAction(currentPage, pageSize, '').then((res: any) => {
+      props.BlogActions.asyncEssayListAction(currentPage, pageSize, '').then((res: EssayData) => {
         // 获取随笔
-        let { data, totalCount, page, pageSize } = res.data;
+        let { data, totalCount, page, pageSize } = res.data as unknown as EssayData;
         setList(data);
         setTotal(totalCount);
         setCurrentPage(page);
@@ -205,18 +210,18 @@ const Essay = (props: any) => {
     });
   };
   // 删除随笔
-  const EssayDelete = (item: any) => {
+  const EssayDelete = (item: DataType) => {
     confirm({
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
         // 先将要删除的数据过滤掉再调用接口
-        setList(list.filter((it: any) => it._id !== item._id));
+        setList(list.filter((it) => it._id !== item._id));
         message.success('随笔删除成功');
         props.BlogActions.asyncEssayDeleteAction(item._id).then(() => {
-          props.BlogActions.asyncEssayListAction(currentPage, pageSize, '').then((res: any) => {
+          props.BlogActions.asyncEssayListAction(currentPage, pageSize, '').then((res: EssayData) => {
             // 获取随笔
-            let { data, totalCount, page, pageSize } = res.data;
+            let { data, totalCount, page, pageSize } = res.data as unknown as EssayData;
             setList(data);
             setTotal(totalCount);
             setCurrentPage(page);
@@ -228,8 +233,8 @@ const Essay = (props: any) => {
   };
   // 搜索
   const onSearch = (value: string) => {
-    props.BlogActions.asyncEssayListAction(currentPage, pageSize, value).then((res: any) => {
-      let { data, totalCount, page, pageSize } = res.data;
+    props.BlogActions.asyncEssayListAction(currentPage, pageSize, value).then((res: EssayData) => {
+      let { data, totalCount, page, pageSize } = res.data as unknown as EssayData;
       setList(data);
       setTotal(totalCount);
       setCurrentPage(page);
@@ -237,11 +242,11 @@ const Essay = (props: any) => {
     });
   };
   // 跳转页数据显示
-  const onChangePage = (page: any, pageSize: any, params = '') => {
+  const onChangePage = (page: number, pageSize: number, params = '') => {
     // 重新调用接口将参数传递过去
-    props.BlogActions.asyncUserListAction(page, pageSize, params).then((res: any) => {
+    props.BlogActions.asyncUserListAction(page, pageSize, params).then((res: EssayData) => {
       // 获取列表数据
-      let { data } = res.data;
+      let { data } = res.data as unknown as EssayData;
       setList(data);
       // 切换行
       setCurrentPage(page);
@@ -251,7 +256,7 @@ const Essay = (props: any) => {
   };
 
   // 获取图片信息
-  const handleChange = (data: any) => {
+  const handleChange = (data: CoverData) => {
     let newData = {
       name: data.name,
       thumbUrl: data.url
@@ -260,8 +265,8 @@ const Essay = (props: any) => {
     setImageList(imageList)
   };
   // 获取移除的图片信息
-  const handleRemove = (val: any) => {
-    let newImageList = imageList?.cover ? imageList.cover.filter((item: any) => item.name !== val.name) : imageList.filter((item: any) => item.name !== val.name)
+  const handleRemove = (val: { name: string }) => {
+    let newImageList = imageList?.cover ? imageList.cover.filter((item: { name: string }) => item.name !== val.name) : imageList.filter((item: { name: string }) => item.name !== val.name)
     // imageList.push('')
     setImageList({
       ...imageList,
@@ -273,7 +278,7 @@ const Essay = (props: any) => {
     const formData = new FormData();
     formData.append('file', file);
     // 上传图片接口
-    props.BlogActions.asyncFileUploadAction(formData).then((res: any) => {
+    props.BlogActions.asyncFileUploadAction(formData).then((res: CoverData) => {
       if (res) {
         // 如果返回值
         editorRef.current.$img2Url(file.name, res.url);
@@ -365,7 +370,7 @@ const Essay = (props: any) => {
       <Table
         columns={columns}
         dataSource={list}
-        rowKey={(item: any) => {
+        rowKey={(item) => {
           return item._id + Date.now();
         }}
         pagination={false}
@@ -380,7 +385,7 @@ const Essay = (props: any) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     BlogActions: bindActionCreators(BlogActions, dispatch),
   };
