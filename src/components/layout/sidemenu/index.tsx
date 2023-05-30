@@ -83,7 +83,7 @@ const SideMenu = (props: any) => {
 
   // 获取路由列表
   // 点击切换路由
-  const handleItemClick = (e: any) => {
+  const handleItemClick = (e: { keyPath: any[]; }) => {
     let path = e.keyPath[0];
     props.history.push(path);
   };
