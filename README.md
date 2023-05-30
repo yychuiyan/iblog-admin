@@ -2,18 +2,28 @@
 
 ### 工具侧
 
-- React v18.2.0
-- Node v16.15.1
-- Typescript v4.7.4
-- React-router v5
-- Ant Design v4.22.4
+- react
+- react-redux
+- webpack
+- node
+- axios
+- typescript
+- less
+- react-router
+- antDesign
+- dayjs
+- echarts
+- eslint
+- marked
+- for-editor
+- highlight.js
+- nprogress
 
-### 安装 React+Ts
-
-```js
-npx create-react-app iblog-admin --template typescript
-```
 ### 启动
-```js
-yarn start
+```bash
+npm run start
+```
+### 打包
+```bash
+npm run build
 ```
