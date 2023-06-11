@@ -10,6 +10,7 @@ import {
   EditOutlined,
   LinkedinOutlined,
   NotificationOutlined,
+  UserOutlined
 } from '@ant-design/icons';
 import './index.less';
 
@@ -47,11 +48,27 @@ const items = [
       },
     ],
   },
-  // {
-  //   key: '/admin/userinfo',
-  //   icon: <UserOutlined />,
-  //   label: '用户管理',
-  // },
+  {
+    key: '/admin/permission',
+    icon: <HighlightOutlined />,
+    label: '权限管理',
+    children: [
+      {
+        key: '/admin/permission/list',
+        label: '权限列表',
+      },
+      {
+        key: '/admin/rule/list',
+        label: '角色管理',
+      }
+    ],
+  },
+
+  {
+    key: '/admin/userinfo',
+    icon: <UserOutlined />,
+    label: '用户管理',
+  },
   {
     key: '/admin/message',
     icon: <MessageOutlined />,

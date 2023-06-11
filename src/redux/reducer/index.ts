@@ -41,6 +41,7 @@ import { EssayListReducer } from './essay/list';
 import { EssayDeleteReducer } from './essay/delete';
 import { EssayInsertReducer } from './essay/insert';
 import { EssayUpdateReducer } from './essay/update';
+import { RightsListReducer } from './rights/list';
 const RootReducer = combineReducers({
   LoginReducer,
   RegisterReducer,
@@ -84,5 +85,6 @@ const RootReducer = combineReducers({
   EssayDeleteReducer,
   EssayInsertReducer,
   EssayUpdateReducer,
+  RightsListReducer,
 });
 export default RootReducer;

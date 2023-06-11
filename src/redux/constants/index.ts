@@ -82,3 +82,5 @@ export const ESSAY_DELETE = 'ESSAY_DELETE';
 export const ESSAY_INSERT = 'ESSAY_INSERT';
 // 修改随笔
 export const ESSAY_UPDATE = 'ESSAY_UPDATE';
+// 权限列表
+export const RIGHTS_LIST = 'RIGHTS_LIST';

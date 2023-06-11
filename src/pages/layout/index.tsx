@@ -12,6 +12,8 @@ import './index.less';
 const Home = lazy(() => import('@/pages/home'));
 const NotFound = lazy(() => import('@/pages/404'));
 const ArticleList = lazy(() => import('@/pages/articles'));
+const PermissionList = lazy(() => import('@/pages/permission'))
+const RuleList = lazy(() => import('@/pages/permission/RuleList'))
 const Category = lazy(() => import('@/pages/category'));
 const Tags = lazy(() => import('@/pages/tags'));
 const About = lazy(() => import('@/pages/about'));
@@ -47,6 +49,8 @@ const LayoutIndex = (props: any) => {
               <Switch>
                 <Route path="/admin/home" component={Home}></Route>
                 <Route path="/admin/article/list" component={ArticleList}></Route>
+                <Route path="/admin/permission/list" component={PermissionList}></Route>
+                <Route path="/admin/rule/list" component={RuleList}></Route>
                 <Route path="/admin/article/category" component={Category}></Route>
                 <Route path="/admin/article/tags" component={Tags}></Route>
                 <Route path="/admin/article/insert" component={ArticleAdd}></Route>

@@ -199,5 +199,9 @@ const api: Api = {
   essayUpdate(params: EssayUpdate) {
     return axios.put(`${baseURL}/essay/${params.id}`, params);
   },
+  // 随笔列表
+  getRightsList(page: number, pageSize: number, title: string) {
+    return axios.get(`${baseURL}/rights?page=${page}&&pageSize=${pageSize}&&title=${title}`);
+  },
 };
 export default api;

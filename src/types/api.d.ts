@@ -126,6 +126,7 @@ interface EssayUpdate {
   content: string;
   cover: CoverData[];
 }
+
 export interface Api {
   Login(params: LoginParams): Promise<ApiResponse>;
   userRegister(params: UserRegister): Promise<ApiResponse>;
@@ -173,4 +174,5 @@ export interface Api {
   essayDelete(id: string): Promise<ApiResponse>;
   essayInsert(params: EssayAdd): Promise<ApiResponse>;
   essayUpdate(params: EssayUpdate): Promise<ApiResponse>;
+  getRightsList(page: number, pageSize: number, title: string): Promise<ApiResponse>;
 }

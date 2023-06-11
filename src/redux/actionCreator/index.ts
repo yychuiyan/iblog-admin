@@ -43,6 +43,7 @@ import {
   ESSAY_DELETE,
   ESSAY_INSERT,
   ESSAY_UPDATE,
+  RIGHTS_LIST,
 } from '@/redux/constants';
 import jwtDecode from 'jwt-decode';
 import {
@@ -524,6 +525,17 @@ export const asyncEssayUpdateAction = (params: EssayUpdate) => {
     dispatch({
       type: ESSAY_UPDATE,
       eid: res,
+    });
+    return res;
+  };
+};
+// 权限列表
+export const asyncRightsListAction = (page: number, pageSize: number, title: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.getRightsList(page, pageSize, title);
+    dispatch({
+      type: RIGHTS_LIST,
+      rights: res,
     });
     return res;
   };

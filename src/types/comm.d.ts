@@ -40,4 +40,5 @@ export interface Action {
   fid?: string;
   eid?: string;
   essay?: string[];
+  rights?: string[];
 }
