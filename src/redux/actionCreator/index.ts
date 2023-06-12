@@ -44,6 +44,8 @@ import {
   ESSAY_INSERT,
   ESSAY_UPDATE,
   RIGHTS_LIST,
+  RIGHTS_DELETE,
+  RIGHTS_CHILDREN_DELETE,
 } from '@/redux/constants';
 import jwtDecode from 'jwt-decode';
 import {
@@ -536,6 +538,28 @@ export const asyncRightsListAction = (page: number, pageSize: number, title: str
     dispatch({
       type: RIGHTS_LIST,
       rights: res,
+    });
+    return res;
+  };
+};
+// 删除权限
+export const asyncRightsDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.rightsDelete(id);
+    dispatch({
+      type: RIGHTS_DELETE,
+      rid: '',
+    });
+    return res;
+  };
+};
+// 删除权限子菜单
+export const asyncRightsChildrenDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.rightsChildrenDelete(id);
+    dispatch({
+      type: RIGHTS_CHILDREN_DELETE,
+      rid: '',
     });
     return res;
   };

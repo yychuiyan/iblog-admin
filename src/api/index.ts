@@ -199,9 +199,17 @@ const api: Api = {
   essayUpdate(params: EssayUpdate) {
     return axios.put(`${baseURL}/essay/${params.id}`, params);
   },
-  // 随笔列表
+  // 权限列表
   getRightsList(page: number, pageSize: number, title: string) {
     return axios.get(`${baseURL}/rights?page=${page}&&pageSize=${pageSize}&&title=${title}`);
+  },
+  // 删除权限
+  rightsDelete(id: string) {
+    return axios.delete(`${baseURL}/rights/${id}`);
+  },
+  // 删除权限子菜单
+  rightsChildrenDelete(id: string) {
+    return axios.delete(`${baseURL}/rights-children/${id}`);
   },
 };
 export default api;

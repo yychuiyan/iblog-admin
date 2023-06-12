@@ -84,3 +84,6 @@ export const ESSAY_INSERT = 'ESSAY_INSERT';
 export const ESSAY_UPDATE = 'ESSAY_UPDATE';
 // 权限列表
 export const RIGHTS_LIST = 'RIGHTS_LIST';
+// 删除权限
+export const RIGHTS_DELETE = 'RIGHTS_DELETE';
+export const RIGHTS_CHILDREN_DELETE = 'RIGHTS_CHILDREN_DELETE';

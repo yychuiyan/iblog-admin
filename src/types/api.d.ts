@@ -175,4 +175,6 @@ export interface Api {
   essayInsert(params: EssayAdd): Promise<ApiResponse>;
   essayUpdate(params: EssayUpdate): Promise<ApiResponse>;
   getRightsList(page: number, pageSize: number, title: string): Promise<ApiResponse>;
+  rightsDelete(id: string): Promise<ApiResponse>;
+  rightsChildrenDelete(id: string): Promise<ApiResponse>;
 }

@@ -244,7 +244,7 @@ const Essay = (props: any) => {
   // 跳转页数据显示
   const onChangePage = (page: number, pageSize: number, params = '') => {
     // 重新调用接口将参数传递过去
-    props.BlogActions.asyncUserListAction(page, pageSize, params).then((res: EssayData) => {
+    props.BlogActions.asyncEssayListAction(page, pageSize, params).then((res: EssayData) => {
       // 获取列表数据
       let { data } = res.data as unknown as EssayData;
       setList(data);
