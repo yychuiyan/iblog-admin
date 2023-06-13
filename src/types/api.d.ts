@@ -18,10 +18,16 @@ interface LoginParams {
   username: string;
   password: string;
 }
-interface UserRegister {
+interface AdminRegister {
   username: string;
   password: string;
   verifyPassword: string;
+  role_id: string;
+}
+interface AdminAdd {
+  username: string;
+  password: string;
+  role_id: string;
 }
 interface CategoryUpdate {
   id: string;
@@ -126,11 +132,29 @@ interface EssayUpdate {
   content: string;
   cover: CoverData[];
 }
-
+interface RightsUpdate {
+  id: string;
+  label: string;
+  pagepermission: number;
+}
+interface RightsChildrenUpdate {
+  id: string;
+  label: string;
+  pagepermission: number;
+}
+interface RoleUpdate {
+  id: string;
+  role_name: string;
+  role_type: number;
+  rights: Array;
+}
 export interface Api {
   Login(params: LoginParams): Promise<ApiResponse>;
-  userRegister(params: UserRegister): Promise<ApiResponse>;
+  adminRegister(params: AdminRegister): Promise<ApiResponse>;
   loginOut(): Promise<ApiResponse>;
+  getAdminList(page: number, pageSize: number, username: string): Promise<ApiResponse>;
+  adminDelete(id: string): Promise<ApiResponse>;
+  adminAdd(params: AdminAdd): Promise<ApiResponse>;
   getCategories(page: number, pageSize: number, name: string): Promise<ApiResponse>;
   categoryAdd(name: string): Promise<ApiResponse>;
   categoryDelete(id: string): Promise<ApiResponse>;
@@ -143,8 +167,6 @@ export interface Api {
   getAboutList(checked: boolean): Promise<ApiResponse>;
   aboutAdd(params: AboutAdd): Promise<ApiResponse>;
   aboutUpdate(params: AboutUpdate): Promise<ApiResponse>;
-  getUserInfo(page: number, pageSize: number, nickName: string): Promise<ApiResponse>;
-  userDelete(id: string): Promise<ApiResponse>;
   getComments(page: number, pageSize: number, articleTitle: string): Promise<ApiResponse>;
   commentDelete(id: string): Promise<ApiResponse>;
   getMessages(page: number, pageSize: number, auditStatus: boolean): Promise<ApiResponse>;
@@ -177,4 +199,9 @@ export interface Api {
   getRightsList(page: number, pageSize: number, title: string): Promise<ApiResponse>;
   rightsDelete(id: string): Promise<ApiResponse>;
   rightsChildrenDelete(id: string): Promise<ApiResponse>;
+  rightsUpdate(params: RightsUpdate): Promise<ApiResponse>;
+  rightsChildrenUpdate(params: RightsChildrenUpdate): Promise<ApiResponse>;
+  getRoleList(page: number, pageSize: number, role_name: string): Promise<ApiResponse>;
+  roleDelete(id: string): Promise<ApiResponse>;
+  roleUpdate(params: RoleUpdate): Promise<ApiResponse>;
 }

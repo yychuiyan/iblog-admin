@@ -42,4 +42,5 @@ export interface Action {
   essay?: string[];
   rights?: string[];
   rid?: string;
+  role?: string[];
 }

@@ -2,6 +2,9 @@ import { combineReducers } from 'redux';
 import { LoginReducer } from './login';
 import { RegisterReducer } from './register';
 import { LoginOutReducer } from './login/loginout';
+import { AdminListReducer } from './admin/list';
+import { AdminDeleteReducer } from './admin/delete';
+import { AdminAddReducer } from './admin/add';
 import { SideMenuStateReducer } from './collapsed';
 import { LoadingReducer } from './loading';
 import { CategoriesReducer } from './categories/list';
@@ -16,8 +19,6 @@ import { TagStatusUpdateReducer } from './tags/status_update';
 import { AboutListReducer } from './about/list';
 import { AboutAddReducer } from './about/add';
 import { AboutUpdateReducer } from './about/update';
-import { UserListReducer } from './user/list';
-import { UserDeleteReducer } from './user/delete';
 import { CommentsReducer } from './comments/list';
 import { CommentDeleteReducer } from './comments/delete';
 import { MessageListReducer } from './messages/list';
@@ -44,10 +45,18 @@ import { EssayUpdateReducer } from './essay/update';
 import { RightsListReducer } from './rights/list';
 import { RightsDeleteReducer } from './rights/delete';
 import { RightsChildrenDeleteReducer } from './rights/children-delete';
+import { RightsUpdateReducer } from './rights/update';
+import { RightsChildrenUpdateReducer } from './rights/children-update';
+import { RoleListReducer } from './role/list';
+import { RoleDeleteReducer } from './role/delete';
+import { RoleUpdateReducer } from './role/update';
 const RootReducer = combineReducers({
   LoginReducer,
   RegisterReducer,
   LoginOutReducer,
+  AdminAddReducer,
+  AdminListReducer,
+  AdminDeleteReducer,
   SideMenuStateReducer,
   LoadingReducer,
   CategoriesReducer,
@@ -62,8 +71,6 @@ const RootReducer = combineReducers({
   AboutListReducer,
   AboutAddReducer,
   AboutUpdateReducer,
-  UserListReducer,
-  UserDeleteReducer,
   CommentsReducer,
   CommentDeleteReducer,
   MessageListReducer,
@@ -90,5 +97,10 @@ const RootReducer = combineReducers({
   RightsListReducer,
   RightsDeleteReducer,
   RightsChildrenDeleteReducer,
+  RightsUpdateReducer,
+  RightsChildrenUpdateReducer,
+  RoleListReducer,
+  RoleDeleteReducer,
+  RoleUpdateReducer,
 });
 export default RootReducer;

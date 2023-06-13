@@ -2,8 +2,8 @@ import { message } from 'antd';
 import api from '@/api';
 import { Dispatch } from 'redux';
 import {
-  USER_LOGIN,
-  USER_REGISTER,
+  ADMIN_LOGIN,
+  ADMIN_REGISTER,
   LOGINOUT,
   CHANGE_COLLAPSED,
   CATEGORY_LIST,
@@ -18,8 +18,8 @@ import {
   ABOUT_LIST,
   ABOUT_ADD,
   ABOUT_UPDATE,
-  USER_LIST,
-  USER_DELETE,
+  ADMIN_LIST,
+  ADMIN_DELETE,
   ARTICLE_COMMENT,
   COMMENT_DELETE,
   MESSAGE_LIST,
@@ -46,6 +46,12 @@ import {
   RIGHTS_LIST,
   RIGHTS_DELETE,
   RIGHTS_CHILDREN_DELETE,
+  RIGHTS_UPDATE,
+  RIGHTS_CHILDREN_UPDATE,
+  ROLE_LIST,
+  ROLE_DELETE,
+  ROLE_UPDATE,
+  ADMIN_ADD,
 } from '@/redux/constants';
 import jwtDecode from 'jwt-decode';
 import {
@@ -57,7 +63,7 @@ import {
   MessageStatus,
   TagsUpdate,
   TagsUpdateStatus,
-  UserRegister,
+  AdminRegister,
   IArticleStatus,
   IArticleTopStatus,
   IArticlePublishStatus,
@@ -66,6 +72,10 @@ import {
   FriendlyUpdate,
   EssayAdd,
   EssayUpdate,
+  RightsUpdate,
+  RightsChildrenUpdate,
+  RoleUpdate,
+  AdminAdd,
 } from '@/types/api';
 // 登录
 export function asyncLoginAction(data: LoginParams) {
@@ -80,7 +90,7 @@ export function asyncLoginAction(data: LoginParams) {
       // 解析token
       let userToken = jwtDecode(res.data.token);
       dispatch({
-        type: USER_LOGIN,
+        type: ADMIN_LOGIN,
         userToken: userToken,
       });
       return res;
@@ -88,11 +98,11 @@ export function asyncLoginAction(data: LoginParams) {
   };
 }
 // 注册
-export const asyncRegisterAction = (data: UserRegister) => {
+export const asyncRegisterAction = (data: AdminRegister) => {
   return async (dispatch: Dispatch) => {
-    const res = await api.userRegister(data);
+    const res = await api.adminRegister(data);
     dispatch({
-      type: USER_REGISTER,
+      type: ADMIN_REGISTER,
       userinfo: {},
     });
     return res;
@@ -106,6 +116,39 @@ export const asyncLoginOutAction = () => {
       type: LOGINOUT,
       userinfo: res,
     });
+  };
+};
+// 用户列表
+export const asyncAdminListAction = (page: number, pageSize: number, name: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.getAdminList(page, pageSize, name);
+    dispatch({
+      type: ADMIN_LIST,
+      users: res,
+    });
+    return res;
+  };
+};
+// 新增用户
+export const asyncAdminAddAction = (data: AdminAdd) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.adminAdd(data);
+    dispatch({
+      type: ADMIN_ADD,
+      userinfo: {},
+    });
+    return res;
+  };
+};
+// 删除用户
+export const asyncUserDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.adminDelete(id);
+    dispatch({
+      type: ADMIN_DELETE,
+      userId: '',
+    });
+    return res;
   };
 };
 // 侧边栏展示和隐藏
@@ -249,28 +292,7 @@ export const asyncAboutUpdateAction = (params: AboutUpdate) => {
     return res;
   };
 };
-// 用户列表
-export const asyncUserListAction = (page: number, pageSize: number, name: string) => {
-  return async (dispatch: Dispatch) => {
-    const res = await api.getUserInfo(page, pageSize, name);
-    dispatch({
-      type: USER_LIST,
-      users: res,
-    });
-    return res;
-  };
-};
-// 删除用户
-export const asyncUserDeleteAction = (id: string) => {
-  return async (dispatch: Dispatch) => {
-    const res = await api.userDelete(id);
-    dispatch({
-      type: USER_DELETE,
-      userId: '',
-    });
-    return res;
-  };
-};
+
 // 评论列表
 export const asyncCommentsAction = (page: number, pageSize: number, articleTitle: string) => {
   return async (dispatch: Dispatch) => {
@@ -560,6 +582,61 @@ export const asyncRightsChildrenDeleteAction = (id: string) => {
     dispatch({
       type: RIGHTS_CHILDREN_DELETE,
       rid: '',
+    });
+    return res;
+  };
+};
+// 更新权限
+export const asyncRightsUpdateAction = (params: RightsUpdate) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.rightsUpdate(params);
+    dispatch({
+      type: RIGHTS_UPDATE,
+      rid: res,
+    });
+    return res;
+  };
+};
+// 更新子菜单权限
+export const asyncRightsChildrenUpdateAction = (params: RightsChildrenUpdate) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.rightsChildrenUpdate(params);
+    dispatch({
+      type: RIGHTS_CHILDREN_UPDATE,
+      rid: res,
+    });
+    return res;
+  };
+};
+// 角色列表
+export const asyncRoleListAction = (page: number, pageSize: number, role_name: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.getRoleList(page, pageSize, role_name);
+    dispatch({
+      type: ROLE_LIST,
+      role: res,
+    });
+    return res;
+  };
+};
+// 删除角色
+export const asyncRoleDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.roleDelete(id);
+    dispatch({
+      type: ROLE_DELETE,
+      rid: '',
+    });
+    return res;
+  };
+};
+// 更新角色
+export const asyncRoleUpdateAction = (params: RoleUpdate) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.roleUpdate(params);
+    dispatch({
+      type: ROLE_UPDATE,
+      rid: res,
     });
     return res;
   };

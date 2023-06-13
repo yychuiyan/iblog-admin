@@ -16,6 +16,9 @@ import {
   FriendlyUpdate,
   EssayAdd,
   EssayUpdate,
+  RightsUpdate,
+  RightsChildrenUpdate,
+  RoleUpdate,
 } from '@/types/api';
 
 const baseURL = `/api/v1`;
@@ -26,12 +29,24 @@ const api: Api = {
     return axios.post(`${baseURL}/admin/login`, params);
   },
   // 注册
-  userRegister(params) {
-    return axios.post(`${baseURL}/register`, params);
+  adminRegister(params) {
+    return axios.post(`${baseURL}/admin/register`, params);
   },
   // 退出登录
   loginOut() {
     return axios.post(`${baseURL}/admin/logout`);
+  },
+  // 用户列表
+  getAdminList(page: number, pageSize: number, username: string) {
+    return axios.get(`${baseURL}/admin?page=${page}&&pageSize=${pageSize}&&username=${username}`);
+  },
+  // 新增用户
+  adminAdd(params) {
+    return axios.post(`${baseURL}/admin`, params);
+  },
+  // 删除用户
+  adminDelete(id: string) {
+    return axios.delete(`${baseURL}/user/${id}`);
   },
   // 获取分类列表
   getCategories(page, pageSize, name) {
@@ -80,14 +95,6 @@ const api: Api = {
   // 修改关于
   aboutUpdate(params: AboutUpdate) {
     return axios.put(`${baseURL}/about/${params.id}`, params);
-  },
-  // 用户列表
-  getUserInfo(page: number, pageSize: number, nickName: string) {
-    return axios.get(`${baseURL}/user?page=${page}&&pageSize=${pageSize}&&nickName=${nickName}`);
-  },
-  // 删除用户
-  userDelete(id: string) {
-    return axios.delete(`${baseURL}/user/${id}`);
   },
   // 评论列表
   getComments(page: number, pageSize: number, articleTitle: string) {
@@ -210,6 +217,26 @@ const api: Api = {
   // 删除权限子菜单
   rightsChildrenDelete(id: string) {
     return axios.delete(`${baseURL}/rights-children/${id}`);
+  },
+  // 修改权限
+  rightsUpdate(params: RightsUpdate) {
+    return axios.put(`${baseURL}/rights/${params.id}`, params);
+  },
+  // 修改权限子菜单
+  rightsChildrenUpdate(params: RightsChildrenUpdate) {
+    return axios.put(`${baseURL}/rights-children/${params.id}`, params);
+  },
+  // 角色列表
+  getRoleList(page: number, pageSize: number, role_name: string) {
+    return axios.get(`${baseURL}/role?page=${page}&&pageSize=${pageSize}&&role_name=${role_name}`);
+  },
+  // 删除角色
+  roleDelete(id: string) {
+    return axios.delete(`${baseURL}/role/${id}`);
+  },
+  // 修改角色
+  roleUpdate(params: RoleUpdate) {
+    return axios.put(`${baseURL}/role/${params.id}`, params);
   },
 };
 export default api;

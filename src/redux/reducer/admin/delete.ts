@@ -1,11 +1,11 @@
-import { USER_DELETE } from '@/redux/constants';
+import { ADMIN_DELETE } from '@/redux/constants';
 import { Action } from '@/types/comm';
 const userState = {
   userId: String,
 };
-export const UserDeleteReducer = (state = userState, action: Action) => {
+export const AdminDeleteReducer = (state = userState, action: Action) => {
   switch (action.type) {
-    case USER_DELETE:
+    case ADMIN_DELETE:
       return {
         userId: action.userId,
       };

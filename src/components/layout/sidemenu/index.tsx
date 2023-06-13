@@ -4,13 +4,13 @@ import { bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import { withRouter } from 'react-router-dom';
 import {
-  HomeOutlined,
-  HighlightOutlined,
-  MessageOutlined,
-  EditOutlined,
-  LinkedinOutlined,
-  NotificationOutlined,
-  UserOutlined
+  // HomeOutlined,
+  // HighlightOutlined,
+  // MessageOutlined,
+  // EditOutlined,
+  // LinkedinOutlined,
+  // NotificationOutlined,
+  // UserOutlined
 } from '@ant-design/icons';
 import './index.less';
 import { useEffect, useState } from 'react';
@@ -26,9 +26,9 @@ interface DataType {
   updatetime: number;
   children: DataType[] | string;
 }
-interface RightsData {
-  data: DataType[];
-}
+// interface RightsData {
+//   data: DataType[];
+// }
 const { Sider } = Layout;
 // const items = [
 //   {
@@ -106,9 +106,9 @@ const { Sider } = Layout;
 //   },
 // ];
 // icon
-const iconList = {
-  '/admin/home': <HomeOutlined />,
-}
+// const iconList = {
+//   '/admin/home': <HomeOutlined />,
+// }
 
 const SideMenu = (props: any) => {
   // 路由列表
@@ -120,17 +120,15 @@ const SideMenu = (props: any) => {
       let { data } = res.data;
       // 根据pagepermission字段将页面需要的权限展示
       data.map((item: any, index: number) => {
-        if (item.children < 1) {
+        if (item.children.length < 1) {
           return data[index].children = ""
         } else {
-          const newItem = item.children.filter((it: any) => it.pagepermission === 1)
-          return item.children = newItem
+          const itemChildren = item.children.filter((it: any) => it.pagepermission === 1)
+          return item.children = itemChildren
         }
       })
-
-      console.log("data", data);
-
-      setItems(data);
+      let dataFilter = data.filter((data: DataType) => data.pagepermission === 1)
+      setItems(dataFilter);
     });
   }, [props.BlogActions]);
 

@@ -15,10 +15,10 @@ const ArticleList = lazy(() => import('@/pages/articles'));
 const PermissionList = lazy(() => import('@/pages/permission'))
 const RuleList = lazy(() => import('@/pages/permission/RuleList'))
 const Category = lazy(() => import('@/pages/category'));
-const Tags = lazy(() => import('@/pages/tags'));
+const Tags = lazy(() => import('@/redux/tags'));
 const About = lazy(() => import('@/pages/about'));
 const Comment = lazy(() => import('@/pages/comment'));
-const UserInfo = lazy(() => import('@/pages/users'));
+const UserInfo = lazy(() => import('@/pages/admin'));
 const ArticleAdd = lazy(() => import('@/pages/articles/add'));
 const ArticleUpdate = lazy(() => import('@/pages/articles/update'));
 const Message = lazy(() => import('@/pages/message'));

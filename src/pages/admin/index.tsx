@@ -1,67 +1,89 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Image, Input, message, Modal, Table, Tag, Tooltip } from 'antd';
+import { Button, Form, Image, Input, message, Modal, Select, Switch, Table, Tag, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ExclamationCircleOutlined, EditOutlined, CheckOutlined, CloseOutlined, } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
+import dayjs from 'dayjs';
 import './index.less';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
+  default: boolean | undefined;
   key: React.Key;
   _id?: string;
   username?: string;
-  avatar?: string;
+  roleState?: boolean;
   articleIds?: string[];
   createTime: string;
   updateTime: string;
+  role_type: number;
+  role_name: string;
+  rights: string[];
+  create_time: string;
+  update_time: string;
+  rightsId: any;
+  index: number;
+  label: string;
+  title?: string;
+  pagepermission: number | boolean;
+  grade: number;
+  children?: DataType[] | string;
+}
+interface RoleData {
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  data: DataType[];
 }
 const UserInfo = (props: any) => {
   const columns: ColumnsType<DataType> = [
     {
-      title: '昵称',
-      dataIndex: 'nickName',
-      width: 100,
+      title: '用户名',
+      dataIndex: 'username',
     },
     {
-      title: '头像',
-      dataIndex: 'avatar',
+      title: '角色名称',
+      dataIndex: 'role',
+      render: (role: any) => {
+        return role[0].role_name
+      }
+    },
+    {
+      title: '用户状态',
+      dataIndex: 'roleState',
       render: (_, record) => {
-        return <Image width={50} height={50} src={record.avatar}></Image>;
+        return (
+          <Switch
+            checkedChildren={<CheckOutlined />}
+            unCheckedChildren={<CloseOutlined />}
+            checked={record.roleState}
+            disabled={record.default}
+          // onChange={checked => onChangeStatus(checked, record)}
+          />
+        );
       },
     },
     {
-      title: '来源',
-      dataIndex: 'provider',
-    },
-    {
-      title: '邮箱',
-      dataIndex: 'email',
-    },
-    {
-      title: '收藏数量',
-      dataIndex: 'articleIds',
-      render: (_, record) => {
-        return <Tag color="orange">{record.articleIds?.length}</Tag>;
+      title: '创建时间',
+      dataIndex: 'createTime',
+      render: time => {
+        return time === 0 ? time : dayjs(time * 1000).format('YYYY-MM-DD HH:mm:ss');
       },
     },
     {
-      title: '个人介绍',
-      dataIndex: 'introduction',
-      render: text => {
-        return <Tooltip title={text}>{text}</Tooltip>;
+      title: '更新时间',
+      dataIndex: 'updateTime',
+      render: time => {
+        return time === 0 ? time : dayjs(time * 1000).format('YYYY-MM-DD HH:mm:ss');
       },
-    },
-    {
-      title: '注册时间',
-      dataIndex: 'registerTime',
     },
     {
       title: '操作',
       key: 'action',
-      render: item => {
+      render: (_, item) => {
         return (
           <div>
             <Button
@@ -71,6 +93,17 @@ const UserInfo = (props: any) => {
               icon={<DeleteOutlined />}
               onClick={() => {
                 categoryDelete(item);
+              }}
+              disabled={item.default}
+              style={{ marginRight: '5px' }}
+            />
+            <Button
+              type="primary"
+              ghost
+              shape="circle"
+              icon={<EditOutlined />}
+              onClick={() => {
+                // EssayUpdate(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -83,6 +116,8 @@ const UserInfo = (props: any) => {
   const [form] = Form.useForm();
   // 用户列表
   const [list, setList] = useState([]);
+  // 角色列表
+  const [roleName, setRoleName] = useState<any>()
   // 分页总数
   const [total, setTotal] = useState(0);
   // 当前第几页
@@ -94,16 +129,34 @@ const UserInfo = (props: any) => {
 
   // 获取用户列表数据
   useEffect(() => {
-    props.BlogActions.asyncUserListAction(currentPage, pageSize, '').then((res: any) => {
+    props.BlogActions.asyncAdminListAction(currentPage, pageSize, '').then((res: any) => {
       // 获取用户
       let { data, totalCount, page, pageSize } = res.data;
+      console.log("data", data);
+
       setList(data);
       setTotal(totalCount);
       setCurrentPage(page);
       setPageSize(pageSize);
     });
   }, [currentPage, pageSize, props.BlogActions]);
+  // 获取角色列表
+  useEffect(() => {
+    props.BlogActions.asyncRoleListAction('', '', '').then((res: RoleData) => {
+      // 获取角色
+      let { data } = res.data as unknown as RoleData;
+      let roleName = data.map((item: any) => {
+        return {
+          "value": item._id,
+          "label": item.role_name
+        }
+      })
+      console.log("roleName", roleName);
 
+
+      setRoleName(roleName);
+    });
+  }, [currentPage, pageSize, props.BlogActions]);
   // 新增用户
   const showModal = () => {
     setIsModalOpen(true);
@@ -114,17 +167,26 @@ const UserInfo = (props: any) => {
     await form.validateFields();
     // 获取表单值
     const data = form.getFieldsValue();
+    console.log("data", data);
     message.success('用户新增成功');
-    form.resetFields();
-    setIsModalOpen(false);
-    props.BlogActions.asyncCategoryAddAction({
-      name: data.title,
-    }).then((res: any) => {
+    props.BlogActions.asyncAdminAddAction({
+      username: data.username,
+      password: data.password,
+      role_id: data.role_id,
+    }).then(() => {
       // 重新调用查询接口
-      props.BlogActions.asyncUserListAction(currentPage, pageSize, '').then((res: any) => {
-        let { data } = res.data;
+      props.BlogActions.asyncAdminListAction(currentPage, pageSize, '').then((res: any) => {
+        // 获取用户
+        let { data, totalCount, page, pageSize } = res.data;
+        console.log("data", data);
+
         setList(data);
+        setTotal(totalCount);
+        setCurrentPage(page);
+        setPageSize(pageSize);
       });
+      form.resetFields();
+      setIsModalOpen(false);
     });
   };
   // 关闭窗口
@@ -142,7 +204,7 @@ const UserInfo = (props: any) => {
         setList(list.filter((it: any) => it._id !== item._id));
         message.success('用户删除成功');
         props.BlogActions.asyncUserDeleteAction(item._id).then(() => {
-          props.BlogActions.asyncUserListAction(currentPage, pageSize, '').then((res: any) => {
+          props.BlogActions.asyncAdminListAction(currentPage, pageSize, '').then((res: any) => {
             // 获取用户
             let { data, totalCount, page, pageSize } = res.data;
             setList(data);
@@ -156,7 +218,7 @@ const UserInfo = (props: any) => {
   };
   // 搜索
   const onSearch = (value: string) => {
-    props.BlogActions.asyncUserListAction(currentPage, pageSize, value).then((res: any) => {
+    props.BlogActions.asyncAdminListAction(currentPage, pageSize, value).then((res: any) => {
       let { data, totalCount, page, pageSize } = res.data;
 
       setList(data);
@@ -168,7 +230,7 @@ const UserInfo = (props: any) => {
   // 跳转页数据显示
   const onChangePage = (page: any, pageSize: any, params = '') => {
     // 重新调用接口将参数传递过去
-    props.BlogActions.asyncUserListAction(page, pageSize, params).then((res: any) => {
+    props.BlogActions.asyncAdminListAction(page, pageSize, params).then((res: any) => {
       // 获取列表数据
       let { data } = res.data;
       setList(data);
@@ -204,12 +266,32 @@ const UserInfo = (props: any) => {
       >
         <Form form={form} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item
-            name="title"
-            label="名称"
+            name="username"
+            label="用户名称"
             rules={[{ required: true, message: '用户名称不能为空' }]}
           >
             <Input />
           </Form.Item>
+          <Form.Item
+            name="password"
+            label="用户密码"
+            rules={[{ required: true, message: '用户密码不能为空' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="role_id"
+            label="角色"
+            rules={[{ required: true, message: '角色不能为空' }]}
+          >
+            <Select
+              // defaultValue=""
+              // style={{ width: 120 }}
+              // onChange={handleChange}
+              options={roleName}
+            />
+          </Form.Item>
+
         </Form>
       </Modal>
       <Table

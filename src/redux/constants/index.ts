@@ -1,9 +1,15 @@
 // 登录
-export const USER_LOGIN = 'USER_LOGIN';
+export const ADMIN_LOGIN = 'ADMIN_LOGIN';
 // 注册
-export const USER_REGISTER = 'USER_REGISTER';
+export const ADMIN_REGISTER = 'ADMIN_REGISTER';
 // 退出登录
 export const LOGINOUT = 'LOGINOUT';
+// 用户列表
+export const ADMIN_LIST = 'ADMIN_LIST';
+// 新增用户
+export const ADMIN_ADD = 'ADMIN_ADD';
+// 用户删除
+export const ADMIN_DELETE = 'ADMIN_DELETE';
 // 侧边栏的显示与隐藏
 export const CHANGE_COLLAPSED = 'CHANGE_COLLAPSED';
 // loading
@@ -32,10 +38,6 @@ export const ABOUT_LIST = 'ABOUT_LIST';
 export const ABOUT_ADD = 'ABOUT_ADD';
 // 修改关于
 export const ABOUT_UPDATE = 'ABOUT_UPDATE';
-// 用户列表
-export const USER_LIST = 'USER_LIST';
-// 用户删除
-export const USER_DELETE = 'USER_DELETE';
 // 评论列表
 export const ARTICLE_COMMENT = 'ARTICLE_COMMENT';
 // 删除评论
@@ -86,4 +88,14 @@ export const ESSAY_UPDATE = 'ESSAY_UPDATE';
 export const RIGHTS_LIST = 'RIGHTS_LIST';
 // 删除权限
 export const RIGHTS_DELETE = 'RIGHTS_DELETE';
+// 删除权限子菜单
 export const RIGHTS_CHILDREN_DELETE = 'RIGHTS_CHILDREN_DELETE';
+// 更新权限
+export const RIGHTS_UPDATE = 'RIGHTS_UPDATE';
+export const RIGHTS_CHILDREN_UPDATE = 'RIGHTS_CHILDREN_UPDATE';
+// 角色列表
+export const ROLE_LIST = 'ROLE_LIST';
+// 删除角色
+export const ROLE_DELETE = 'ROLE_DELETE';
+// 修改角色
+export const ROLE_UPDATE = 'ROLE_UPDATE';

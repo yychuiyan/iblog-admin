@@ -1,11 +1,11 @@
-import { ADMIN_REGISTER } from '@/redux/constants';
+import { ADMIN_ADD } from '@/redux/constants';
 import { Action } from '@/types/comm';
 const userState = {
   userinfo: {},
 };
-export const RegisterReducer = (state = userState, action: Action) => {
+export const AdminAddReducer = (state = userState, action: Action) => {
   switch (action.type) {
-    case ADMIN_REGISTER:
+    case ADMIN_ADD:
       return {
         userinfo: action.userinfo,
       };
