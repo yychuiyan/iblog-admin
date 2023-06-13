@@ -19,6 +19,8 @@ import {
   RightsUpdate,
   RightsChildrenUpdate,
   RoleUpdate,
+  AdminUpdateStatus,
+  AdminUpdate,
 } from '@/types/api';
 
 const baseURL = `/api/v1`;
@@ -46,7 +48,15 @@ const api: Api = {
   },
   // 删除用户
   adminDelete(id: string) {
-    return axios.delete(`${baseURL}/user/${id}`);
+    return axios.delete(`${baseURL}/admin/${id}`);
+  },
+  // 更新用户状态
+  adminStatusUpdate(params: AdminUpdateStatus) {
+    return axios.put(`${baseURL}/admin/status/${params.id}`, params);
+  },
+  // 更新用户
+  adminUpdate(params: AdminUpdate) {
+    return axios.put(`${baseURL}/admin/${params.id}`, params);
   },
   // 获取分类列表
   getCategories(page, pageSize, name) {

@@ -8,6 +8,10 @@ export const LOGINOUT = 'LOGINOUT';
 export const ADMIN_LIST = 'ADMIN_LIST';
 // 新增用户
 export const ADMIN_ADD = 'ADMIN_ADD';
+// 更新管理员状态
+export const ADMIN_STATUS = 'ADMIN_STATUS';
+// 更新管理员
+export const ADMIN_UPDATE = 'ADMIN_UPDATE';
 // 用户删除
 export const ADMIN_DELETE = 'ADMIN_DELETE';
 // 侧边栏的显示与隐藏

@@ -11,12 +11,12 @@ import jwtDecode from 'jwt-decode';
 const { Header } = Layout;
 const TopHeader = (props: any) => {
   // 用户信息
-  const [userInfo, setUserInfo] = useState<any>({});
+  const [username, setUserName] = useState();
   useEffect(() => {
     // 解析token
     //@ts-ignore
-    let userInfo = jwtDecode(localStorage.getItem('token'))._doc;
-    setUserInfo(userInfo);
+    let username = jwtDecode(localStorage.getItem('token'))[0].username;
+    setUserName(username);
   }, []);
   const changeCollapsed = () => {
     // 改变状态值
@@ -59,7 +59,7 @@ const TopHeader = (props: any) => {
         <span>
           欢迎回家：
           <Dropdown menu={{ items }} placement="bottom">
-            <b style={{ color: 'blue', cursor: 'pointer' }}>{userInfo.username}</b>
+            <b style={{ color: 'blue', cursor: 'pointer' }}>11{username}</b>
           </Dropdown>
         </span>
 

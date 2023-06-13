@@ -169,6 +169,7 @@ const Essay = (props: any) => {
     updateForm.resetFields();
     setIsModalUpdateOpen(false);
   };
+  // 更新
   const EssayUpdate = (item: EssayData) => {
     setImageList(item)
     setImgUrl(item.cover);

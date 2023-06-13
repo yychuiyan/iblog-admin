@@ -13,7 +13,7 @@ const Home = lazy(() => import('@/pages/home'));
 const NotFound = lazy(() => import('@/pages/404'));
 const ArticleList = lazy(() => import('@/pages/articles'));
 const PermissionList = lazy(() => import('@/pages/permission'))
-const RuleList = lazy(() => import('@/pages/permission/RuleList'))
+const RuleList = lazy(() => import('@/pages/permission/RoleList'))
 const Category = lazy(() => import('@/pages/category'));
 const Tags = lazy(() => import('@/redux/tags'));
 const About = lazy(() => import('@/pages/about'));

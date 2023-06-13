@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Image, Input, message, Modal, Select, Switch, Table, Tag, Tooltip } from 'antd';
+import { Button, Form, Input, message, Modal, Select, Switch, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, ExclamationCircleOutlined, EditOutlined, CheckOutlined, CloseOutlined, } from '@ant-design/icons';
 import { connect } from 'react-redux';
@@ -32,7 +32,10 @@ interface DataType {
   grade: number;
   children?: DataType[] | string;
 }
-interface RoleData {
+interface AdminData {
+  code: number;
+  _id: any;
+  status: any;
   totalCount: number;
   page: number;
   pageSize: number;
@@ -53,15 +56,15 @@ const UserInfo = (props: any) => {
     },
     {
       title: '用户状态',
-      dataIndex: 'roleState',
-      render: (_, record) => {
+      dataIndex: 'status',
+      render: (_, record: any) => {
         return (
           <Switch
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
-            checked={record.roleState}
+            checked={record.status}
             disabled={record.default}
-          // onChange={checked => onChangeStatus(checked, record)}
+            onChange={checked => onChangeStatus(checked, record)}
           />
         );
       },
@@ -83,7 +86,7 @@ const UserInfo = (props: any) => {
     {
       title: '操作',
       key: 'action',
-      render: (_, item) => {
+      render: (_, item: any) => {
         return (
           <div>
             <Button
@@ -103,7 +106,7 @@ const UserInfo = (props: any) => {
               shape="circle"
               icon={<EditOutlined />}
               onClick={() => {
-                // EssayUpdate(item);
+                AdminUpdate(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -114,8 +117,11 @@ const UserInfo = (props: any) => {
   ];
   // 表单数据
   const [form] = Form.useForm();
+  const [updateForm] = Form.useForm();
   // 用户列表
-  const [list, setList] = useState([]);
+  const [list, setList] = useState<DataType[]>([]);
+  // 更新存储信息
+  const [adminData, setAdminData] = useState<any>([])
   // 角色列表
   const [roleName, setRoleName] = useState<any>()
   // 分页总数
@@ -126,13 +132,14 @@ const UserInfo = (props: any) => {
   const [pageSize, setPageSize] = useState(10);
   // 窗口
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   // 获取用户列表数据
   useEffect(() => {
     props.BlogActions.asyncAdminListAction(currentPage, pageSize, '').then((res: any) => {
       // 获取用户
       let { data, totalCount, page, pageSize } = res.data;
-      console.log("data", data);
+      console.log("获取用户列表", data);
 
       setList(data);
       setTotal(totalCount);
@@ -142,9 +149,9 @@ const UserInfo = (props: any) => {
   }, [currentPage, pageSize, props.BlogActions]);
   // 获取角色列表
   useEffect(() => {
-    props.BlogActions.asyncRoleListAction('', '', '').then((res: RoleData) => {
+    props.BlogActions.asyncRoleListAction('', '', '').then((res: AdminData) => {
       // 获取角色
-      let { data } = res.data as unknown as RoleData;
+      let { data } = res.data as unknown as AdminData;
       let roleName = data.map((item: any) => {
         return {
           "value": item._id,
@@ -175,9 +182,9 @@ const UserInfo = (props: any) => {
       role_id: data.role_id,
     }).then(() => {
       // 重新调用查询接口
-      props.BlogActions.asyncAdminListAction(currentPage, pageSize, '').then((res: any) => {
+      props.BlogActions.asyncAdminListAction(currentPage, pageSize, '').then((res: AdminData) => {
         // 获取用户
-        let { data, totalCount, page, pageSize } = res.data;
+        let { data, totalCount, page, pageSize } = res.data as unknown as AdminData;
         console.log("data", data);
 
         setList(data);
@@ -189,10 +196,56 @@ const UserInfo = (props: any) => {
       setIsModalOpen(false);
     });
   };
+  // 更新用户状态
+  const onChangeStatus = (checked: boolean, row: AdminData) => {
+    props.BlogActions.asyncAdminStatusUpdateAction({
+      status: checked,
+      id: row._id,
+    }).then(() => {
+      row.status = checked;
+      setList([...list]);
+      message.success('状态更新成功');
+    });
+  };
+  // 更新用户
+  const AdminUpdate = (item: AdminData) => {
+    setIsUpdateModalOpen(true);
+    updateForm.setFieldsValue(item);
+    setAdminData(item);
+  };
+  // 提交更新
+  const handleUpdateConfirm = () => {
+    let data = updateForm.getFieldsValue();
+    console.log("data", data);
+    props.BlogActions.asyncAdminUpdateAction({
+      ...data,
+      //@ts-ignore
+      id: adminData._id,
+    }).then(() => {
+      message.success('更新成功');
+      // 重新调用查询接口
+      props.BlogActions.asyncAdminListAction(currentPage, pageSize, '').then((res: AdminData) => {
+        // 获取用户
+        let { data, totalCount, page, pageSize } = res.data as unknown as AdminData;
+        console.log("更新：", data);
+
+        setList(data);
+        setTotal(totalCount);
+        setCurrentPage(page);
+        setPageSize(pageSize);
+      });
+      updateForm.resetFields();
+      setIsUpdateModalOpen(false);
+    });
+  };
   // 关闭窗口
   const handleCancel = (e: any) => {
     form.resetFields();
     setIsModalOpen(false);
+  };
+  const handleUpdateCancel = (e: any) => {
+    updateForm.resetFields();
+    setIsUpdateModalOpen(false);
   };
   // 删除用户
   const categoryDelete = (item: any) => {
@@ -203,7 +256,7 @@ const UserInfo = (props: any) => {
         // 先将要删除的数据过滤掉再调用接口
         setList(list.filter((it: any) => it._id !== item._id));
         message.success('用户删除成功');
-        props.BlogActions.asyncUserDeleteAction(item._id).then(() => {
+        props.BlogActions.asyncAdminDeleteAction(item._id).then(() => {
           props.BlogActions.asyncAdminListAction(currentPage, pageSize, '').then((res: any) => {
             // 获取用户
             let { data, totalCount, page, pageSize } = res.data;
@@ -277,7 +330,47 @@ const UserInfo = (props: any) => {
             label="用户密码"
             rules={[{ required: true, message: '用户密码不能为空' }]}
           >
+            <Input type='password' />
+          </Form.Item>
+          <Form.Item
+            name="role_id"
+            label="角色"
+            rules={[{ required: true, message: '角色不能为空' }]}
+          >
+            <Select
+              // defaultValue=""
+              // style={{ width: 120 }}
+              // onChange={handleChange}
+              options={roleName}
+            />
+          </Form.Item>
+
+        </Form>
+      </Modal>
+      <Modal
+        open={isUpdateModalOpen}
+        title={<div style={{ textAlign: 'left' }}>更新用户</div>}
+        okText="更新"
+        cancelText="取消"
+        onCancel={handleUpdateCancel}
+        onOk={() => {
+          handleUpdateConfirm();
+        }}
+      >
+        <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
+          <Form.Item
+            name="username"
+            label="用户名称"
+            rules={[{ required: true, message: '用户名称不能为空' }]}
+          >
             <Input />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="用户密码"
+            rules={[{ required: true, message: '用户密码不能为空' }]}
+          >
+            <Input type='password' />
           </Form.Item>
           <Form.Item
             name="role_id"

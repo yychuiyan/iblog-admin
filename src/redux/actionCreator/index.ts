@@ -52,6 +52,8 @@ import {
   ROLE_DELETE,
   ROLE_UPDATE,
   ADMIN_ADD,
+  ADMIN_STATUS,
+  ADMIN_UPDATE,
 } from '@/redux/constants';
 import jwtDecode from 'jwt-decode';
 import {
@@ -76,15 +78,20 @@ import {
   RightsChildrenUpdate,
   RoleUpdate,
   AdminAdd,
+  AdminUpdateStatus,
+  AdminUpdate,
 } from '@/types/api';
 // 登录
 export function asyncLoginAction(data: LoginParams) {
   return async (dispatch: Dispatch) => {
     const res = await api.Login(data);
-    if (res.data === null) {
-      message.error('用户名或密码错误，请再次确认');
-      return;
-    } else {
+    if (res.code === 110404) {
+      message.error(res.msg);
+    } else if (res.code === 110405) {
+      message.error(res.msg);
+    }
+    if (res.code === 0) {
+      console.log('res', res);
       // 将token存储存到本地
       localStorage.setItem('token', res.data.token);
       // 解析token
@@ -94,9 +101,12 @@ export function asyncLoginAction(data: LoginParams) {
         userToken: userToken,
       });
       return res;
+    } else if (res.code === 110401) {
+      message.error('请检查用户名或密码后重新登录');
     }
   };
 }
+// }
 // 注册
 export const asyncRegisterAction = (data: AdminRegister) => {
   return async (dispatch: Dispatch) => {
@@ -141,12 +151,34 @@ export const asyncAdminAddAction = (data: AdminAdd) => {
   };
 };
 // 删除用户
-export const asyncUserDeleteAction = (id: string) => {
+export const asyncAdminDeleteAction = (id: string) => {
   return async (dispatch: Dispatch) => {
     const res = await api.adminDelete(id);
     dispatch({
       type: ADMIN_DELETE,
       userId: '',
+    });
+    return res;
+  };
+};
+// 更新管理员状态
+export const asyncAdminStatusUpdateAction = (params: AdminUpdateStatus) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.adminStatusUpdate(params);
+    dispatch({
+      type: ADMIN_STATUS,
+      admin: res,
+    });
+    return res;
+  };
+};
+// 更新管理员
+export const asyncAdminUpdateAction = (params: AdminUpdate) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.adminUpdate(params);
+    dispatch({
+      type: ADMIN_UPDATE,
+      admin: res,
     });
     return res;
   };

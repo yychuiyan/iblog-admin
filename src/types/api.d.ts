@@ -29,6 +29,16 @@ interface AdminAdd {
   password: string;
   role_id: string;
 }
+interface AdminUpdateStatus {
+  status: boolean;
+  id: string;
+}
+interface AdminUpdate {
+  id: string;
+  username: string;
+  password: string;
+  role_id: string;
+}
 interface CategoryUpdate {
   id: string;
   name: string;
@@ -155,6 +165,8 @@ export interface Api {
   getAdminList(page: number, pageSize: number, username: string): Promise<ApiResponse>;
   adminDelete(id: string): Promise<ApiResponse>;
   adminAdd(params: AdminAdd): Promise<ApiResponse>;
+  adminUpdate(params: AdminUpdate): Promise<ApiResponse>;
+  adminStatusUpdate(params: AdminUpdateStatus): Promise<ApiResponse>;
   getCategories(page: number, pageSize: number, name: string): Promise<ApiResponse>;
   categoryAdd(name: string): Promise<ApiResponse>;
   categoryDelete(id: string): Promise<ApiResponse>;

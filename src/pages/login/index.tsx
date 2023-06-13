@@ -11,13 +11,13 @@ function Login(props: any) {
     props.authActions.asyncLoginAction({
         username: values.username,
         password: values.password,
-    }).then((res: { code: number; }) => {
-        if (res.code === 0) {
-          message.success('登录成功，跳转到首页');
-          props.history.replace('/admin/home');
-        } else {
-          message.error('请检查用户名或密码后重新登录');
-        }
+    }).then((res: { code: number; msg: string }) => {
+      if (res.code === 0) {
+        message.success('登录成功，跳转到首页');
+        props.history.replace('/admin/home');
+      } else {
+        message.error('系统异常，请联系管理员进行处理!')
+      }
       });
   };
   const handClick = () => {

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import { withRouter } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 import {
   // HomeOutlined,
   // HighlightOutlined,
@@ -111,6 +112,9 @@ const { Sider } = Layout;
 // }
 
 const SideMenu = (props: any) => {
+  const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
+  const { role } = token[0]
+  console.log('local', role[0].rights);
   // 路由列表
   const [items, setItems] = useState<DataType[]>([])
   // 获取权限列表
@@ -128,6 +132,8 @@ const SideMenu = (props: any) => {
         }
       })
       let dataFilter = data.filter((data: DataType) => data.pagepermission === 1)
+      console.log("dataFilter", dataFilter);
+
       setItems(dataFilter);
     });
   }, [props.BlogActions]);
