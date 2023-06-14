@@ -5,7 +5,10 @@ import './index.less'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import dayjs from 'dayjs';
+import jwtDecode from 'jwt-decode';
 const Save = (props: any) => {
+  const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
+  const role_type = token[0].role[0].role_type
   const { time, showBack, onRefresh, onSave, onBack, onDraft, onPublish } = props
   const message = time ? `上次保存时间：${dayjs(time * 1000).format('YYYY-MM-DD HH:mm:ss')}` : `暂无操作`
   const goBack = () => {
@@ -24,24 +27,24 @@ const Save = (props: any) => {
           </div>
           <div className='save_right'>
             {
-              showBack && <Button onClick={onBack || goBack} type="primary" ghost icon={<RollbackOutlined />} className="save_right_btn">返回</Button>
+              showBack && <Button onClick={onBack || goBack} type="primary" ghost icon={<RollbackOutlined />} disabled={role_type} className="save_right_btn">返回</Button>
             }
             {
-              onBack && <Button onClick={onBack} type="primary" ghost icon={<ArrowLeftOutlined />} className="save_right_btn">返回</Button>
+              onBack && <Button onClick={onBack} type="primary" ghost icon={<ArrowLeftOutlined />} disabled={role_type} className="save_right_btn">返回</Button>
             }
             {/* 当存在该方法时显示刷新操作并执行 */}
             {
-              onRefresh && <Button onClick={onRefresh} type="primary" ghost icon={<RedoOutlined />} className="save_right_btn">刷新</Button>
+              onRefresh && <Button onClick={onRefresh} type="primary" ghost icon={<RedoOutlined />} disabled={role_type} className="save_right_btn">刷新</Button>
             }
 
             {
-              onSave && <Button onClick={onSave} icon={<SaveOutlined />} className="save_right_btn">保存</Button>
+              onSave && <Button onClick={onSave} icon={<SaveOutlined />} disabled={role_type} className="save_right_btn">保存</Button>
             }
             {
-              onDraft && <Button onClick={onDraft} icon={<SaveOutlined />} className="save_right_btn">保存草稿</Button>
+              onDraft && <Button onClick={onDraft} icon={<SaveOutlined />} disabled={role_type} className="save_right_btn">保存草稿</Button>
             }
             {
-              onPublish && <Button onClick={onPublish} icon={<SaveOutlined />} className="save_right_btn">发布文章</Button>
+              onPublish && <Button onClick={onPublish} icon={<SaveOutlined />} disabled={role_type} className="save_right_btn">发布文章</Button>
             }
 
 

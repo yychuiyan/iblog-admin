@@ -8,6 +8,7 @@ import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import { auditStatusOptions } from '@/utils/constants';
 import dayjs from 'dayjs';
+import jwtDecode from 'jwt-decode';
 import './index.less';
 const { confirm } = Modal;
 interface DataType {
@@ -27,6 +28,8 @@ interface MessageData {
   data: DataType[];
 }
 const Message = (props: any) => {
+  const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
+  const role_type = token[0].role[0].role_type
   const columns: ColumnsType<DataType> = [
     {
       title: '昵称',
@@ -96,6 +99,7 @@ const Message = (props: any) => {
               danger
               shape="circle"
               icon={<DeleteOutlined />}
+              disabled={role_type}
               onClick={() => {
                 messageDelete(item);
               }}
@@ -109,7 +113,7 @@ const Message = (props: any) => {
                 messageAudit(item);
               }}
               style={{ marginRight: '5px' }}
-              disabled={!item.children}
+              disabled={role_type ? role_type : !item.children}
             ></Button>
           </div>
         );
@@ -279,7 +283,7 @@ const Message = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" onClick={() => messageAudit({ _id: 0 })}>
+        <Button type="primary" disabled={role_type} onClick={() => messageAudit({ _id: 0 })}>
           一键审核
         </Button>
         {/* <div className="cate_search">

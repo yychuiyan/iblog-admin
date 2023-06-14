@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import dayjs from 'dayjs';
+import jwtDecode from 'jwt-decode';
 import './index.less';
 const { confirm } = Modal;
 const { Search } = Input;
@@ -41,7 +42,11 @@ interface AdminData {
   pageSize: number;
   data: DataType[];
 }
-const UserInfo = (props: any) => {
+const Adminstrator = (props: any) => {
+  const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
+  // const role_type = Boolean(token[0].role.map((item: any) => item.role_type).join(''))
+  const role_type = token[0].role[0].role_type
+
   const columns: ColumnsType<DataType> = [
     {
       title: '用户名',
@@ -51,7 +56,7 @@ const UserInfo = (props: any) => {
       title: '角色名称',
       dataIndex: 'role',
       render: (role: any) => {
-        return role[0].role_name
+        return role[0]?.role_name
       }
     },
     {
@@ -63,7 +68,7 @@ const UserInfo = (props: any) => {
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
             checked={record.status}
-            disabled={record.default}
+            disabled={role_type}
             onChange={checked => onChangeStatus(checked, record)}
           />
         );
@@ -97,7 +102,7 @@ const UserInfo = (props: any) => {
               onClick={() => {
                 categoryDelete(item);
               }}
-              disabled={item.default}
+              disabled={item.default ? item.default : role_type}
               style={{ marginRight: '5px' }}
             />
             <Button
@@ -108,6 +113,7 @@ const UserInfo = (props: any) => {
               onClick={() => {
                 AdminUpdate(item);
               }}
+              disabled={role_type}
               style={{ marginRight: '5px' }}
             />
           </div>
@@ -139,8 +145,6 @@ const UserInfo = (props: any) => {
     props.BlogActions.asyncAdminListAction(currentPage, pageSize, '').then((res: any) => {
       // 获取用户
       let { data, totalCount, page, pageSize } = res.data;
-      console.log("获取用户列表", data);
-
       setList(data);
       setTotal(totalCount);
       setCurrentPage(page);
@@ -158,9 +162,6 @@ const UserInfo = (props: any) => {
           "label": item.role_name
         }
       })
-      console.log("roleName", roleName);
-
-
       setRoleName(roleName);
     });
   }, [currentPage, pageSize, props.BlogActions]);
@@ -174,7 +175,7 @@ const UserInfo = (props: any) => {
     await form.validateFields();
     // 获取表单值
     const data = form.getFieldsValue();
-    console.log("data", data);
+
     message.success('用户新增成功');
     props.BlogActions.asyncAdminAddAction({
       username: data.username,
@@ -185,8 +186,6 @@ const UserInfo = (props: any) => {
       props.BlogActions.asyncAdminListAction(currentPage, pageSize, '').then((res: AdminData) => {
         // 获取用户
         let { data, totalCount, page, pageSize } = res.data as unknown as AdminData;
-        console.log("data", data);
-
         setList(data);
         setTotal(totalCount);
         setCurrentPage(page);
@@ -216,7 +215,7 @@ const UserInfo = (props: any) => {
   // 提交更新
   const handleUpdateConfirm = () => {
     let data = updateForm.getFieldsValue();
-    console.log("data", data);
+
     props.BlogActions.asyncAdminUpdateAction({
       ...data,
       //@ts-ignore
@@ -227,7 +226,6 @@ const UserInfo = (props: any) => {
       props.BlogActions.asyncAdminListAction(currentPage, pageSize, '').then((res: AdminData) => {
         // 获取用户
         let { data, totalCount, page, pageSize } = res.data as unknown as AdminData;
-        console.log("更新：", data);
 
         setList(data);
         setTotal(totalCount);
@@ -296,7 +294,7 @@ const UserInfo = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" onClick={showModal} className="btn">
+        <Button type="primary" disabled={role_type} onClick={showModal} className="btn">
           新增用户
         </Button>
         <Search
@@ -366,13 +364,6 @@ const UserInfo = (props: any) => {
             <Input />
           </Form.Item>
           <Form.Item
-            name="password"
-            label="用户密码"
-            rules={[{ required: true, message: '用户密码不能为空' }]}
-          >
-            <Input type='password' />
-          </Form.Item>
-          <Form.Item
             name="role_id"
             label="角色"
             rules={[{ required: true, message: '角色不能为空' }]}
@@ -410,4 +401,4 @@ const mapDispatchToProps = (dispatch: any) => {
     BlogActions: bindActionCreators(BlogActions, dispatch),
   };
 };
-export default connect(null, mapDispatchToProps)(UserInfo);
+export default connect(null, mapDispatchToProps)(Adminstrator);

@@ -8,6 +8,7 @@ import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import './index.less';
 import dayjs from 'dayjs';
+import jwtDecode from 'jwt-decode';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
@@ -116,6 +117,8 @@ interface DataType {
   name: string;
 }
 const ArticleCategory = (props: any) => {
+  const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
+  const role_type = token[0].role[0].role_type
   // 保存
   const handleSave = (record: DataType) => {
     let rawData = list.map((item: DataType) => {
@@ -193,6 +196,7 @@ const ArticleCategory = (props: any) => {
               type="primary"
               danger
               shape="circle"
+              disabled={role_type}
               icon={<DeleteOutlined />}
               onClick={() => {
                 categoryDelete(item);
@@ -314,7 +318,7 @@ const ArticleCategory = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" onClick={showModal} className="btn">
+        <Button type="primary" disabled={role_type} onClick={showModal} className="btn">
           新增分类
         </Button>
         <Search

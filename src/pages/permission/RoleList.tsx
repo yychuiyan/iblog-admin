@@ -176,7 +176,6 @@ const RoleList = (props: any) => {
     }))
     props.BlogActions.asyncRoleUpdateAction({
       role_name: value.role_name,
-      role_type: 1,
       rights: currentRights,
       //@ts-ignore
       id: updateData._id,

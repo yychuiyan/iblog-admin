@@ -36,7 +36,6 @@ interface AdminUpdateStatus {
 interface AdminUpdate {
   id: string;
   username: string;
-  password: string;
   role_id: string;
 }
 interface CategoryUpdate {

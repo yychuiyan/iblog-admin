@@ -7,6 +7,7 @@ import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import dayjs from 'dayjs';
+import jwtDecode from 'jwt-decode';
 import './index.less';
 const { confirm } = Modal;
 const { Search } = Input;
@@ -28,6 +29,8 @@ interface CommentData {
   data: DataType[];
 }
 const Comments = (props: any) => {
+  const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
+  const role_type = token[0].role[0].role_type
   const columns: ColumnsType<DataType> = [
     {
       title: '文章标题',
@@ -72,6 +75,7 @@ const Comments = (props: any) => {
               type="primary"
               danger
               shape="circle"
+              disabled={role_type}
               icon={<DeleteOutlined />}
               onClick={() => {
                 commentDelete(item);

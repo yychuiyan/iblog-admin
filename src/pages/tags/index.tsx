@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
+import jwtDecode from 'jwt-decode';
 import './index.less';
 import dayjs from 'dayjs';
 const { confirm } = Modal;
@@ -123,6 +124,8 @@ const EditableCell: React.FC<EditableCellProps> = ({
 };
 
 const ArticleTag = (props: any) => {
+  const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
+  const role_type = token[0].role[0].role_type
   // 保存
   const handleSave = (record: DataType) => {
     let rawData = list.map((item: DataType) => {
@@ -182,6 +185,7 @@ const ArticleTag = (props: any) => {
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
             checked={record.status}
+            disabled={role_type}
             onChange={checked => onChangeStatus(checked, record)}
           />
         );
@@ -218,7 +222,7 @@ const ArticleTag = (props: any) => {
                 TagDelete(item);
               }}
               style={{ marginRight: '5px' }}
-              disabled={item.status}
+              disabled={item.status ? item.status : role_type}
             />
           </div>
         );
@@ -347,7 +351,7 @@ const ArticleTag = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" onClick={showModal} className="btn">
+        <Button type="primary" disabled={role_type} onClick={showModal} className="btn">
           新增标签
         </Button>
         <Search

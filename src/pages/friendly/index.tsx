@@ -9,6 +9,7 @@ import MyPagination from '@/components/pagination';
 import './index.less';
 import dayjs from 'dayjs';
 import UploadImage from '@/components/upload';
+import jwtDecode from 'jwt-decode';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
@@ -29,6 +30,8 @@ interface FriendlyData {
   data: DataType[];
 }
 const UserInfo = (props: any) => {
+  const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
+  const role_type = token[0].role[0].role_type
   const columns: ColumnsType<DataType> = [
     {
       title: '昵称',
@@ -78,6 +81,7 @@ const UserInfo = (props: any) => {
               danger
               shape="circle"
               icon={<DeleteOutlined />}
+              disabled={role_type}
               onClick={() => {
                 friendlyDelete(item);
               }}
@@ -88,6 +92,7 @@ const UserInfo = (props: any) => {
               ghost
               shape="circle"
               icon={<EditOutlined />}
+              disabled={role_type}
               onClick={() => {
                 friendlyUpdate(item);
               }}
@@ -274,7 +279,7 @@ const UserInfo = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" onClick={showModal} className="btn">
+        <Button type="primary" disabled={role_type} onClick={showModal} className="btn">
           新增友链
         </Button>
         <Search

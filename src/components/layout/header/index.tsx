@@ -27,7 +27,7 @@ const TopHeader = (props: any) => {
     props.BlogActions.asyncLoginOutAction().then(() => {
       // 清空token
       localStorage.removeItem('token');
-      message.success('退出登录成功');
+      message.success('退出登录');
       // 跳转到登录页面
       props.history.push('/admin/login');
     });
@@ -59,7 +59,7 @@ const TopHeader = (props: any) => {
         <span>
           欢迎回家：
           <Dropdown menu={{ items }} placement="bottom">
-            <b style={{ color: 'blue', cursor: 'pointer' }}>11{username}</b>
+            <b style={{ color: 'blue', cursor: 'pointer' }}>{username}</b>
           </Dropdown>
         </span>
 

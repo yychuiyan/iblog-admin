@@ -14,6 +14,7 @@ import {
   Tag,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import jwtDecode from 'jwt-decode';
 import {
   DeleteOutlined,
   ExclamationCircleOutlined,
@@ -59,6 +60,8 @@ interface ArticleData {
   data: DataType[];
 }
 const ArticleList = (props: any) => {
+  const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
+  const role_type = token[0].role[0].role_type
   const columns: ColumnsType<DataType> = [
     {
       title: '文章标题',
@@ -132,6 +135,7 @@ const ArticleList = (props: any) => {
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
             checked={record.isTop}
+            disabled={role_type}
             onChange={checked => onChangeStatus(checked, record)}
           />
         );
@@ -181,6 +185,7 @@ const ArticleList = (props: any) => {
               type="primary"
               ghost
               shape="circle"
+              disabled={role_type}
               onClick={() => {
                 onChangePublishStatus(record);
               }}
@@ -188,16 +193,6 @@ const ArticleList = (props: any) => {
             >
               {record.publishStatus === 1 ? <CloudDownloadOutlined /> : <CloudUploadOutlined />}
             </Button>
-            {/* <Button
-              type="primary"
-              ghost
-              shape="circle"
-              icon={<EyeOutlined />}
-              onClick={() => {
-                onPreview(record);
-              }}
-              style={{ marginRight: '5px' }}
-            /> */}
             {record.publishStatus === 2 && (
               <>
                 <Button
@@ -377,7 +372,7 @@ const ArticleList = (props: any) => {
     <div>
       <div className="cate_title">
         <div>
-          <Button type="primary" onClick={handleArticleAdd} className="btn">
+          <Button type="primary" disabled={role_type} onClick={handleArticleAdd} className="btn">
             新增文章
           </Button>
         </div>

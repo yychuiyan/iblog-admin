@@ -24,10 +24,11 @@ function Login(props: any) {
     props.history.push('/admin/register');
   };
   // 用户名校验
-  const validateName = (_rule: any, value: string, callback: (error?: string) => void): Promise<void> => {
-    if (value === '') {
-      return Promise.reject('用户名不能为空');
-    } else if (value.length < 2 || value.length > 20) {
+  const validateName = (_rule: any, value: string) => {
+    if (!value) {
+      return Promise.reject('请输入用户名');
+    }
+    if (value.length < 2 || value.length > 20) {
       return Promise.reject('字符不能小于2大于20');
     } else {
       const reg = /^[\u4e00-\u9fa5A-Za-z0-9_]{2,20}$/;
@@ -39,10 +40,11 @@ function Login(props: any) {
     }
   };
   // 密码校验
-  const validatePassword = (_rule: any, value: string, callback: (error?: string) => void): Promise<void> => {
-    if (value === '') {
-      return Promise.reject('密码不能为空');
-    } else if (value.length < 6 || value.length > 20) {
+  const validatePassword = (_rule: any, value: string) => {
+    if (!value) {
+      return Promise.reject('请输入密码');
+    }
+    if (value.length < 6 || value.length > 20) {
       return Promise.reject('字符不能小于6大于20');
     } else {
       const reg = /^[A-Za-z0-9_]{6,20}$/;
@@ -64,11 +66,7 @@ function Login(props: any) {
         >
           <Form.Item
             name="username"
-            rules={[
-              {
-                validator: validateName,
-              },
-            ]}
+            rules={[{ validator: validateName }]}
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}

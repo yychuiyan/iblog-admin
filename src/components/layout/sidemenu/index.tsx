@@ -114,7 +114,7 @@ const { Sider } = Layout;
 const SideMenu = (props: any) => {
   const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
   const { role } = token[0]
-  console.log('local', role[0].rights);
+
   // 路由列表
   const [items, setItems] = useState<DataType[]>([])
   // 获取权限列表
@@ -131,8 +131,7 @@ const SideMenu = (props: any) => {
           return item.children = itemChildren
         }
       })
-      let dataFilter = data.filter((data: DataType) => data.pagepermission === 1)
-      console.log("dataFilter", dataFilter);
+      let dataFilter = data.filter((data: DataType) => data.pagepermission === 1 && role[0].rights.includes(data.key))
 
       setItems(dataFilter);
     });

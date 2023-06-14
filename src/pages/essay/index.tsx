@@ -8,6 +8,7 @@ import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import './index.less';
 import dayjs from 'dayjs';
+import jwtDecode from 'jwt-decode';
 import UploadImage from '@/components/uploadMany';
 import Editor from 'for-editor';
 const { confirm } = Modal;
@@ -32,6 +33,8 @@ interface EssayData {
   data: DataType[];
 }
 const Essay = (props: any) => {
+  const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
+  const role_type = token[0].role[0].role_type
   const columns: ColumnsType<DataType> = [
     {
       title: '随笔',
@@ -65,6 +68,7 @@ const Essay = (props: any) => {
               danger
               shape="circle"
               icon={<DeleteOutlined />}
+              disabled={role_type}
               onClick={() => {
                 EssayDelete(item);
               }}
@@ -75,6 +79,7 @@ const Essay = (props: any) => {
               ghost
               shape="circle"
               icon={<EditOutlined />}
+              disabled={role_type}
               onClick={() => {
                 EssayUpdate(item);
               }}
@@ -289,7 +294,7 @@ const Essay = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" onClick={showModal} className="btn">
+        <Button type="primary" disabled={role_type} onClick={showModal} className="btn">
           新增随笔
         </Button>
         <Search

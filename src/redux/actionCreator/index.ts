@@ -91,7 +91,6 @@ export function asyncLoginAction(data: LoginParams) {
       message.error(res.msg);
     }
     if (res.code === 0) {
-      console.log('res', res);
       // 将token存储存到本地
       localStorage.setItem('token', res.data.token);
       // 解析token
