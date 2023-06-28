@@ -45,4 +45,6 @@ export interface Action {
   role?: string[];
   admin?: string[];
   user?: string;
+  affiche?: string[];
+  afficheId?: string;
 }

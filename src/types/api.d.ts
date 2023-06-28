@@ -169,6 +169,21 @@ interface RoleUpdate {
   role_type: number;
   rights: Array;
 }
+interface AfficheAdd {
+  updateTime: string;
+  createTime: string;
+  content: string;
+}
+interface AfficheUpdate {
+  id: string;
+  updateTime: string;
+  createTime: string;
+  content: string;
+}
+interface AfficheUpdateStatus {
+  checked: boolean;
+  id: string;
+}
 export interface Api {
   Login(params: LoginParams): Promise<ApiResponse>;
   adminRegister(params: AdminRegister): Promise<ApiResponse>;
@@ -230,4 +245,9 @@ export interface Api {
   getRoleList(page: number, pageSize: number, role_name: string): Promise<ApiResponse>;
   roleDelete(id: string): Promise<ApiResponse>;
   roleUpdate(params: RoleUpdate): Promise<ApiResponse>;
+  getAfficheList(page: number, pageSize: number, content: string): Promise<ApiResponse>;
+  afficheAdd(params: AfficheAdd): Promise<ApiResponse>;
+  afficheUpdate(params: AfficheUpdate): Promise<ApiResponse>;
+  afficheDelete(id: string): Promise<ApiResponse>;
+  afficheStatusUpdate(params: AfficheUpdateStatus): Promise<ApiResponse>;
 }

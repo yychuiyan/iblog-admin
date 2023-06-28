@@ -25,6 +25,7 @@ const ArticleUpdate = lazy(() => import('@/pages/articles/update'));
 const Message = lazy(() => import('@/pages/message'));
 const Friendly = lazy(() => import('@/pages/friendly'));
 const Essay = lazy(() => import('@/pages/essay'));
+const Affiche = lazy(() => import('@/pages/affiche'));
 const { Content } = Layout;
 const LayoutIndex = (props: any) => {
   NProgress.start();
@@ -63,6 +64,7 @@ const LayoutIndex = (props: any) => {
                 <Route path="/admin/message" component={Message}></Route>
                 <Route path="/admin/friendly" component={Friendly}></Route>
                 <Route path="/admin/essay" component={Essay}></Route>
+                <Route path="/admin/affiche" component={Affiche}></Route>
                 <Route path="*" component={NotFound}></Route>
               </Switch>
             </Spin>

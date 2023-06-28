@@ -57,6 +57,10 @@ import {
   USER_LIST,
   USER_UPDATE,
   USER_DELETE,
+  AFFICHE_LIST,
+  AFFICHE_ADD,
+  AFFICHE_UPDATE,
+  AFFICHE_DELETE,
 } from '@/redux/constants';
 import jwtDecode from 'jwt-decode';
 import {
@@ -84,6 +88,9 @@ import {
   AdminUpdateStatus,
   AdminUpdate,
   UserUpdate,
+  AfficheAdd,
+  AfficheUpdate,
+  AfficheUpdateStatus,
 } from '@/types/api';
 // 登录
 export function asyncLoginAction(data: LoginParams) {
@@ -348,7 +355,7 @@ export const asyncAboutAddAction = (data: AboutAdd) => {
     return res;
   };
 };
-// 更新标签
+// 更新关于
 export const asyncAboutUpdateAction = (params: AboutUpdate) => {
   return async (dispatch: Dispatch) => {
     const res = await api.aboutUpdate(params);
@@ -704,6 +711,61 @@ export const asyncRoleUpdateAction = (params: RoleUpdate) => {
     dispatch({
       type: ROLE_UPDATE,
       rid: res,
+    });
+    return res;
+  };
+};
+// 获取公告信息
+export const asyncAfficheListAction = (page: number, pageSize: number, content: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.getAfficheList(page, pageSize, content);
+    dispatch({
+      type: AFFICHE_LIST,
+      affiche: res.data,
+    });
+    return res;
+  };
+};
+// 新增公告
+export const asyncAfficheAddAction = (data: AfficheAdd) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.afficheAdd(data);
+    dispatch({
+      type: AFFICHE_ADD,
+      affiche: {},
+    });
+    return res;
+  };
+};
+// 更新公告
+export const asyncAfficheUpdateAction = (params: AfficheUpdate) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.afficheUpdate(params);
+    dispatch({
+      type: AFFICHE_UPDATE,
+      affiche: res,
+    });
+    return res;
+  };
+};
+// 删除公告
+export const asyncAfficheDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.afficheDelete(id);
+    dispatch({
+      type: AFFICHE_DELETE,
+      afficheId: '',
+    });
+    return res;
+  };
+};
+// 更新状态
+export const asyncAfficheStatusUpdateAction = (params: AfficheUpdateStatus) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.afficheStatusUpdate(params);
+    dispatch({
+      type: AFFICHE_UPDATE,
+      affiche: res,
     });
     return res;
   };

@@ -55,6 +55,11 @@ import { RightsChildrenUpdateReducer } from './rights/children-update';
 import { RoleListReducer } from './role/list';
 import { RoleDeleteReducer } from './role/delete';
 import { RoleUpdateReducer } from './role/update';
+import { AfficheAddReducer } from './affiche/add';
+import { AfficheListReducer } from './affiche/list';
+import { AfficheUpdateReducer } from './affiche/update';
+import { AfficheStatusUpdateReducer } from './affiche/status_update';
+import { AfficeDeleteReducer } from './affiche/delete';
 const RootReducer = combineReducers({
   LoginReducer,
   RegisterReducer,
@@ -112,5 +117,10 @@ const RootReducer = combineReducers({
   RoleListReducer,
   RoleDeleteReducer,
   RoleUpdateReducer,
+  AfficheAddReducer,
+  AfficheListReducer,
+  AfficheUpdateReducer,
+  AfficheStatusUpdateReducer,
+  AfficeDeleteReducer,
 });
 export default RootReducer;

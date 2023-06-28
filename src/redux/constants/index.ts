@@ -109,3 +109,13 @@ export const ROLE_LIST = 'ROLE_LIST';
 export const ROLE_DELETE = 'ROLE_DELETE';
 // 修改角色
 export const ROLE_UPDATE = 'ROLE_UPDATE';
+// 获取公告信息
+export const AFFICHE_LIST = 'AFFICHE_LIST';
+// 新增公告
+export const AFFICHE_ADD = 'AFFICHE_ADD';
+// 修改公告
+export const AFFICHE_UPDATE = 'AFFICHE_UPDATE';
+// 删除公告
+export const AFFICHE_DELETE = 'AFFICHE_DELETE';
+// 修改公告状态
+export const AFFICHE_STATUS = 'AFFICHE_STATUS';

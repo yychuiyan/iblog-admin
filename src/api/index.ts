@@ -22,6 +22,9 @@ import {
   AdminUpdateStatus,
   AdminUpdate,
   UserUpdate,
+  AfficheAdd,
+  AfficheUpdate,
+  AfficheUpdateStatus,
 } from '@/types/api';
 
 const baseURL = `/api/v1`;
@@ -260,6 +263,25 @@ const api: Api = {
   // 修改角色
   roleUpdate(params: RoleUpdate) {
     return axios.put(`${baseURL}/role/${params.id}`, params);
+  },
+  // 获取公告信息
+  getAfficheList(page: number, pageSize: number, content: string) {
+    return axios.get(`${baseURL}/affiche?page=${page}&&pageSize=${pageSize}&&content=${content}`);
+  },
+  // 新增公告
+  afficheAdd(params: AfficheAdd) {
+    return axios.post(`${baseURL}/affiche`, params);
+  },
+  // 修改公告
+  afficheUpdate(params: AfficheUpdate) {
+    return axios.put(`${baseURL}/affiche/${params.id}`, params);
+  },
+  // 删除公告
+  afficheDelete(id: string) {
+    return axios.delete(`${baseURL}/affiche/${id}`);
+  },
+  afficheStatusUpdate(params: AfficheUpdateStatus) {
+    return axios.put(`${baseURL}/affiche/status/${params.id}`, params);
   },
 };
 export default api;
