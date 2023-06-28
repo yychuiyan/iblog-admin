@@ -18,7 +18,8 @@ const Category = lazy(() => import('@/pages/category'));
 const Tags = lazy(() => import('@/pages/tags'));
 const About = lazy(() => import('@/pages/about'));
 const Comment = lazy(() => import('@/pages/comment'));
-const UserInfo = lazy(() => import('@/pages/admin'));
+const Administrator = lazy(() => import('@/pages/admin'));
+const UserInfo = lazy(() => import('@/pages/users'));
 const ArticleAdd = lazy(() => import('@/pages/articles/add'));
 const ArticleUpdate = lazy(() => import('@/pages/articles/update'));
 const Message = lazy(() => import('@/pages/message'));
@@ -57,7 +58,8 @@ const LayoutIndex = (props: any) => {
                 <Route path="/admin/article/update/:id" component={ArticleUpdate}></Route>
                 <Route path="/admin/article/comment" component={Comment}></Route>
                 <Route path="/admin/about" component={About}></Route>
-                <Route path="/admin/userinfo" component={UserInfo}></Route>
+                <Route path="/admin/manage/list" component={Administrator}></Route>
+                <Route path="/admin/user/list" component={UserInfo}></Route>
                 <Route path="/admin/message" component={Message}></Route>
                 <Route path="/admin/friendly" component={Friendly}></Route>
                 <Route path="/admin/essay" component={Essay}></Route>

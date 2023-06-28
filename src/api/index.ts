@@ -21,6 +21,7 @@ import {
   RoleUpdate,
   AdminUpdateStatus,
   AdminUpdate,
+  UserUpdate,
 } from '@/types/api';
 
 const baseURL = `/api/v1`;
@@ -38,25 +39,37 @@ const api: Api = {
   loginOut() {
     return axios.post(`${baseURL}/admin/logout`);
   },
-  // 用户列表
+  // 管理员列表
   getAdminList(page: number, pageSize: number, username: string) {
     return axios.get(`${baseURL}/admin?page=${page}&&pageSize=${pageSize}&&username=${username}`);
   },
-  // 新增用户
+  // 新增管理员
   adminAdd(params) {
     return axios.post(`${baseURL}/admin`, params);
   },
-  // 删除用户
+  // 删除管理员
   adminDelete(id: string) {
     return axios.delete(`${baseURL}/admin/${id}`);
   },
-  // 更新用户状态
+  // 更新管理员状态
   adminStatusUpdate(params: AdminUpdateStatus) {
     return axios.put(`${baseURL}/admin/status/${params.id}`, params);
   },
-  // 更新用户
+  // 更新管理员
   adminUpdate(params: AdminUpdate) {
     return axios.put(`${baseURL}/admin/${params.id}`, params);
+  },
+  // 用户列表
+  getUserList(page: number, pageSize: number, username: string) {
+    return axios.get(`${baseURL}/user?page=${page}&&pageSize=${pageSize}&&username=${username}`);
+  },
+  // 更新用户
+  userUpdate(params: UserUpdate) {
+    return axios.put(`${baseURL}/user/${params.id}`, params);
+  },
+  // 删除用户
+  userDelete(id: string) {
+    return axios.delete(`${baseURL}/user/${id}`);
   },
   // 获取分类列表
   getCategories(page, pageSize, name) {

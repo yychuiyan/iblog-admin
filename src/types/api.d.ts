@@ -18,26 +18,38 @@ interface LoginParams {
   username: string;
   password: string;
 }
+// 注册
 interface AdminRegister {
   username: string;
   password: string;
   verifyPassword: string;
   role_id: string;
 }
+// 新增
 interface AdminAdd {
   username: string;
   password: string;
   role_id: string;
 }
+// 更新状态
 interface AdminUpdateStatus {
   status: boolean;
   id: string;
 }
+// 更新管理员信息
 interface AdminUpdate {
   id: string;
   username: string;
   role_id: string;
 }
+// 更新用户信息
+interface UserUpdate{
+  id: string;
+  username: string;
+  email: string;
+  avatar: string;
+}
+// 更新分类
 interface CategoryUpdate {
   id: string;
   name: string;
@@ -166,7 +178,10 @@ export interface Api {
   adminAdd(params: AdminAdd): Promise<ApiResponse>;
   adminUpdate(params: AdminUpdate): Promise<ApiResponse>;
   adminStatusUpdate(params: AdminUpdateStatus): Promise<ApiResponse>;
+  getUserList(page: number, pageSize: number, username: string): Promise<ApiResponse>;
   getCategories(page: number, pageSize: number, name: string): Promise<ApiResponse>;
+  userUpdate(params: UserUpdate): Promise<ApiResponse>;
+  userDelete(id: string): Promise<ApiResponse>;
   categoryAdd(name: string): Promise<ApiResponse>;
   categoryDelete(id: string): Promise<ApiResponse>;
   categoryUpdate(params: CategoryUpdate): Promise<ApiResponse>;

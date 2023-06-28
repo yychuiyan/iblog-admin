@@ -54,6 +54,9 @@ import {
   ADMIN_ADD,
   ADMIN_STATUS,
   ADMIN_UPDATE,
+  USER_LIST,
+  USER_UPDATE,
+  USER_DELETE,
 } from '@/redux/constants';
 import jwtDecode from 'jwt-decode';
 import {
@@ -80,6 +83,7 @@ import {
   AdminAdd,
   AdminUpdateStatus,
   AdminUpdate,
+  UserUpdate,
 } from '@/types/api';
 // 登录
 export function asyncLoginAction(data: LoginParams) {
@@ -101,11 +105,10 @@ export function asyncLoginAction(data: LoginParams) {
       });
       return res;
     } else if (res.code === 110401) {
-      message.error('请检查用户名或密码后重新登录');
+      message.error('请检查管理员名或密码后重新登录');
     }
   };
 }
-// }
 // 注册
 export const asyncRegisterAction = (data: AdminRegister) => {
   return async (dispatch: Dispatch) => {
@@ -127,7 +130,7 @@ export const asyncLoginOutAction = () => {
     });
   };
 };
-// 用户列表
+// 管理员列表
 export const asyncAdminListAction = (page: number, pageSize: number, name: string) => {
   return async (dispatch: Dispatch) => {
     const res = await api.getAdminList(page, pageSize, name);
@@ -138,7 +141,7 @@ export const asyncAdminListAction = (page: number, pageSize: number, name: strin
     return res;
   };
 };
-// 新增用户
+// 新增管理员
 export const asyncAdminAddAction = (data: AdminAdd) => {
   return async (dispatch: Dispatch) => {
     const res = await api.adminAdd(data);
@@ -149,7 +152,7 @@ export const asyncAdminAddAction = (data: AdminAdd) => {
     return res;
   };
 };
-// 删除用户
+// 删除管理员
 export const asyncAdminDeleteAction = (id: string) => {
   return async (dispatch: Dispatch) => {
     const res = await api.adminDelete(id);
@@ -178,6 +181,39 @@ export const asyncAdminUpdateAction = (params: AdminUpdate) => {
     dispatch({
       type: ADMIN_UPDATE,
       admin: res,
+    });
+    return res;
+  };
+};
+// 用户列表
+export const asyncUserListAction = (page: number, pageSize: number, name: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.getUserList(page, pageSize, name);
+    dispatch({
+      type: USER_LIST,
+      users: res,
+    });
+    return res;
+  };
+};
+// 更新用户
+export const asyncUserUpdateAction = (params: UserUpdate) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.userUpdate(params);
+    dispatch({
+      type: USER_UPDATE,
+      user: res,
+    });
+    return res;
+  };
+};
+// 删除用户
+export const asyncUserDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.userDelete(id);
+    dispatch({
+      type: USER_DELETE,
+      userId: '',
     });
     return res;
   };

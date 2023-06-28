@@ -44,4 +44,5 @@ export interface Action {
   rid?: string;
   role?: string[];
   admin?: string[];
+  user?: string;
 }

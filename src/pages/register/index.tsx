@@ -16,7 +16,6 @@ const Register = (props: any) => {
     props.BlogActions.asyncRegisterAction({
       username: values.username,
       password: values.password,
-      verifyPassword: values.verifyPassword,
     }).then((res: { code: number; }) => {
       if (res.code === 1) {
         return message.error('用户名已存在');

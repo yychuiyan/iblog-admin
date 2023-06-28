@@ -7,6 +7,9 @@ import { AdminDeleteReducer } from './admin/delete';
 import { AdminAddReducer } from './admin/add';
 import { AdminStatusUpdateReducer } from './admin/status_update';
 import { AdminUpdateReducer } from './admin/update';
+import { UserListReducer } from './user/list';
+import { UserUpdateReducer } from './user/update';
+import { UserDeleteReducer } from './user/delete';
 import { SideMenuStateReducer } from './collapsed';
 import { LoadingReducer } from './loading';
 import { CategoriesReducer } from './categories/list';
@@ -61,6 +64,9 @@ const RootReducer = combineReducers({
   AdminDeleteReducer,
   AdminUpdateReducer,
   AdminStatusUpdateReducer,
+  UserListReducer,
+  UserUpdateReducer,
+  UserDeleteReducer,
   SideMenuStateReducer,
   LoadingReducer,
   CategoriesReducer,

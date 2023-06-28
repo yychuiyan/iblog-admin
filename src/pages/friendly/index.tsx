@@ -45,8 +45,11 @@ const UserInfo = (props: any) => {
     {
       title: '头像',
       dataIndex: 'avatar',
-      render: (_, record) => {
-        return <Image width={50} height={50} src={record.avatar}></Image>;
+      render: (_, record: any) => {
+        if (typeof (record.avatar) === 'object') {
+          return <Image width={50} height={50} src={record.avatar[0].thumbUrl} />
+        }
+        return <Image width={50} height={50} src={record.avatar} />
       },
     },
     {
@@ -179,18 +182,21 @@ const UserInfo = (props: any) => {
   };
   // 点击更新
   const friendlyUpdate = (item: FriendlyData) => {
+    console.log("item", item);
+
     setIsModalUpdateOpen(true);
     updateForm.setFieldsValue(item);
-
-    let data = item.avatar;
-    let start = data.indexOf('images');
-    let name = data.substring(start);
-    item.avatar = [
-      {
-        name: name,
-        thumbUrl: item.avatar,
-      },
-    ];
+    if (typeof (item.avatar) === 'string') {
+      let data = item.avatar;
+      let start = data.indexOf('images');
+      let name = data.substring(start);
+      item.avatar = [
+        {
+          name: name,
+          thumbUrl: item.avatar,
+        },
+      ];
+    }
     setImgUrl(item.avatar);
     setEditData(item);
   };

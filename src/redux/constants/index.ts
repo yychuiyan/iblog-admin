@@ -4,16 +4,22 @@ export const ADMIN_LOGIN = 'ADMIN_LOGIN';
 export const ADMIN_REGISTER = 'ADMIN_REGISTER';
 // 退出登录
 export const LOGINOUT = 'LOGINOUT';
-// 用户列表
+// 管理员列表
 export const ADMIN_LIST = 'ADMIN_LIST';
-// 新增用户
+// 新增管理员
 export const ADMIN_ADD = 'ADMIN_ADD';
 // 更新管理员状态
 export const ADMIN_STATUS = 'ADMIN_STATUS';
 // 更新管理员
 export const ADMIN_UPDATE = 'ADMIN_UPDATE';
-// 用户删除
+// 管理员删除
 export const ADMIN_DELETE = 'ADMIN_DELETE';
+// 用户列表
+export const USER_LIST = 'USER_LIST';
+// 更新用户
+export const USER_UPDATE = 'USER_UPDATE';
+// 删除用户
+export const USER_DELETE = 'USER_DELETE';
 // 侧边栏的显示与隐藏
 export const CHANGE_COLLAPSED = 'CHANGE_COLLAPSED';
 // loading
