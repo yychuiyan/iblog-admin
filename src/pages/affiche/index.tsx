@@ -10,6 +10,7 @@ import './index.less';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
 import TextArea from 'antd/es/input/TextArea';
+import { handleNotAdd, handleNotChangeStatus, handleNotDelete, handleNotUpdate } from '@/utils/prompt';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
@@ -50,8 +51,7 @@ const AfficheList = (props: any) => {
             checkedChildren={'上线'}
             unCheckedChildren={'下线'}
             checked={record.checked}
-            disabled={role_type}
-            onChange={checked => onChangeStatus(checked, record)}
+            onChange={checked => role_type ? handleNotChangeStatus() : onChangeStatus(checked, record)}
           />
         );
       },
@@ -81,9 +81,8 @@ const AfficheList = (props: any) => {
               danger
               shape="circle"
               icon={<DeleteOutlined />}
-              disabled={role_type}
               onClick={() => {
-                afficheDelete(item);
+                role_type ? handleNotDelete() : afficheDelete(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -92,9 +91,8 @@ const AfficheList = (props: any) => {
               ghost
               shape="circle"
               icon={<EditOutlined />}
-              disabled={role_type}
               onClick={() => {
-                afficheUpdate(item);
+                role_type ? handleNotUpdate() : afficheUpdate(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -259,7 +257,7 @@ const AfficheList = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" disabled={role_type} onClick={showModal} className="btn">
+        <Button type="primary" onClick={role_type ? handleNotAdd : showModal} className="btn">
           新增公告
         </Button>
         <Search

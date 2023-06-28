@@ -9,6 +9,7 @@ import MyPagination from '@/components/pagination';
 import UploadImage from '@/components/upload';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
+import { handleNotDelete, handleNotUpdate } from '@/utils/prompt';
 import './index.less';
 const { confirm } = Modal;
 const { Search } = Input;
@@ -35,7 +36,6 @@ const UserInfo = (props: any) => {
   const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
   // const role_type = Boolean(token[0].role.map((item: any) => item.role_type).join(''))
   const role_type = token[0].role[0].role_type
-
   const columns: ColumnsType<DataType> = [
     {
       title: '用户名',
@@ -85,9 +85,8 @@ const UserInfo = (props: any) => {
               shape="circle"
               icon={<DeleteOutlined />}
               onClick={() => {
-                userDelete(item);
+                role_type ? handleNotDelete() : userDelete(item);
               }}
-              disabled={item.default ? item.default : role_type}
               style={{ marginRight: '5px' }}
             />
             <Button
@@ -96,9 +95,8 @@ const UserInfo = (props: any) => {
               shape="circle"
               icon={<EditOutlined />}
               onClick={() => {
-                UserUpdate(item);
+                role_type ? handleNotUpdate() : userUpdate(item);
               }}
-              disabled={role_type}
               style={{ marginRight: '5px' }}
             />
           </div>
@@ -138,7 +136,7 @@ const UserInfo = (props: any) => {
   }, [currentPage, pageSize, props.BlogActions]);
 
   // 更新用户模态框
-  const UserUpdate = (item: UserData) => {
+  const userUpdate = (item: UserData) => {
     updateForm.setFieldsValue(item);
     if (typeof (item.avatar) === 'string') {
       let data = item.avatar;

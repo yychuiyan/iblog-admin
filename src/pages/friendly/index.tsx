@@ -10,6 +10,7 @@ import './index.less';
 import dayjs from 'dayjs';
 import UploadImage from '@/components/upload';
 import jwtDecode from 'jwt-decode';
+import { handleNotAdd, handleNotDelete, handleNotUpdate } from '@/utils/prompt';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
@@ -84,9 +85,8 @@ const UserInfo = (props: any) => {
               danger
               shape="circle"
               icon={<DeleteOutlined />}
-              disabled={role_type}
               onClick={() => {
-                friendlyDelete(item);
+                role_type ? handleNotDelete() : friendlyDelete(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -95,9 +95,8 @@ const UserInfo = (props: any) => {
               ghost
               shape="circle"
               icon={<EditOutlined />}
-              disabled={role_type}
               onClick={() => {
-                friendlyUpdate(item);
+                role_type ? handleNotUpdate() : friendlyUpdate(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -285,7 +284,7 @@ const UserInfo = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" disabled={role_type} onClick={showModal} className="btn">
+        <Button type="primary" onClick={role_type ? handleNotAdd : showModal} className="btn">
           新增友链
         </Button>
         <Search

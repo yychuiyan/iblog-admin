@@ -135,6 +135,7 @@ const SideMenu = (props: any) => {
 
       setItems(dataFilter);
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.BlogActions]);
 
   // 获取动态路由信息

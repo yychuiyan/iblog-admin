@@ -180,7 +180,7 @@ const RoleList = (props: any) => {
       //@ts-ignore
       id: updateData._id,
     }).then(() => {
-      message.success('更新成功');
+      message.success('更新成功，再次登录后权限生效');
       props.BlogActions.asyncRoleListAction(currentPage, pageSize, '').then((res: RoleData) => {
         // 获取角色
         let { data, totalCount, page, pageSize } = res.data as unknown as RoleData;

@@ -8,6 +8,7 @@ import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
+import { handleNotUpdate } from '@/utils/prompt';
 import './index.less';
 const { confirm } = Modal;
 const { Search } = Input;
@@ -75,10 +76,10 @@ const Comments = (props: any) => {
               type="primary"
               danger
               shape="circle"
-              disabled={role_type}
+              // disabled={role_type}
               icon={<DeleteOutlined />}
               onClick={() => {
-                commentDelete(item);
+                role_type ? handleNotUpdate() : commentDelete(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -113,7 +114,6 @@ const Comments = (props: any) => {
       setPageSize(pageSize);
     });
   }, [currentPage, pageSize, props.BlogActions]);
-
   // 删除评论
   const commentDelete = (item: DataType) => {
     confirm({

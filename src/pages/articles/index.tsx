@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {
   Badge,
   Button,
-  Form,
   Image,
   Input,
   message,
@@ -31,6 +30,7 @@ import MyPagination from '@/components/pagination';
 import dayjs from 'dayjs';
 import './index.less';
 import { statusPublish } from '@/utils/constants';
+import { handleNotAdd, handleNotDelete, handleNotUpdate, onNotChangeStatus, onNotChangePublishStatus } from '@/utils/prompt';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
@@ -135,8 +135,7 @@ const ArticleList = (props: any) => {
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
             checked={record.isTop}
-            disabled={role_type}
-            onChange={checked => onChangeStatus(checked, record)}
+            onChange={checked => role_type ? onNotChangeStatus() : onChangeStatus(checked, record)}
           />
         );
       },
@@ -185,9 +184,8 @@ const ArticleList = (props: any) => {
               type="primary"
               ghost
               shape="circle"
-              disabled={role_type}
               onClick={() => {
-                onChangePublishStatus(record);
+                role_type ? onNotChangePublishStatus() : onChangePublishStatus(record);
               }}
               style={{ marginRight: '5px' }}
             >
@@ -201,7 +199,7 @@ const ArticleList = (props: any) => {
                   shape="circle"
                   icon={<EditOutlined />}
                   onClick={() => {
-                    props.history.push(`/admin/article/update/${record._id}`);
+                    role_type ? handleNotUpdate() : props.history.push(`/admin/article/update/${record._id}`);
                   }}
                   style={{ marginRight: '5px' }}
                 />
@@ -212,7 +210,7 @@ const ArticleList = (props: any) => {
                   shape="circle"
                   icon={<DeleteOutlined />}
                   onClick={() => {
-                    categoryDelete(record);
+                    role_type ? handleNotDelete() : articleDelete(record);
                   }}
                   style={{ marginRight: '5px' }}
                 />
@@ -223,8 +221,6 @@ const ArticleList = (props: any) => {
       },
     },
   ];
-  // 表单数据
-  const [form] = Form.useForm();
   // 文章列表
   const [list, setList] = useState<DataType[]>([]);
   // 分页总数
@@ -233,8 +229,6 @@ const ArticleList = (props: any) => {
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
   const [pageSize, setPageSize] = useState(10);
-  // 窗口
-  const [isModalOpen, setIsModalOpen] = useState(false);
   // 获取文章列表数据
   useEffect(() => {
     props.BlogActions.asyncArticleListAction(currentPage, pageSize, '', 0, 0).then((res: ArticleData) => {
@@ -250,30 +244,6 @@ const ArticleList = (props: any) => {
   // 新增文章
   const handleArticleAdd = () => {
     props.history.push(`/admin/article/insert`);
-  };
-  // 点击确定按钮
-  const handleConfirm = async () => {
-    // 校验form值 校验通过后获取值
-    await form.validateFields();
-    // 获取表单值
-    const data = form.getFieldsValue();
-    message.success('文章新增成功');
-    form.resetFields();
-    setIsModalOpen(false);
-    props.BlogActions.asyncCategoryAddAction({
-      name: data.title,
-    }).then(() => {
-      // 重新调用查询接口
-      props.BlogActions.asyncArticleListAction(currentPage, pageSize, '', 0, 0).then((res: ArticleData) => {
-        let { data } = res.data as unknown as ArticleData;
-        setList(data);
-      });
-    });
-  };
-  // 关闭窗口
-  const handleCancel = () => {
-    form.resetFields();
-    setIsModalOpen(false);
   };
   // 发布
   const onChangePublishStatus = (record: DataType) => {
@@ -296,6 +266,7 @@ const ArticleList = (props: any) => {
       });
     }
   };
+
   // 更新文章置顶状态
   const onChangeStatus = (checked: boolean, row: DataType) => {
     row.isTop = checked
@@ -308,7 +279,7 @@ const ArticleList = (props: any) => {
     });
   };
   // 删除文章
-  const categoryDelete = (item: DataType) => {
+  const articleDelete = (item: DataType) => {
     confirm({
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
@@ -372,7 +343,7 @@ const ArticleList = (props: any) => {
     <div>
       <div className="cate_title">
         <div>
-          <Button type="primary" disabled={role_type} onClick={handleArticleAdd} className="btn">
+          <Button type="primary" onClick={role_type ? handleNotAdd : handleArticleAdd} className="btn">
             新增文章
           </Button>
         </div>
@@ -393,26 +364,6 @@ const ArticleList = (props: any) => {
           />
         </div>
       </div>
-      <Modal
-        open={isModalOpen}
-        title={<div style={{ textAlign: 'left' }}>添加文章</div>}
-        okText="新增"
-        cancelText="取消"
-        onCancel={handleCancel}
-        onOk={() => {
-          handleConfirm();
-        }}
-      >
-        <Form form={form} layout="vertical" name="basic" className="userAddFrom">
-          <Form.Item
-            name="title"
-            label="名称"
-            rules={[{ required: true, message: '文章名称不能为空' }]}
-          >
-            <Input />
-          </Form.Item>
-        </Form>
-      </Modal>
       <Table
         columns={columns}
         dataSource={list}

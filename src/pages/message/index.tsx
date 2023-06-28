@@ -9,6 +9,7 @@ import MyPagination from '@/components/pagination';
 import { auditStatusOptions } from '@/utils/constants';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
+import { handleNotAudit, handleNotDelete, handleNotAllAudit } from '@/utils/prompt';
 import './index.less';
 const { confirm } = Modal;
 interface DataType {
@@ -45,10 +46,6 @@ const Message = (props: any) => {
       title: '当前回复内容',
       dataIndex: 'currentReplayContent',
     },
-    // {
-    //   title: '目标回复ID',
-    //   dataIndex: 'targetReplayId',
-    // },
     {
       title: '目标回复内容',
       dataIndex: 'targetReplayContent',
@@ -99,9 +96,8 @@ const Message = (props: any) => {
               danger
               shape="circle"
               icon={<DeleteOutlined />}
-              disabled={role_type}
               onClick={() => {
-                messageDelete(item);
+                role_type ? handleNotDelete() : messageDelete(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -110,10 +106,9 @@ const Message = (props: any) => {
               shape="circle"
               icon={<AuditOutlined />}
               onClick={() => {
-                messageAudit(item);
+                role_type ? handleNotAudit() : messageAudit(item);
               }}
               style={{ marginRight: '5px' }}
-              disabled={role_type ? role_type : !item.children}
             ></Button>
           </div>
         );
@@ -283,7 +278,7 @@ const Message = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" disabled={role_type} onClick={() => messageAudit({ _id: 0 })}>
+        <Button type="primary" onClick={() => role_type ? handleNotAllAudit() : messageAudit({ _id: 0 })}>
           一键审核
         </Button>
         {/* <div className="cate_search">

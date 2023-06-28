@@ -70,14 +70,14 @@ function Login(props: any) {
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="请输入用户名"
+              placeholder="公开账号: guest"
             />
           </Form.Item>
           <Form.Item name="password" rules={[{ validator: validatePassword }]}>
             <Input
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="password"
-              placeholder="请输入密码"
+              placeholder="密码: 123456"
             />
           </Form.Item>
           <Form.Item>

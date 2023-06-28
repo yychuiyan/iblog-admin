@@ -9,6 +9,7 @@ import MyPagination from '@/components/pagination';
 import './index.less';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
+import { handleNotAdd, handleNotDelete, handleNotUpdate } from '@/utils/prompt';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
@@ -162,7 +163,7 @@ const ArticleCategory = (props: any) => {
         editable: true,
         dataIndex: 'name',
         title: '分类名称',
-        handleSave: handleSave,
+        handleSave: role_type ? handleNotUpdate : handleSave,
       }),
     },
     {
@@ -196,10 +197,9 @@ const ArticleCategory = (props: any) => {
               type="primary"
               danger
               shape="circle"
-              disabled={role_type}
               icon={<DeleteOutlined />}
               onClick={() => {
-                categoryDelete(item);
+                role_type ? handleNotDelete() : categoryDelete(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -318,7 +318,7 @@ const ArticleCategory = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" disabled={role_type} onClick={showModal} className="btn">
+        <Button type="primary" onClick={role_type ? handleNotAdd : showModal} className="btn">
           新增分类
         </Button>
         <Search

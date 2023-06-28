@@ -12,6 +12,7 @@ import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import jwtDecode from 'jwt-decode';
+import { handleNotAdd, handleNotDelete, handleNotUpdate, handleNotChangeStatus } from '@/utils/prompt';
 import './index.less';
 import dayjs from 'dayjs';
 const { confirm } = Modal;
@@ -167,7 +168,7 @@ const ArticleTag = (props: any) => {
         editable: record.status,
         dataIndex: 'name',
         title: '标签名称',
-        handleSave: handleSave,
+        handleSave: role_type ? handleNotUpdate : handleSave,
       }),
     },
     {
@@ -184,8 +185,8 @@ const ArticleTag = (props: any) => {
             checkedChildren={<CheckOutlined />}
             unCheckedChildren={<CloseOutlined />}
             checked={record.status}
-            disabled={role_type}
-            onChange={checked => onChangeStatus(checked, record)}
+            // disabled={role_type}
+            onChange={checked => role_type ? handleNotChangeStatus() : onChangeStatus(checked, record)}
           />
         );
       },
@@ -218,10 +219,10 @@ const ArticleTag = (props: any) => {
               shape="circle"
               icon={<DeleteOutlined />}
               onClick={() => {
-                TagDelete(item);
+                role_type ? handleNotDelete() : TagDelete(item);
               }}
               style={{ marginRight: '5px' }}
-              disabled={item.status ? item.status : role_type}
+              disabled={item.status}
             />
           </div>
         );
@@ -350,7 +351,7 @@ const ArticleTag = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" disabled={role_type} onClick={showModal} className="btn">
+        <Button type="primary" onClick={role_type ? handleNotAdd : showModal} className="btn">
           新增标签
         </Button>
         <Search

@@ -280,7 +280,6 @@ const ArticleAdd = (props: any) => {
           <Row>
             <Col span={24}>
               <Form.Item name="content" {...formItemLayoutTwo} style={{ width: '100%' }}>
-                {/* <MarkDown handleChangeVal={handleChangeVal} /> */}
                 <Editor
                   preview={false}
                   subfield={false}

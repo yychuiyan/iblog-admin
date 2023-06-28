@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
 import UploadImage from '@/components/uploadMany';
 import Editor from 'for-editor';
+import { handleNotAdd, handleNotDelete, handleNotUpdate } from '@/utils/prompt';
 const { confirm } = Modal;
 const { Search } = Input;
 interface CoverData {
@@ -68,9 +69,8 @@ const Essay = (props: any) => {
               danger
               shape="circle"
               icon={<DeleteOutlined />}
-              disabled={role_type}
               onClick={() => {
-                EssayDelete(item);
+                role_type ? handleNotDelete() : essayDelete(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -79,9 +79,8 @@ const Essay = (props: any) => {
               ghost
               shape="circle"
               icon={<EditOutlined />}
-              disabled={role_type}
               onClick={() => {
-                EssayUpdate(item);
+                role_type ? handleNotUpdate() : essayUpdate(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -175,7 +174,7 @@ const Essay = (props: any) => {
     setIsModalUpdateOpen(false);
   };
   // 更新
-  const EssayUpdate = (item: EssayData) => {
+  const essayUpdate = (item: EssayData) => {
     setImageList(item)
     setImgUrl(item.cover);
     setIsModalUpdateOpen(true);
@@ -216,7 +215,7 @@ const Essay = (props: any) => {
     });
   };
   // 删除随笔
-  const EssayDelete = (item: DataType) => {
+  const essayDelete = (item: DataType) => {
     confirm({
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
@@ -294,7 +293,7 @@ const Essay = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" disabled={role_type} onClick={showModal} className="btn">
+        <Button type="primary" onClick={role_type ? handleNotAdd : showModal} className="btn">
           新增随笔
         </Button>
         <Search
