@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as authActions from '@/redux/actionCreator';
 import { LoginFormValues } from '@/types/login';
-import './index.less';
+import '@/styles/login.less';
 function Login(props: any) {
   const onFinish = (values: LoginFormValues) => {
     props.authActions.asyncLoginAction({
@@ -55,9 +55,25 @@ function Login(props: any) {
       }
     }
   };
+  // 免登进入
+  const handleExemption = () => {
+    const exemName = "guest";
+    const exemPassword = "123456"
+    props.authActions.asyncLoginAction({
+      username: exemName,
+      password: exemPassword,
+    }).then((res: { code: number; msg: string }) => {
+      if (res.code === 0) {
+        message.success('欢迎访客登录~');
+        props.history.replace('/admin/home');
+      } else {
+        message.error('系统异常，请联系管理员进行处理!')
+      }
+    });
+  }
   return (
     <div className="login">
-      <Card style={{ width: '50%', margin: '0 auto' }} title="欢迎进入登录页面">
+      <Card style={{ width: '50%', margin: '0 auto' }} title={<span style={{ color: '#fff', fontWeight: 'bold' }}>欢迎进入登录页面</span>}>
         <Form
           name="normal_login"
           className="login-form"
@@ -70,23 +86,26 @@ function Login(props: any) {
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="公开账号: guest"
+              placeholder="请输入用户名"
             />
           </Form.Item>
           <Form.Item name="password" rules={[{ validator: validatePassword }]}>
             <Input
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="password"
-              placeholder="密码: 123456"
+              placeholder="请输入密码"
             />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" className="login-form-button">
               点击登录
             </Button>
-            <p style={{ float: 'right', color: '#1890FF', cursor: 'pointer' }} onClick={handClick}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <p style={{ color: '#1890FF', cursor: 'pointer', fontWeight: 'bold' }} onClick={handleExemption}>免登入口</p>
+              <p style={{ float: 'right', color: '#1890FF', cursor: 'pointer', fontWeight: 'bold' }} onClick={handClick}>
               没有账号？点我注册
             </p>
+            </div>
             {/* 忘记密码 */}
           </Form.Item>
         </Form>

@@ -1,5 +1,5 @@
-import { Layout, Dropdown, message } from 'antd';
-import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
+import { Layout, Dropdown, message, Avatar } from 'antd';
+import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -55,15 +55,17 @@ const TopHeader = (props: any) => {
       ) : (
         <MenuFoldOutlined onClick={changeCollapsed} />
       )}
-      <div style={{ float: 'right' }}>
-        <span>
-          欢迎回家：
+      <div style={{ float: 'right', cursor: 'pointer' }}>
           <Dropdown menu={{ items }} placement="bottom">
-            <b style={{ color: 'blue', cursor: 'pointer' }}>{username}</b>
-          </Dropdown>
-        </span>
-
-        {/* <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} /> */}
+          <p style={{ position: 'relative', bottom: '15px' }}>
+            <Avatar size={40} className='avatar' style={{ backgroundColor: '#87d068' }}>
+              {
+                // @ts-ignore
+                username?.slice(0, 1)?.toUpperCase()
+              }
+            </Avatar>
+          </p>
+        </Dropdown>
       </div>
     </Header>
   );

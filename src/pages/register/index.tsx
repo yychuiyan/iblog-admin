@@ -2,10 +2,10 @@ import React from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Card, message } from 'antd';
 import * as BlogActions from '@/redux/actionCreator';
-import './index.less';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { RegisterFormValues } from '@/types/register';
+import '@/styles/login.less'
 const Register = (props: any) => {
   // 提交注册
   const onFinish = (values: RegisterFormValues) => {
@@ -22,10 +22,14 @@ const Register = (props: any) => {
       }
       message.success('注册成功,即将跳转到登录页面^_^');
       setTimeout(() => {
-        props.history.push('/api/login');
+        props.history.push('/admin/login');
       }, 2000);
     });
   };
+  // 返回登录页面
+  const handleBackLogin = () => {
+    props.history.push('/admin/login');
+  }
   // 用户名校验
   const validateName = (_rule: any, value: string) => {
     if (!value) {
@@ -60,7 +64,7 @@ const Register = (props: any) => {
   };
   return (
     <div className="login">
-      <Card style={{ width: '50%', margin: '0 auto' }} title="注册页面">
+      <Card style={{ width: '50%', margin: '0 auto' }} title={<span style={{ color: '#fff', fontWeight: 'bold' }}>欢迎进入注册页面</span>}>
         <Form
           name="normal_login"
           className="login-form"
@@ -98,6 +102,9 @@ const Register = (props: any) => {
             <Button type="primary" htmlType="submit" className="login-form-button">
               点击注册
             </Button>
+            <p style={{ float: 'right', color: '#1890FF', cursor: 'pointer' }} onClick={handleBackLogin}>
+              返回登录页面
+            </p>
           </Form.Item>
         </Form>
       </Card>
