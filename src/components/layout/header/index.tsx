@@ -1,5 +1,5 @@
 import { Layout, Dropdown, message, Avatar } from 'antd';
-import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined } from '@ant-design/icons';
+import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
