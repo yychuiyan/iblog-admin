@@ -25,6 +25,9 @@ import {
   AfficheAdd,
   AfficheUpdate,
   AfficheUpdateStatus,
+  ApothegmAdd,
+  ApothegmUpdate,
+  ApothegmUpdateStatus,
 } from '@/types/api';
 
 const baseURL = `/api/v1`;
@@ -280,8 +283,29 @@ const api: Api = {
   afficheDelete(id: string) {
     return axios.delete(`${baseURL}/affiche/${id}`);
   },
+  // 公告状态
   afficheStatusUpdate(params: AfficheUpdateStatus) {
     return axios.put(`${baseURL}/affiche/status/${params.id}`, params);
+  },
+  // 获取警句信息
+  getApothegmList(page: number, pageSize: number, author: string) {
+    return axios.get(`${baseURL}/apothegm?page=${page}&&pageSize=${pageSize}&&author=${author}`);
+  },
+  // 新增警句
+  apothegmAdd(params: ApothegmAdd) {
+    return axios.post(`${baseURL}/apothegm`, params);
+  },
+  // 修改警句
+  apothegmUpdate(params: ApothegmUpdate) {
+    return axios.put(`${baseURL}/apothegm/${params.id}`, params);
+  },
+  // 删除警句
+  apothegmDelete(id: string) {
+    return axios.delete(`${baseURL}/apothegm/${id}`);
+  },
+  // 警句状态
+  apothegmStatusUpdate(params: ApothegmUpdateStatus) {
+    return axios.put(`${baseURL}/apothegm/status/${params.id}`, params);
   },
 };
 export default api;

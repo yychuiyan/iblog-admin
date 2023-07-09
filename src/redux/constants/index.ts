@@ -119,3 +119,13 @@ export const AFFICHE_UPDATE = 'AFFICHE_UPDATE';
 export const AFFICHE_DELETE = 'AFFICHE_DELETE';
 // 修改公告状态
 export const AFFICHE_STATUS = 'AFFICHE_STATUS';
+// 获取警句信息
+export const APOTHEGM_LIST = 'APOTHEGM_LIST';
+// 新增警句
+export const APOTHEGM_ADD = 'APOTHEGM_ADD';
+// 修改警句
+export const APOTHEGM_UPDATE = 'APOTHEGM_UPDATE';
+// 删除警句
+export const APOTHEGM_DELETE = 'APOTHEGM_DELETE';
+// 修改警句状态
+export const APOTHEGM_STATUS = 'APOTHEGM_STATUS';

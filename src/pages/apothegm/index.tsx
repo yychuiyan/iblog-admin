@@ -14,6 +14,7 @@ import { handleNotAdd, handleNotChangeStatus, handleNotDelete, handleNotUpdate }
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
+  author: string;
   key: React.Key;
   _id: string;
   checked: boolean;
@@ -21,7 +22,7 @@ interface DataType {
   createTime: string;
   updateTime: string;
 }
-interface AfficheData {
+interface ApothegmData {
   checked: any;
   avatar: any;
   _id: string;
@@ -30,20 +31,27 @@ interface AfficheData {
   pageSize: number;
   data: DataType[];
 }
-const AfficheList = (props: any) => {
+const ApothegmList = (props: any) => {
   const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
   const role_type = token[0].role[0].role_type
 
   const columns: ColumnsType<DataType> = [
     {
-      title: '公告内容',
+      title: '作者',
+      dataIndex: 'author',
+      render: (_, record) => {
+        return <p className='introduction' style={{ width: '12rem' }}>{record.author}</p>;
+      },
+    },
+    {
+      title: '内容',
       dataIndex: 'content',
       render: (_, record) => {
         return <p className='introduction' style={{ width: '12rem' }}>{record.content}</p>;
       },
     },
     {
-      title: '公告展示状态',
+      title: '警句展示状态',
       dataIndex: 'checked',
       render: (_, record: any) => {
         return (
@@ -82,7 +90,7 @@ const AfficheList = (props: any) => {
               shape="circle"
               icon={<DeleteOutlined />}
               onClick={() => {
-                role_type ? handleNotDelete() : afficheDelete(item);
+                role_type ? handleNotDelete() : ApothegmDelete(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -92,7 +100,7 @@ const AfficheList = (props: any) => {
               shape="circle"
               icon={<EditOutlined />}
               onClick={() => {
-                role_type ? handleNotUpdate() : afficheUpdate(item);
+                role_type ? handleNotUpdate() : ApothegmUpdate(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -105,7 +113,7 @@ const AfficheList = (props: any) => {
   const [form] = Form.useForm();
   // 更新表单
   const [updateForm] = Form.useForm();
-  // 公告列表
+  // 警句列表
   const [list, setList] = useState<DataType[]>([]);
   // 分页总数
   const [total, setTotal] = useState(0);
@@ -119,11 +127,13 @@ const AfficheList = (props: any) => {
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
   // 保存当前更新的数据
   const [editData, setEditData] = useState({});
-  // 获取公告列表数据
+  // 获取警句列表数据
   useEffect(() => {
-    props.BlogActions.asyncAfficheListAction(currentPage, pageSize, '').then((res: AfficheData) => {
-      // 获取公告
-      let { data, totalCount, page, pageSize } = res.data as unknown as AfficheData;
+    props.BlogActions.asyncApothegmListAction(currentPage, pageSize, '').then((res: ApothegmData) => {
+      // 获取警句
+      let { data, totalCount, page, pageSize } = res.data as unknown as ApothegmData;
+      console.log("data", data);
+
 
       setList(data);
       setTotal(totalCount);
@@ -132,7 +142,7 @@ const AfficheList = (props: any) => {
     });
   }, [currentPage, pageSize, props.BlogActions]);
 
-  // 新增公告
+  // 新增警句
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -142,13 +152,14 @@ const AfficheList = (props: any) => {
     await form.validateFields();
     // 获取表单值
     const data = form.getFieldsValue();
-    props.BlogActions.asyncAfficheAddAction({
+    props.BlogActions.asyncApothegmAddAction({
+      author: data.author,
       content: data.content,
     }).then(() => {
-      message.success('新增公告成功')
+      message.success('新增成功')
       // 重新调用查询接口
-      props.BlogActions.asyncAfficheListAction(currentPage, pageSize, '').then((res: AfficheData) => {
-        let { data, totalCount, page, pageSize } = res.data as unknown as AfficheData;
+      props.BlogActions.asyncApothegmListAction(currentPage, pageSize, '').then((res: ApothegmData) => {
+        let { data, totalCount, page, pageSize } = res.data as unknown as ApothegmData;
         setList(data);
         setTotal(totalCount);
         setCurrentPage(page);
@@ -169,7 +180,7 @@ const AfficheList = (props: any) => {
     setIsModalUpdateOpen(false);
   };
   // 点击更新
-  const afficheUpdate = (item: AfficheData) => {
+  const ApothegmUpdate = (item: ApothegmData) => {
     setIsModalUpdateOpen(true);
     updateForm.setFieldsValue(item);
     setEditData(item);
@@ -177,15 +188,16 @@ const AfficheList = (props: any) => {
   // 更新操作
   const handleUpdateConfirm = () => {
     let value = updateForm.getFieldsValue();
-    props.BlogActions.asyncAfficheUpdateAction({
+    props.BlogActions.asyncApothegmUpdateAction({
+      author: value.author,
       content: value.content,
       //@ts-ignore
       id: editData._id,
     }).then(() => {
-      message.success('公告更新成功');
-      props.BlogActions.asyncAfficheListAction(currentPage, pageSize, '').then((res: AfficheData) => {
-        // 获取公告
-        let { data, totalCount, page, pageSize } = res.data as unknown as AfficheData;
+      message.success('更新成功');
+      props.BlogActions.asyncApothegmListAction(currentPage, pageSize, '').then((res: ApothegmData) => {
+        // 获取警句
+        let { data, totalCount, page, pageSize } = res.data as unknown as ApothegmData;
         setList(data);
         setTotal(totalCount);
         setCurrentPage(page);
@@ -195,19 +207,19 @@ const AfficheList = (props: any) => {
       setIsModalUpdateOpen(false);
     });
   };
-  // 删除公告
-  const afficheDelete = (item: AfficheData) => {
+  // 删除警句
+  const ApothegmDelete = (item: ApothegmData) => {
     confirm({
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
         // 先将要删除的数据过滤掉再调用接口
         setList(list.filter((it) => it._id !== item._id));
-        message.success('公告删除成功');
-        props.BlogActions.asyncAfficheDeleteAction(item._id).then(() => {
-          props.BlogActions.asyncAfficheListAction(currentPage, pageSize, '').then((res: AfficheData) => {
-            // 获取公告
-            let { data, totalCount, page, pageSize } = res.data as unknown as AfficheData;
+        message.success('删除成功');
+        props.BlogActions.asyncApothegmDeleteAction(item._id).then(() => {
+          props.BlogActions.asyncApothegmListAction(currentPage, pageSize, '').then((res: ApothegmData) => {
+            // 获取警句
+            let { data, totalCount, page, pageSize } = res.data as unknown as ApothegmData;
             setList(data);
             setTotal(totalCount);
             setCurrentPage(page);
@@ -217,9 +229,9 @@ const AfficheList = (props: any) => {
       },
     });
   };
-  // 更新公告状态
-  const onChangeStatus = (checked: boolean, row: AfficheData) => {
-    props.BlogActions.asyncAfficheStatusUpdateAction({
+  // 更新警句状态
+  const onChangeStatus = (checked: boolean, row: ApothegmData) => {
+    props.BlogActions.asyncApothegmStatusUpdateAction({
       checked: checked,
       id: row._id,
     }).then((res: { code: number, msg: string }) => {
@@ -232,8 +244,8 @@ const AfficheList = (props: any) => {
   };
   // 搜索
   const onSearch = (value: string) => {
-    props.BlogActions.asyncAfficheListAction(currentPage, pageSize, value).then((res: AfficheData) => {
-      let { data, totalCount, page, pageSize } = res.data as unknown as AfficheData;
+    props.BlogActions.asyncApothegmListAction(currentPage, pageSize, value).then((res: ApothegmData) => {
+      let { data, totalCount, page, pageSize } = res.data as unknown as ApothegmData;
       setList(data);
       setTotal(totalCount);
       setCurrentPage(page);
@@ -243,9 +255,9 @@ const AfficheList = (props: any) => {
   // 跳转页数据显示
   const onChangePage = (page: number, pageSize: number, params = '') => {
     // 重新调用接口将参数传递过去
-    props.BlogActions.asyncUserListAction(page, pageSize, params).then((res: AfficheData) => {
+    props.BlogActions.asyncUserListAction(page, pageSize, params).then((res: ApothegmData) => {
       // 获取列表数据
-      let { data } = res.data as unknown as AfficheData;
+      let { data } = res.data as unknown as ApothegmData;
       setList(data);
       // 切换行
       setCurrentPage(page);
@@ -257,19 +269,19 @@ const AfficheList = (props: any) => {
     <div>
       <div className="cate_title">
         <Button type="primary" onClick={role_type ? handleNotAdd : showModal} className="btn">
-          新增公告
+          新增名言警句
         </Button>
         <Search
           className="search"
           allowClear
-          placeholder="请输入公告"
+          placeholder="请输入作者"
           onSearch={onSearch}
           enterButton
         />
       </div>
       <Modal
         open={isModalOpen}
-        title={<div style={{ textAlign: 'left' }}>添加公告</div>}
+        title={<div style={{ textAlign: 'left' }}>添加名言警句</div>}
         okText="新增"
         cancelText="取消"
         onCancel={handleCancel}
@@ -278,14 +290,17 @@ const AfficheList = (props: any) => {
         }}
       >
         <Form form={form} layout="vertical" name="basic" className="userAddFrom">
-          <Form.Item name="content" label="公告内容" rules={[{ required: true, message: '内容不能为空' }]}>
+          <Form.Item name="author" label="作者" rules={[{ required: true, message: '作者不能为空' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="content" label="内容" rules={[{ required: true, message: '内容不能为空' }]}>
             <TextArea rows={5} />
           </Form.Item>
         </Form>
       </Modal>
       <Modal
         open={isModalUpdateOpen}
-        title={<div style={{ textAlign: 'left' }}>更新公告</div>}
+        title={<div style={{ textAlign: 'left' }}>更新名言警句</div>}
         okText="更新"
         cancelText="取消"
         onCancel={handleUpdateCancel}
@@ -294,7 +309,10 @@ const AfficheList = (props: any) => {
         }}
       >
         <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
-          <Form.Item name="content" label="公告内容" rules={[{ required: true, message: '内容不能为空' }]}>
+          <Form.Item name="author" label="作者" rules={[{ required: true, message: '作者不能为空' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="content" label="警句内容" rules={[{ required: true, message: '内容不能为空' }]}>
             <TextArea rows={5} />
           </Form.Item>
         </Form>
@@ -322,4 +340,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     BlogActions: bindActionCreators(BlogActions, dispatch),
   };
 };
-export default connect(null, mapDispatchToProps)(AfficheList);
+export default connect(null, mapDispatchToProps)(ApothegmList);

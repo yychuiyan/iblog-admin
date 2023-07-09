@@ -184,6 +184,23 @@ interface AfficheUpdateStatus {
   checked: boolean;
   id: string;
 }
+interface ApothegmAdd {
+  updateTime: string;
+  createTime: string;
+  content: string;
+  author: string;
+}
+interface ApothegmUpdate {
+  id: string;
+  updateTime: string;
+  createTime: string;
+  content: string;
+  author: string;
+}
+interface ApothegmUpdateStatus {
+  checked: boolean;
+  id: string;
+}
 export interface Api {
   Login(params: LoginParams): Promise<ApiResponse>;
   adminRegister(params: AdminRegister): Promise<ApiResponse>;
@@ -250,4 +267,9 @@ export interface Api {
   afficheUpdate(params: AfficheUpdate): Promise<ApiResponse>;
   afficheDelete(id: string): Promise<ApiResponse>;
   afficheStatusUpdate(params: AfficheUpdateStatus): Promise<ApiResponse>;
+  getApothegmList(page: number, pageSize: number, author: string): Promise<ApiResponse>;
+  apothegmAdd(params: ApothegmAdd): Promise<ApiResponse>;
+  apothegmUpdate(params: ApothegmUpdate): Promise<ApiResponse>;
+  apothegmDelete(id: string): Promise<ApiResponse>;
+  apothegmStatusUpdate(params: ApothegmUpdateStatus): Promise<ApiResponse>;
 }

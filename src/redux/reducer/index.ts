@@ -59,7 +59,12 @@ import { AfficheAddReducer } from './affiche/add';
 import { AfficheListReducer } from './affiche/list';
 import { AfficheUpdateReducer } from './affiche/update';
 import { AfficheStatusUpdateReducer } from './affiche/status_update';
-import { AfficeDeleteReducer } from './affiche/delete';
+import { AfficheDeleteReducer } from './affiche/delete';
+import { ApothegmAddReducer } from './apothegm/add';
+import { ApothegmListReducer } from './apothegm/list';
+import { ApothegmUpdateReducer } from './apothegm/update';
+import { ApothegmStatusUpdateReducer } from './apothegm/status_update';
+import { ApothegmDeleteReducer } from './apothegm/delete';
 const RootReducer = combineReducers({
   LoginReducer,
   RegisterReducer,
@@ -121,6 +126,11 @@ const RootReducer = combineReducers({
   AfficheListReducer,
   AfficheUpdateReducer,
   AfficheStatusUpdateReducer,
-  AfficeDeleteReducer,
+  AfficheDeleteReducer,
+  ApothegmAddReducer,
+  ApothegmListReducer,
+  ApothegmUpdateReducer,
+  ApothegmStatusUpdateReducer,
+  ApothegmDeleteReducer,
 });
 export default RootReducer;

@@ -47,4 +47,6 @@ export interface Action {
   user?: string;
   affiche?: string[];
   afficheId?: string;
+  apothegm?: string[];
+  apothegmId?: string;
 }

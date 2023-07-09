@@ -3,7 +3,7 @@ import { Action } from '@/types/comm';
 const userState = {
   afficheId: String,
 };
-export const AfficeDeleteReducer = (state = userState, action: Action) => {
+export const AfficheDeleteReducer = (state = userState, action: Action) => {
   switch (action.type) {
     case AFFICHE_DELETE:
       return {

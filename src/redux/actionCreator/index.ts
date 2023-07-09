@@ -61,6 +61,11 @@ import {
   AFFICHE_ADD,
   AFFICHE_UPDATE,
   AFFICHE_DELETE,
+  APOTHEGM_LIST,
+  APOTHEGM_ADD,
+  APOTHEGM_UPDATE,
+  APOTHEGM_DELETE,
+  APOTHEGM_STATUS,
 } from '@/redux/constants';
 import jwtDecode from 'jwt-decode';
 import {
@@ -91,6 +96,9 @@ import {
   AfficheAdd,
   AfficheUpdate,
   AfficheUpdateStatus,
+  ApothegmAdd,
+  ApothegmUpdate,
+  ApothegmUpdateStatus,
 } from '@/types/api';
 // 登录
 export function asyncLoginAction(data: LoginParams) {
@@ -765,6 +773,62 @@ export const asyncAfficheStatusUpdateAction = (params: AfficheUpdateStatus) => {
     const res = await api.afficheStatusUpdate(params);
     dispatch({
       type: AFFICHE_UPDATE,
+      affiche: res,
+    });
+    return res;
+  };
+};
+
+// 获取警句信息
+export const asyncApothegmListAction = (page: number, pageSize: number, author: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.getApothegmList(page, pageSize, author);
+    dispatch({
+      type: APOTHEGM_LIST,
+      apothegm: res.data,
+    });
+    return res;
+  };
+};
+// 新增警句
+export const asyncApothegmAddAction = (data: ApothegmAdd) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.apothegmAdd(data);
+    dispatch({
+      type: APOTHEGM_ADD,
+      apothegm: {},
+    });
+    return res;
+  };
+};
+// 更新警句
+export const asyncApothegmUpdateAction = (params: ApothegmUpdate) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.apothegmUpdate(params);
+    dispatch({
+      type: APOTHEGM_UPDATE,
+      apothegm: res,
+    });
+    return res;
+  };
+};
+// 删除警句
+export const asyncApothegmDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.apothegmDelete(id);
+    dispatch({
+      type: APOTHEGM_DELETE,
+      apothegmId: '',
+    });
+    return res;
+  };
+};
+// 更新警句
+export const asyncApothegmStatusUpdateAction = (params: ApothegmUpdateStatus) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.apothegmStatusUpdate(params);
+    dispatch({
+      type: APOTHEGM_STATUS,
       affiche: res,
     });
     return res;
