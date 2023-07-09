@@ -8,7 +8,7 @@ import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
-import { handleNotUpdate } from '@/utils/prompt';
+import { handleNotDelete } from '@/utils/prompt';
 import './index.less';
 const { confirm } = Modal;
 const { Search } = Input;
@@ -79,7 +79,7 @@ const Comments = (props: any) => {
               // disabled={role_type}
               icon={<DeleteOutlined />}
               onClick={() => {
-                role_type ? handleNotUpdate() : commentDelete(item);
+                commentDelete(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -120,6 +120,9 @@ const Comments = (props: any) => {
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
+        if (role_type) {
+          return handleNotDelete();
+        }
         // 先将要删除的数据过滤掉再调用接口
         setList(list.filter((it: { _id: string }) => it._id !== item._id));
         message.success('评论删除成功');

@@ -5,7 +5,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import InputImage from './InputImage';
+import jwtDecode from 'jwt-decode';
+import { handleNotUpload } from '@/utils/prompt';
 const UploadImage: React.FC = (props: any) => {
+  const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
+  const role_type = token[0].role[0].role_type
+
   // 预览模态框
   const [previewOpen, setPreviewOpen] = useState(false);
   // 预览图片
@@ -96,7 +101,7 @@ const UploadImage: React.FC = (props: any) => {
       <Upload
         listType="picture-card"
         fileList={fileList}
-        customRequest={handleUpload}
+        customRequest={role_type ? handleNotUpload : handleUpload}
         onPreview={handlePreview}
         beforeUpload={beforeUpload}
         // onChange={handleChange}

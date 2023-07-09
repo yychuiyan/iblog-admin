@@ -97,7 +97,7 @@ const Message = (props: any) => {
               shape="circle"
               icon={<DeleteOutlined />}
               onClick={() => {
-                role_type ? handleNotDelete() : messageDelete(item);
+                messageDelete(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -106,7 +106,7 @@ const Message = (props: any) => {
               shape="circle"
               icon={<AuditOutlined />}
               onClick={() => {
-                role_type ? handleNotAudit() : messageAudit(item);
+                messageAudit(item);
               }}
               style={{ marginRight: '5px' }}
             ></Button>
@@ -156,6 +156,9 @@ const Message = (props: any) => {
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
+        if (role_type) {
+          return handleNotDelete();
+        }
         // 先将要删除的数据过滤掉再调用接口
         setList(list.filter((it) => it._id !== item._id));
         message.success('留言删除成功');
@@ -189,6 +192,9 @@ const Message = (props: any) => {
   };
   // 点击确定
   const handleConfirm = async () => {
+    if (role_type) {
+      return handleNotAudit();
+    }
     await form.validateFields();
     const val = form.getFieldsValue();
 

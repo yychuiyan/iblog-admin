@@ -86,7 +86,7 @@ const UserInfo = (props: any) => {
               shape="circle"
               icon={<DeleteOutlined />}
               onClick={() => {
-                role_type ? handleNotDelete() : friendlyDelete(item);
+                friendlyDelete(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -96,7 +96,7 @@ const UserInfo = (props: any) => {
               shape="circle"
               icon={<EditOutlined />}
               onClick={() => {
-                role_type ? handleNotUpdate() : friendlyUpdate(item);
+                friendlyUpdate(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -139,12 +139,15 @@ const UserInfo = (props: any) => {
     });
   }, [currentPage, pageSize, props.BlogActions]);
 
-  // 新增友链
+  // 添加友链
   const showModal = () => {
     setIsModalOpen(true);
   };
   // 点击确定按钮
   const handleConfirm = async () => {
+    if (role_type) {
+      return handleNotAdd()
+    }
     // 校验form值 校验通过后获取值
     await form.validateFields();
     // 获取表单值
@@ -181,8 +184,6 @@ const UserInfo = (props: any) => {
   };
   // 点击更新
   const friendlyUpdate = (item: FriendlyData) => {
-    console.log("item", item);
-
     setIsModalUpdateOpen(true);
     updateForm.setFieldsValue(item);
     if (typeof (item.avatar) === 'string') {
@@ -201,6 +202,9 @@ const UserInfo = (props: any) => {
   };
   // 更新操作
   const handleUpdateConfirm = () => {
+    if (role_type) {
+      return handleNotUpdate();
+    }
     let value = updateForm.getFieldsValue();
 
     if (typeof imageList === 'object') {
@@ -238,6 +242,9 @@ const UserInfo = (props: any) => {
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
+        if (role_type) {
+          return handleNotDelete();
+        }
         // 先将要删除的数据过滤掉再调用接口
         setList(list.filter((it) => it._id !== item._id));
         message.success('友链删除成功');
@@ -284,8 +291,8 @@ const UserInfo = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" onClick={role_type ? handleNotAdd : showModal} className="btn">
-          新增友链
+        <Button type="primary" onClick={showModal} className="btn">
+          添加友链
         </Button>
         <Search
           className="search"
@@ -298,7 +305,7 @@ const UserInfo = (props: any) => {
       <Modal
         open={isModalOpen}
         title={<div style={{ textAlign: 'left' }}>添加友链</div>}
-        okText="新增"
+        okText="添加"
         cancelText="取消"
         onCancel={handleCancel}
         onOk={() => {

@@ -6,6 +6,8 @@ import type { UploadFile } from 'antd/es/upload/interface';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
+import { handleNotUpload } from '@/utils/prompt';
+import jwtDecode from 'jwt-decode';
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -15,6 +17,9 @@ const getBase64 = (file: RcFile): Promise<string> =>
   });
 
 const UploadMany: React.FC = (props: any) => {
+  const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
+  const role_type = token[0].role[0].role_type
+
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
@@ -45,8 +50,12 @@ const UploadMany: React.FC = (props: any) => {
     setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
   };
 
-  const handleChangeMany: UploadProps['onChange'] = ({ fileList: newFileList }) =>
+  const handleChangeMany: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    if (role_type) {
+      return false
+    }
     setFileList(newFileList);
+  }
 
   const handleUpload = (data: any) => {
     props.BlogActions.asyncFileUploadAction(data).then((result: any) => {
@@ -73,7 +82,7 @@ const UploadMany: React.FC = (props: any) => {
       <Upload
         listType="picture-card"
         fileList={fileList}
-        customRequest={handleUpload}
+        customRequest={role_type ? handleNotUpload : handleUpload}
         onPreview={handlePreview}
         onChange={handleChangeMany}
         onRemove={hanleRemove}

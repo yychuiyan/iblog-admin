@@ -219,7 +219,7 @@ const ArticleTag = (props: any) => {
               shape="circle"
               icon={<DeleteOutlined />}
               onClick={() => {
-                role_type ? handleNotDelete() : TagDelete(item);
+                TagDelete(item);
               }}
               style={{ marginRight: '5px' }}
               disabled={item.status}
@@ -259,6 +259,9 @@ const ArticleTag = (props: any) => {
   };
   // 点击确定按钮
   const handleConfirm = async () => {
+    if (role_type) {
+      return handleNotAdd()
+    }
     // 校验form值 校验通过后获取值
     await form.validateFields();
     // 获取表单值
@@ -287,6 +290,9 @@ const ArticleTag = (props: any) => {
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
+        if (role_type) {
+          return handleNotDelete();
+        }
         props.BlogActions.asyncTagDeleteAction(item._id).then((res: TagsData) => {
           if (res.code === 40001) {
             message.error('文章中有关联该标签信息，请解绑后再次执行删除操作');
@@ -351,8 +357,8 @@ const ArticleTag = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" onClick={role_type ? handleNotAdd : showModal} className="btn">
-          新增标签
+        <Button type="primary" onClick={showModal} className="btn">
+          添加标签
         </Button>
         <Search
           className="search"

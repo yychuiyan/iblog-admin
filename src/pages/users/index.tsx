@@ -85,7 +85,7 @@ const UserInfo = (props: any) => {
               shape="circle"
               icon={<DeleteOutlined />}
               onClick={() => {
-                role_type ? handleNotDelete() : userDelete(item);
+                userDelete(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -95,7 +95,7 @@ const UserInfo = (props: any) => {
               shape="circle"
               icon={<EditOutlined />}
               onClick={() => {
-                role_type ? handleNotUpdate() : userUpdate(item);
+                userUpdate(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -155,6 +155,9 @@ const UserInfo = (props: any) => {
   };
   // 提交更新
   const handleUpdateConfirm = () => {
+    if (role_type) {
+      return handleNotUpdate();
+    }
     let data = updateForm.getFieldsValue();
 
     if (typeof imageList === 'object') {
@@ -197,6 +200,9 @@ const UserInfo = (props: any) => {
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
+        if (role_type) {
+          return handleNotDelete();
+        }
         // 先将要删除的数据过滤掉再调用接口
         setList(list.filter((it: any) => it._id !== item._id));
         message.success('用户删除成功');

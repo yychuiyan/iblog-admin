@@ -43,7 +43,7 @@ const AfficheList = (props: any) => {
       },
     },
     {
-      title: '公告展示状态',
+      title: '展示状态',
       dataIndex: 'checked',
       render: (_, record: any) => {
         return (
@@ -82,7 +82,7 @@ const AfficheList = (props: any) => {
               shape="circle"
               icon={<DeleteOutlined />}
               onClick={() => {
-                role_type ? handleNotDelete() : afficheDelete(item);
+                afficheDelete(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -92,7 +92,7 @@ const AfficheList = (props: any) => {
               shape="circle"
               icon={<EditOutlined />}
               onClick={() => {
-                role_type ? handleNotUpdate() : afficheUpdate(item);
+                afficheUpdate(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -132,12 +132,15 @@ const AfficheList = (props: any) => {
     });
   }, [currentPage, pageSize, props.BlogActions]);
 
-  // 新增公告
+  // 添加公告
   const showModal = () => {
     setIsModalOpen(true);
   };
   // 点击确定按钮
   const handleConfirm = async () => {
+    if (role_type) {
+      return handleNotAdd()
+    }
     // 校验form值 校验通过后获取值
     await form.validateFields();
     // 获取表单值
@@ -145,7 +148,7 @@ const AfficheList = (props: any) => {
     props.BlogActions.asyncAfficheAddAction({
       content: data.content,
     }).then(() => {
-      message.success('新增公告成功')
+      message.success('添加公告成功')
       // 重新调用查询接口
       props.BlogActions.asyncAfficheListAction(currentPage, pageSize, '').then((res: AfficheData) => {
         let { data, totalCount, page, pageSize } = res.data as unknown as AfficheData;
@@ -176,6 +179,9 @@ const AfficheList = (props: any) => {
   };
   // 更新操作
   const handleUpdateConfirm = () => {
+    if (role_type) {
+      return handleNotUpdate();
+    }
     let value = updateForm.getFieldsValue();
     props.BlogActions.asyncAfficheUpdateAction({
       content: value.content,
@@ -201,6 +207,9 @@ const AfficheList = (props: any) => {
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
+        if (role_type) {
+          return handleNotDelete();
+        }
         // 先将要删除的数据过滤掉再调用接口
         setList(list.filter((it) => it._id !== item._id));
         message.success('公告删除成功');
@@ -256,8 +265,8 @@ const AfficheList = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" onClick={role_type ? handleNotAdd : showModal} className="btn">
-          新增公告
+        <Button type="primary" onClick={showModal} className="btn">
+          添加公告
         </Button>
         <Search
           className="search"
@@ -270,7 +279,7 @@ const AfficheList = (props: any) => {
       <Modal
         open={isModalOpen}
         title={<div style={{ textAlign: 'left' }}>添加公告</div>}
-        okText="新增"
+        okText="添加"
         cancelText="取消"
         onCancel={handleCancel}
         onOk={() => {

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Modal } from 'antd';
-
+import jwtDecode from 'jwt-decode';
+import { handleNotLike } from '@/utils/prompt';
 const InputImage = (props: any) => {
+  const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
+  const role_type = token[0].role[0].role_type
   // form
   const [form] = Form.useForm();
   // 窗口显示隐藏
@@ -15,6 +18,9 @@ const InputImage = (props: any) => {
   }, [form, props.fileList, props.imgUrl]);
   // 点击确定
   const onOk = () => {
+    if (role_type) {
+      return handleNotLike()
+    }
     let val = form.getFieldsValue();
     props.onChangeVal(val.url);
     setVisible(false);
@@ -44,6 +50,8 @@ const InputImage = (props: any) => {
           forceRender
           title={<div style={{ textAlign: 'left' }}>图片链接 </div>}
           open={visible}
+          okText="添加"
+          cancelText="取消"
           onOk={onOk}
           onCancel={onCancel}
         >

@@ -199,7 +199,7 @@ const ArticleCategory = (props: any) => {
               shape="circle"
               icon={<DeleteOutlined />}
               onClick={() => {
-                role_type ? handleNotDelete() : categoryDelete(item);
+                categoryDelete(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -239,6 +239,9 @@ const ArticleCategory = (props: any) => {
   };
   // 点击确定按钮
   const handleConfirm = async () => {
+    if (role_type) {
+      return handleNotAdd()
+    }
     // 校验form值 校验通过后获取值
     await form.validateFields();
     // 获取表单值
@@ -267,6 +270,9 @@ const ArticleCategory = (props: any) => {
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
+        if (role_type) {
+          return handleNotDelete();
+        }
         props.BlogActions.asyncCategoryDeleteAction(item._id).then((res: { code: number; } | undefined) => {
           if (res === undefined) {
             message.error('分类删除失败,请稍后再试');
@@ -318,8 +324,8 @@ const ArticleCategory = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" onClick={role_type ? handleNotAdd : showModal} className="btn">
-          新增分类
+        <Button type="primary" onClick={showModal} className="btn">
+          添加分类
         </Button>
         <Search
           className="search"

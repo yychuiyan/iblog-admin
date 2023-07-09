@@ -70,7 +70,7 @@ const Essay = (props: any) => {
               shape="circle"
               icon={<DeleteOutlined />}
               onClick={() => {
-                role_type ? handleNotDelete() : essayDelete(item);
+                essayDelete(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -80,7 +80,7 @@ const Essay = (props: any) => {
               shape="circle"
               icon={<EditOutlined />}
               onClick={() => {
-                role_type ? handleNotUpdate() : essayUpdate(item);
+                essayUpdate(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -125,12 +125,15 @@ const Essay = (props: any) => {
     });
   }, [currentPage, pageSize, props.BlogActions]);
 
-  // 新增随笔
+  // 添加随笔
   const showModal = () => {
     setIsModalOpen(true);
   };
-  // 点击确定按钮新增
+  // 点击确定按钮添加
   const handleConfirm = async () => {
+    if (role_type) {
+      return handleNotAdd()
+    }
     // 校验form值 校验通过后获取值
     await form.validateFields();
     // 获取表单值
@@ -152,7 +155,7 @@ const Essay = (props: any) => {
     props.BlogActions.asyncEssayInsertAction({
       ...newData,
     }).then(() => {
-      message.success('新增随笔成功!')
+      message.success('添加随笔成功!')
       setImageList('')
       form.resetFields();
       setIsModalOpen(false);
@@ -183,8 +186,10 @@ const Essay = (props: any) => {
   };
   // 提交更新
   const handleUpdateConfirm = () => {
+    if (role_type) {
+      return handleNotUpdate();
+    }
     let data = updateForm.getFieldsValue();
-
     let coverArray = imageList.cover.map((item: CoverData) => {
       return {
         name: item.name,
@@ -220,6 +225,9 @@ const Essay = (props: any) => {
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
+        if (role_type) {
+          return handleNotDelete();
+        }
         // 先将要删除的数据过滤掉再调用接口
         setList(list.filter((it) => it._id !== item._id));
         message.success('随笔删除成功');
@@ -293,8 +301,8 @@ const Essay = (props: any) => {
   return (
     <div>
       <div className="cate_title">
-        <Button type="primary" onClick={role_type ? handleNotAdd : showModal} className="btn">
-          新增随笔
+        <Button type="primary" onClick={showModal} className="btn">
+          添加随笔
         </Button>
         <Search
           className="search"
@@ -308,7 +316,7 @@ const Essay = (props: any) => {
         open={isModalOpen}
         className='modal-essay'
         title={<div style={{ textAlign: 'left' }}>添加随笔</div>}
-        okText="新增"
+        okText="添加"
         cancelText="取消"
         onCancel={handleCancel}
         onOk={() => {

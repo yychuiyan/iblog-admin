@@ -30,7 +30,7 @@ import MyPagination from '@/components/pagination';
 import dayjs from 'dayjs';
 import './index.less';
 import { statusPublish } from '@/utils/constants';
-import { handleNotAdd, handleNotDelete, handleNotUpdate, onNotChangeStatus, onNotChangePublishStatus } from '@/utils/prompt';
+import { handleNotDelete, onNotChangeStatus, onNotChangePublishLineStatus, onNotChangePublishStatus } from '@/utils/prompt';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
@@ -185,7 +185,7 @@ const ArticleList = (props: any) => {
               ghost
               shape="circle"
               onClick={() => {
-                role_type ? onNotChangePublishStatus() : onChangePublishStatus(record);
+                onChangePublishStatus(record);
               }}
               style={{ marginRight: '5px' }}
             >
@@ -199,7 +199,7 @@ const ArticleList = (props: any) => {
                   shape="circle"
                   icon={<EditOutlined />}
                   onClick={() => {
-                    role_type ? handleNotUpdate() : props.history.push(`/admin/article/update/${record._id}`);
+                    props.history.push(`/admin/article/update/${record._id}`);
                   }}
                   style={{ marginRight: '5px' }}
                 />
@@ -210,7 +210,7 @@ const ArticleList = (props: any) => {
                   shape="circle"
                   icon={<DeleteOutlined />}
                   onClick={() => {
-                    role_type ? handleNotDelete() : articleDelete(record);
+                    articleDelete(record);
                   }}
                   style={{ marginRight: '5px' }}
                 />
@@ -249,6 +249,9 @@ const ArticleList = (props: any) => {
   const onChangePublishStatus = (record: DataType) => {
     if (record.publishStatus === 2) {
       record.publishStatus = 1;
+      if (role_type) {
+        return onNotChangePublishLineStatus();
+      }
       // 修改发布状态
       props.BlogActions.asyncArticlePublishStatusUpdateAction({
         publishStatus: record.publishStatus,
@@ -257,6 +260,9 @@ const ArticleList = (props: any) => {
         message.success('文章发布成功');
       });
     } else {
+      if (role_type) {
+        return onNotChangePublishStatus();
+      }
       record.publishStatus = 2;
       props.BlogActions.asyncArticlePublishStatusUpdateAction({
         publishStatus: record.publishStatus,
@@ -284,6 +290,9 @@ const ArticleList = (props: any) => {
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
+        if (role_type) {
+          return handleNotDelete();
+        }
         // 先将要删除的数据过滤掉再调用接口
         setList(list.filter((it) => it._id !== item._id));
         message.success('文章删除成功');
@@ -343,8 +352,8 @@ const ArticleList = (props: any) => {
     <div>
       <div className="cate_title">
         <div>
-          <Button type="primary" onClick={role_type ? handleNotAdd : handleArticleAdd} className="btn">
-            新增文章
+          <Button type="primary" onClick={handleArticleAdd} className="btn">
+            添加文章
           </Button>
         </div>
         <div>

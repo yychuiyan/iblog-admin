@@ -192,7 +192,7 @@ const ArticleAdd = (props: any) => {
     <>
       <Save time={updateTime} onDraft={onDraft} onPublish={onPublish} />
       <div className="about">
-        新增文章
+        添加文章
         <Form form={form}>
           <Row>
             <Col span={12}>
