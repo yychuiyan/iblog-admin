@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
-import './index.less';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
 import { handleNotAdd, handleNotDelete, handleNotUpdate } from '@/utils/prompt';
@@ -323,7 +322,7 @@ const ArticleCategory = (props: any) => {
   };
   return (
     <div>
-      <div className="cate_title">
+      <div className="title">
         <Button type="primary" onClick={showModal} className="btn">
           添加分类
         </Button>

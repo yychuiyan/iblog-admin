@@ -13,7 +13,6 @@ import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import jwtDecode from 'jwt-decode';
 import { handleNotAdd, handleNotDelete, handleNotUpdate, handleNotChangeStatus } from '@/utils/prompt';
-import './index.less';
 import dayjs from 'dayjs';
 const { confirm } = Modal;
 const { Search } = Input;
@@ -356,7 +355,7 @@ const ArticleTag = (props: any) => {
   };
   return (
     <div>
-      <div className="cate_title">
+      <div className="title">
         <Button type="primary" onClick={showModal} className="btn">
           添加标签
         </Button>

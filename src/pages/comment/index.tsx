@@ -67,7 +67,7 @@ const Comments = (props: any) => {
     {
       title: '操作',
       key: 'action',
-      fixed: 'right',
+      className: 'handle_btn',
       width: 120,
       render: item => {
         return (
@@ -165,9 +165,9 @@ const Comments = (props: any) => {
   };
   return (
     <div>
-      <div className="cate_title">
+      <div className="title">
         <div></div>
-        <div className="cate_search">
+        <div className="search_box">
           <Search
             className="search"
             allowClear

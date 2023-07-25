@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
-import './index.less';
 import dayjs from 'dayjs';
 import UploadImage from '@/components/upload';
 import jwtDecode from 'jwt-decode';
@@ -77,6 +76,7 @@ const UserInfo = (props: any) => {
     {
       title: '操作',
       key: 'action',
+      className: 'handle_btn',
       render: item => {
         return (
           <div>
@@ -290,7 +290,7 @@ const UserInfo = (props: any) => {
   };
   return (
     <div>
-      <div className="cate_title">
+      <div className="title">
         <Button type="primary" onClick={showModal} className="btn">
           添加友链
         </Button>

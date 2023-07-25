@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
-import './index.less';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
 import UploadImage from '@/components/uploadMany';
@@ -41,7 +40,7 @@ const Essay = (props: any) => {
       title: '随笔',
       dataIndex: 'content',
       render: (_, record) => {
-        return <p className='essay_content' style={{ width: '12rem' }}>{record.content}</p>;
+        return <p className='introduction' style={{ width: '12rem' }}>{record.content}</p>;
       },
     },
     {
@@ -61,6 +60,7 @@ const Essay = (props: any) => {
     {
       title: '操作',
       key: 'action',
+      className: 'handle_btn',
       render: item => {
         return (
           <div>
@@ -300,7 +300,7 @@ const Essay = (props: any) => {
   };
   return (
     <div>
-      <div className="cate_title">
+      <div className="title">
         <Button type="primary" onClick={showModal} className="btn">
           添加随笔
         </Button>

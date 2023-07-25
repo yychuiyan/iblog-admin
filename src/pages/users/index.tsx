@@ -10,7 +10,6 @@ import UploadImage from '@/components/upload';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
 import { handleNotDelete, handleNotUpdate } from '@/utils/prompt';
-import './index.less';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
@@ -248,7 +247,7 @@ const UserInfo = (props: any) => {
   };
   return (
     <div>
-      <div className="cate_title">
+      <div className="title">
         <div></div>
         <Search
           className="search"

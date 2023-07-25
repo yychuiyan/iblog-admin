@@ -8,7 +8,6 @@ import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
-import './index.less';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
@@ -293,7 +292,7 @@ const Adminstrator = (props: any) => {
   };
   return (
     <div>
-      <div className="cate_title">
+      <div className="title">
         <Button type="primary" disabled={role_type} onClick={showModal} className="btn">
           新增用户
         </Button>

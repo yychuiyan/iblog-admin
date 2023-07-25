@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
-import './index.less';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
 import TextArea from 'antd/es/input/TextArea';
@@ -81,6 +80,7 @@ const ApothegmList = (props: any) => {
     {
       title: '操作',
       key: 'action',
+      className: 'handle_btn',
       render: item => {
         return (
           <div>
@@ -273,7 +273,7 @@ const ApothegmList = (props: any) => {
   };
   return (
     <div>
-      <div className="cate_title">
+      <div className="title">
         <Button type="primary" onClick={showModal} className="btn">
           添加名言警句
         </Button>

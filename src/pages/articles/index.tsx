@@ -28,8 +28,8 @@ import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import MyPagination from '@/components/pagination';
 import dayjs from 'dayjs';
-import './index.less';
 import { statusPublish } from '@/utils/constants';
+import './index.less'
 import { handleNotDelete, onNotChangeStatus, onNotChangePublishLineStatus, onNotChangePublishStatus } from '@/utils/prompt';
 const { confirm } = Modal;
 const { Search } = Input;
@@ -67,7 +67,7 @@ const ArticleList = (props: any) => {
       title: '文章标题',
       dataIndex: 'title',
       render: (_, record) => {
-        return <p className='introduction' style={{ width: '8rem' }}>{record.title}</p>;
+        return <p className='introduction' style={{ width: '9rem' }}>{record.title}</p>;
       },
     },
     {
@@ -350,7 +350,7 @@ const ArticleList = (props: any) => {
   };
   return (
     <div>
-      <div className="cate_title">
+      <div className="article_title">
         <div>
           <Button type="primary" onClick={handleArticleAdd} className="btn">
             添加文章
@@ -373,20 +373,25 @@ const ArticleList = (props: any) => {
           />
         </div>
       </div>
+      <div className='table'>
       <Table
         columns={columns}
         dataSource={list}
+
         rowKey={(item) => {
           return item._id + Date.now();
         }}
         pagination={false}
       />
+      </div>
+      <div>
       <MyPagination
         pageSize={pageSize}
         currentPage={currentPage}
         total={total}
         onChange={onChangePage}
       ></MyPagination>
+      </div>
     </div>
   );
 };

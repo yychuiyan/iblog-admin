@@ -10,7 +10,6 @@ import { auditStatusOptions } from '@/utils/constants';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
 import { handleNotAudit, handleNotDelete, handleNotAllAudit } from '@/utils/prompt';
-import './index.less';
 const { confirm } = Modal;
 interface DataType {
   key?: React.Key;
@@ -86,8 +85,7 @@ const Message = (props: any) => {
     {
       title: '操作',
       key: 'action',
-      fixed: 'right',
-      width: 120,
+      className: 'handle_btn',
       render: item => {
         return (
           <div>
@@ -283,7 +281,7 @@ const Message = (props: any) => {
   };
   return (
     <div>
-      <div className="cate_title">
+      <div className="title">
         <Button type="primary" onClick={() => role_type ? handleNotAllAudit() : messageAudit({ _id: 0 })}>
           一键审核
         </Button>
