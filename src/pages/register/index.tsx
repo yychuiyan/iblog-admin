@@ -63,7 +63,7 @@ const Register = (props: any) => {
     }
   };
   return (
-    <div className="login">
+    <div className="login" style={{ userSelect: 'none' }}>
       <Card style={{ width: '50%', margin: '0 auto' }} title={<span style={{ color: '#fff', fontWeight: 'bold' }}>欢迎进入注册页面</span>}>
         <Form
           name="normal_login"

@@ -6,6 +6,7 @@ import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
 import UploadImage from '@/components/upload';
 import Editor from 'for-editor';
+import '../index.less'
 const { TextArea } = Input;
 const { Option } = Select;
 const formItemLayout = {
@@ -191,7 +192,7 @@ const ArticleAdd = (props: any) => {
   return (
     <>
       <Save time={updateTime} onDraft={onDraft} onPublish={onPublish} />
-      <div className="about">
+      <div style={{ height: 'calc(100vh - 180px)', overflow: 'auto' }}>
         添加文章
         <Form form={form}>
           <Row>

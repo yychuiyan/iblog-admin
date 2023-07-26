@@ -311,6 +311,7 @@ const AfficheList = (props: any) => {
       <Table
         columns={columns}
         dataSource={list}
+        scroll={{ y: 'calc(100vh - 240px)', x: true }}
         rowKey={(item) => {
           return item._id + Date.now();
         }}

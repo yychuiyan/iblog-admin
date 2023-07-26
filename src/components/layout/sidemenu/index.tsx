@@ -152,7 +152,7 @@ const SideMenu = (props: any) => {
   };
   return (
     // 折叠展开
-    <Sider trigger={null} collapsible collapsed={props.isCollapsed}>
+    <Sider trigger={null} collapsible collapsed={props.isCollapsed} style={{ userSelect: 'none' }}>
       <div className="logo">
         {/* <img src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" alt="" /> */}
         <div className="logo_text">夜雨炊烟</div>

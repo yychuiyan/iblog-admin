@@ -12,6 +12,8 @@ import jwtDecode from 'jwt-decode';
 import { handleNotAudit, handleNotDelete, handleNotAllAudit } from '@/utils/prompt';
 const { confirm } = Modal;
 interface DataType {
+  targetReplayContent: string;
+  currentReplayContent: string;
   key?: React.Key;
   _id: string;
   nickName?: string;
@@ -34,7 +36,7 @@ const Message = (props: any) => {
     {
       title: '昵称',
       dataIndex: 'nickName',
-      width: 100,
+      width: 150,
     },
     {
       title: '邮箱',
@@ -44,15 +46,22 @@ const Message = (props: any) => {
     {
       title: '当前回复内容',
       dataIndex: 'currentReplayContent',
+      render: (_, record) => {
+        return <p className='introduction' style={{ width: '9rem' }}>{record.currentReplayContent}</p>;
+      },
     },
     {
       title: '目标回复内容',
+      width: 120,
       dataIndex: 'targetReplayContent',
+      render: (_, record) => {
+        return <p className='introduction' style={{ width: '9rem' }}>{record.targetReplayContent}</p>;
+      },
     },
     {
       title: '审核状态',
       dataIndex: 'auditStatus',
-      width: 80,
+      width: 100,
       render: status => {
         const current = auditStatusOptions.filter(item => item.value === +status);
         const enums: any = {
@@ -78,6 +87,7 @@ const Message = (props: any) => {
     {
       title: '审核时间',
       dataIndex: 'auditTime',
+      width: 100,
       render: time => {
         return time && dayjs(time * 1000).format('YYYY-MM-DD HH:mm:ss');
       },
@@ -315,6 +325,7 @@ const Message = (props: any) => {
         }}
         columns={columns}
         dataSource={list}
+        scroll={{ y: 'calc(100vh - 240px)', x: true }}
         expandRowByClick={true}
         defaultExpandAllRows={true}
         pagination={false}

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Form, Row, Col, message, Switch } from 'antd';
-import './index.less';
 import Save from '@/components/save';
 import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
@@ -100,7 +99,7 @@ const About = (props: any) => {
   return (
     <>
       <Save time={updateTime} onRefresh={onRefresh} onSave={submit} />
-      <div className="about">
+      <div style={{ height: 'calc(100vh - 180px)', overflow: 'auto' }}>
         <div style={{ marginBottom: '5px', display: 'flex', alignItems: 'center' }}>
           {isChecked ? (
             <span style={{ fontSize: '20px', marginRight: '1rem' }}>关于我</span>
@@ -127,7 +126,7 @@ const About = (props: any) => {
             <Row>
               <Col span={24}>
                 <Form.Item name="content">
-                  <Editor preview={false} subfield={false} placeholder="关于本站" ref={editorRef} />
+                    <Editor preview={false} subfield={false} placeholder="关于本站" ref={editorRef} />
                 </Form.Item>
               </Col>
             </Row>

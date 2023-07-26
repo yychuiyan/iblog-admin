@@ -48,7 +48,7 @@ const TopHeader = (props: any) => {
     },
   ];
   return (
-    <Header className="site-layout-background" style={{ padding: '0 16px' }}>
+    <Header className="site-layout-background" style={{ padding: '0 16px', userSelect: 'none' }}>
       {/* 获取状态 */}
       {props.isCollapsed ? (
         <MenuUnfoldOutlined onClick={changeCollapsed} />

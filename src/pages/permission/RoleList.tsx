@@ -253,6 +253,7 @@ const RoleList = (props: any) => {
       <Table
         columns={columns}
         expandRowByClick={true}
+        scroll={{ y: 'calc(100vh - 210px)', x: true }}
         dataSource={dataSource}
         rowKey={(item) => {
           return item._id;

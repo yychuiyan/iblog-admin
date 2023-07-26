@@ -349,7 +349,7 @@ const ArticleList = (props: any) => {
     });
   };
   return (
-    <div>
+    <div className='article'>
       <div className="article_title">
         <div>
           <Button type="primary" onClick={handleArticleAdd} className="btn">
@@ -377,7 +377,7 @@ const ArticleList = (props: any) => {
       <Table
         columns={columns}
         dataSource={list}
-
+          scroll={{ y: 'calc(100vh - 240px)', x: true }}
         rowKey={(item) => {
           return item._id + Date.now();
         }}

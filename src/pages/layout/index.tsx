@@ -41,10 +41,11 @@ const LayoutIndex = (props: any) => {
         <Content
           className="site-layout-background"
           style={{
-            margin: '24px 16px',
-            padding: 24,
-            minHeight: 280,
-            overflow: 'auto',
+            margin: '10px 10px',
+            padding: 10,
+            userSelect: 'none'
+            // minHeight: 280,
+            // overflow: 'auto',
           }}
         >
           <Suspense fallback={<div></div>}>

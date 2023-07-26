@@ -39,14 +39,13 @@
 ul li {
   list-style: none;
 }
-.for-container {
-  margin-bottom: 5%;
+.for-container{
+  min-height:  calc(100vh - 360px) !important;
 }
-
 .title {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   .btn {
     margin-right: 10px;
   }
@@ -66,4 +65,19 @@ ul li {
 /* 操作按钮 */
 .handle_btn{
   min-width: 120px;
+}
+/* 随笔新增更新弹窗 */
+.modal-essay{
+  width: 50% !important;
+}
+/* 表格样式 */
+.ant-table-wrapper{
+  margin-bottom: 10px;
+}
+/* 弹窗信息不可选 */
+.ant-modal-confirm-title{
+  user-select: none !important;
+}
+.ant-modal-content{
+  user-select: none !important;
 }

@@ -9,11 +9,12 @@ import MyPagination from '@/components/pagination';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
 import { handleNotDelete } from '@/utils/prompt';
-import './index.less';
 const { confirm } = Modal;
 const { Search } = Input;
 
 interface DataType {
+  targetReplayContent: string;
+  currentReplayContent: string;
   children: DataType[] | string;
   key?: React.Key;
   _id: string;
@@ -42,11 +43,14 @@ const Comments = (props: any) => {
     {
       title: '昵称',
       dataIndex: 'nickName',
-      width: 100,
+      width: 150,
     },
     {
       title: '当前回复内容',
       dataIndex: 'currentReplayContent',
+      render: (_, record) => {
+        return <p className='introduction' style={{ width: '9rem' }}>{record.currentReplayContent}</p>;
+      },
     },
     {
       title: '目标回复ID',
@@ -55,6 +59,9 @@ const Comments = (props: any) => {
     {
       title: '目标回复内容',
       dataIndex: 'targetReplayContent',
+      render: (_, record) => {
+        return <p className='introduction' style={{ width: '9rem' }}>{record.targetReplayContent}</p>;
+      },
     },
 
     {
@@ -180,6 +187,7 @@ const Comments = (props: any) => {
       <Table
         columns={columns}
         dataSource={list}
+        scroll={{ y: 'calc(100vh - 240px)', x: true }}
         rowKey={(item: DataType) => {
           return item._id;
         }}
