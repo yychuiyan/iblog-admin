@@ -248,7 +248,7 @@ const ArticleUpdate = (props: any) => {
         onPublish={onPublish}
         onBack={onBack}
       />
-      <div className="about">
+      <div className="about" style={{ height: 'calc(100vh - 174px)', overflow: 'auto' }}>
         修改文章
         <Form form={form}>
           <Row>
