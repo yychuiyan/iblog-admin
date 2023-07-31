@@ -39,7 +39,7 @@ const Save = (props: any) => {
             }
 
             {
-              onSave && <Button onClick={role_type ? handleNotSave : onSave} icon={<SaveOutlined />} className="save_right_btn">发布</Button>
+              onSave && <Button onClick={role_type ? handleNotSave : onSave} icon={<SaveOutlined />} className="save_right_btn">更新发布</Button>
             }
             {
               onDraft && <Button onClick={role_type ? handleNotSaveDraft : onDraft} icon={<SaveOutlined />} className="save_right_btn">保存草稿</Button>
