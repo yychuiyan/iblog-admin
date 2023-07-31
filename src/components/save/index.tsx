@@ -16,8 +16,7 @@ const Save = (props: any) => {
     // 返回上一步
     props.history.goBack()
   }
-  const width = props.isCollapsed ? `calc(100% - 128px)` : `calc(100% - 268px)`;
-
+  const width = props.isCollapsed ? `calc(100% - 145px)` : `calc(100% - 268px)`;
   return (
     <div>
       <Card className='save_card' bordered={false} style={{ width: width }}>
