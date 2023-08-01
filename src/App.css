@@ -81,3 +81,7 @@ ul li {
 .ant-modal-content{
   user-select: none !important;
 }
+/* 图片预览调整 */
+.ant-image .ant-image-mask:hover{
+  opacity: 0 !important;
+}

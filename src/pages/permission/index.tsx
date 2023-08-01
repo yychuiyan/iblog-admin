@@ -224,7 +224,6 @@ const PermissionList = (props: any) => {
             });
           });
         }
-
       },
     });
   }

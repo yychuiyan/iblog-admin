@@ -1,4 +1,4 @@
-import { Layout, Dropdown, message, Avatar } from 'antd';
+import { Layout, Dropdown, message } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { withRouter } from 'react-router-dom';
@@ -23,7 +23,7 @@ const TopHeader = (props: any) => {
     props.ChangeCollapsed.changeCollapsed();
   };
   // 退出登录
-  const handQuit = () => {
+  const handQuitLogin = () => {
     props.BlogActions.asyncLoginOutAction().then(() => {
       // 清空token
       localStorage.removeItem('token');
@@ -32,39 +32,42 @@ const TopHeader = (props: any) => {
       props.history.push('/admin/login');
     });
   };
+  // 跳转到用户管理
+  const handleJumpUser = () => {
+    props.history.push('/admin/user/list')
+  };
   const items: MenuProps['items'] = [
-    // {
-    //   label: <a href="https://www.antgroup.com">个人中心</a>,
-    //   key: 'person',
-    // },
     {
       label: (
         <div>
-          <div onClick={handQuit}>退出登录</div>
+          <div onClick={handleJumpUser}>用户管理</div>
         </div>
       ),
       key: '1',
+    },
+    {
+      label: (
+        <div>
+          <div onClick={handQuitLogin}>退出登录</div>
+        </div>
+      ),
+      key: '2',
       danger: true,
     },
   ];
   return (
-    <Header className="site-layout-background" style={{ padding: '0 16px', userSelect: 'none' }}>
+    <Header className="site-layout-background" style={{ padding: '0 16px', userSelect: 'none', position: 'relative' }}>
       {/* 获取状态 */}
       {props.isCollapsed ? (
         <MenuUnfoldOutlined onClick={changeCollapsed} />
       ) : (
         <MenuFoldOutlined onClick={changeCollapsed} />
       )}
-      <div style={{ float: 'right', cursor: 'pointer' }}>
+      <div className='avatar'>
           <Dropdown menu={{ items }} placement="bottom">
-          <p style={{ position: 'relative', bottom: '15px' }}>
-            <Avatar size={40} className='avatar' style={{ backgroundColor: '#87d068' }}>
-              {
-                // @ts-ignore
-                username?.slice(0, 1)?.toUpperCase()
-              }
-            </Avatar>
-          </p>
+          <div className='avatar_text'>
+            {username === "guest" ? "访客登录" : <span>「{username}」</span>}
+          </div>
         </Dropdown>
       </div>
     </Header>

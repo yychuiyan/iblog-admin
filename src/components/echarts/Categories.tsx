@@ -56,9 +56,9 @@ const Categories = (props: any) => {
     const myChart = echarts.init(document.getElementById('main') as HTMLElement);
     const option = {
       title: {
-        text: '文章分布',
-        subtext: 'Fake Data',
-        left: 'center',
+        text: '文章分类',
+        left: 'left',
+        top: '0'
       },
       series: [
         {
@@ -78,7 +78,7 @@ const Categories = (props: any) => {
     myChart.setOption(option);
   }, [list]);
 
-  return <div id="main" style={{ width: '100%', height: '500px' }}></div>;
+  return <div id="main" style={{ width: '100%', minHeight: '460px' }}></div>;
 };
 
 export default withRouter(Categories);

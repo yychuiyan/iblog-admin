@@ -127,6 +127,15 @@ const ArticleList = (props: any) => {
       },
     },
     {
+      title: '点赞',
+      dataIndex: 'like',
+      align: 'center',
+      width: 100,
+      render: (_, record) => {
+        return <p style={{ width: '5rem' }}>{record.like}</p>;
+      },
+    },
+    {
       title: '置顶',
       dataIndex: 'isTop',
       render: (_, record) => {

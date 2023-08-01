@@ -271,7 +271,7 @@ const AfficheList = (props: any) => {
         <Search
           className="search"
           allowClear
-          placeholder="请输入公告"
+          placeholder="请输入公告内容"
           onSearch={onSearch}
           enterButton
         />

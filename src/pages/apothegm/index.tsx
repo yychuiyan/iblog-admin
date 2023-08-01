@@ -280,7 +280,7 @@ const ApothegmList = (props: any) => {
         <Search
           className="search"
           allowClear
-          placeholder="请输入作者"
+          placeholder="请输入作者名称"
           onSearch={onSearch}
           enterButton
         />

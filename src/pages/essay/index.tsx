@@ -307,7 +307,7 @@ const Essay = (props: any) => {
         <Search
           className="search"
           allowClear
-          placeholder="请输入随笔"
+          placeholder="请输入想要查询的随笔"
           onSearch={onSearch}
           enterButton
         />

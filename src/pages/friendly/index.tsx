@@ -297,7 +297,7 @@ const UserInfo = (props: any) => {
         <Search
           className="search"
           allowClear
-          placeholder="请输入昵称"
+          placeholder="请输入想要查询的昵称"
           onSearch={onSearch}
           enterButton
         />
