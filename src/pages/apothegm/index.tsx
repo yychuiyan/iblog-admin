@@ -39,14 +39,14 @@ const ApothegmList = (props: any) => {
       title: '作者',
       dataIndex: 'author',
       render: (_, record) => {
-        return <p className='introduction' style={{ width: '12rem' }}>{record.author}</p>;
+        return <p className='introduction' style={{ width: '6rem' }}>{record.author}</p>;
       },
     },
     {
       title: '内容',
       dataIndex: 'content',
       render: (_, record) => {
-        return <p className='introduction' style={{ width: '12rem' }}>{record.content}</p>;
+        return <p className='introduction' style={{ width: '20rem' }}>{record.content}</p>;
       },
     },
     {

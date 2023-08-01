@@ -157,6 +157,7 @@ const ArticleCategory = (props: any) => {
       title: '分类名称(点击可编辑)',
       dataIndex: 'name',
       key: 'name',
+      width: '20rem',
       onCell: (record: DataType) => ({
         record,
         editable: true,
@@ -169,6 +170,7 @@ const ArticleCategory = (props: any) => {
       title: '文章数量',
       dataIndex: 'articleNum',
       key: 'articleNum',
+      width: '10rem'
     },
     {
       title: '创建时间',

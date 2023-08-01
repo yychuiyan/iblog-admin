@@ -38,7 +38,9 @@ const AfficheList = (props: any) => {
       title: '公告内容',
       dataIndex: 'content',
       render: (_, record) => {
-        return <p className='introduction' style={{ width: '12rem' }}>{record.content}</p>;
+        return <p className='introduction' style={{ width: '35rem' }}>
+          <span>{record.content}</span>
+        </p>;
       },
     },
     {

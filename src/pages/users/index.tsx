@@ -39,14 +39,17 @@ const UserInfo = (props: any) => {
     {
       title: '用户名',
       dataIndex: 'username',
+      width: '10rem'
     },
     {
       title: '用户类型',
-      dataIndex: 'provider'
+      dataIndex: 'provider',
+      width: '6rem'
     },
     {
       title: '邮箱',
       dataIndex: 'email',
+      width: '15rem'
     },
     {
       title: '头像',

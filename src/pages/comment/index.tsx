@@ -38,7 +38,7 @@ const Comments = (props: any) => {
       title: '文章标题',
       dataIndex: 'articleTitle',
       fixed: 'left',
-      width: 160,
+      width: '20rem',
     },
     {
       title: '昵称',
@@ -49,24 +49,26 @@ const Comments = (props: any) => {
       title: '当前回复内容',
       dataIndex: 'currentReplayContent',
       render: (_, record) => {
-        return <p className='introduction' style={{ width: '9rem' }}>{record.currentReplayContent}</p>;
+        return <p className='introduction' style={{ width: '10rem' }}>{record.currentReplayContent}</p>;
       },
     },
     {
       title: '目标回复ID',
       dataIndex: 'targetReplayId',
+      width: '10rem'
     },
     {
       title: '目标回复内容',
       dataIndex: 'targetReplayContent',
       render: (_, record) => {
-        return <p className='introduction' style={{ width: '9rem' }}>{record.targetReplayContent}</p>;
+        return <p className='introduction' style={{ width: '10rem' }}>{record.targetReplayContent}</p>;
       },
     },
 
     {
       title: '评论时间',
       dataIndex: 'commentTime',
+      width: '16rem',
       render: time => {
         return dayjs(time * 1000).format('YYYY-MM-DD HH:mm:ss');
       },

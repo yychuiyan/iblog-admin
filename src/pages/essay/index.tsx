@@ -40,7 +40,7 @@ const Essay = (props: any) => {
       title: '随笔',
       dataIndex: 'content',
       render: (_, record) => {
-        return <p className='introduction' style={{ width: '12rem' }}>{record.content}</p>;
+        return <p className='introduction' style={{ width: '40rem' }}>{record.content}</p>;
       },
     },
     {
