@@ -382,7 +382,6 @@ const ArticleList = (props: any) => {
           />
         </div>
       </div>
-      <div className='table'>
       <Table
         columns={columns}
         dataSource={list}
@@ -392,15 +391,12 @@ const ArticleList = (props: any) => {
         }}
         pagination={false}
       />
-      </div>
-      <div>
       <MyPagination
         pageSize={pageSize}
         currentPage={currentPage}
         total={total}
         onChange={onChangePage}
       ></MyPagination>
-      </div>
     </div>
   );
 };

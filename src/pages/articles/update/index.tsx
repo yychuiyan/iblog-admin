@@ -241,13 +241,7 @@ const ArticleUpdate = (props: any) => {
   };
   return (
     <>
-      <Save
-        time={updateTime}
-        onRefresh={onRefresh}
-        onDraft={onDraft}
-        onPublish={onPublish}
-        onBack={onBack}
-      />
+
       <div className="about" style={{ height: 'calc(100vh - 174px)', overflow: 'auto' }}>
         修改文章
         <Form form={form}>
@@ -354,6 +348,13 @@ const ArticleUpdate = (props: any) => {
           </Row>
         </Form>
       </div>
+      <Save
+        time={updateTime}
+        onRefresh={onRefresh}
+        onDraft={onDraft}
+        onPublish={onPublish}
+        onBack={onBack}
+      />
     </>
   );
 };

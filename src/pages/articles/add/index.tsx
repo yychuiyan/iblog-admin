@@ -191,7 +191,6 @@ const ArticleAdd = (props: any) => {
   };
   return (
     <>
-      <Save time={updateTime} onDraft={onDraft} onPublish={onPublish} />
       <div style={{ height: 'calc(100vh - 180px)', overflow: 'auto' }}>
         添加文章
         <Form form={form}>
@@ -293,6 +292,7 @@ const ArticleAdd = (props: any) => {
           </Row>
         </Form>
       </div>
+      <Save time={updateTime} onDraft={onDraft} onPublish={onPublish} />
     </>
   );
 };

@@ -71,9 +71,9 @@ ul li {
   width: 50% !important;
 }
 /* 表格样式 */
-.ant-table-wrapper{
+/* .ant-table-wrapper{
   margin-bottom: 10px;
-}
+} */
 /* 弹窗信息不可选 */
 .ant-modal-confirm-title{
   user-select: none !important;
