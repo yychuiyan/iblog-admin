@@ -66,7 +66,7 @@ const TopHeader = (props: any) => {
       <div className='avatar'>
           <Dropdown menu={{ items }} placement="bottom">
           <div className='avatar_text'>
-            {username === "guest" ? "访客登录" : <span>「{username}」</span>}
+            {username === "guest" ? "「访客登录」" : <span>「{username}」</span>}
           </div>
         </Dropdown>
       </div>
