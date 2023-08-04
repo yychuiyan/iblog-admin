@@ -33,7 +33,6 @@ const Home = (props: any) => {
       }, init)
       setArticleViews(viewCount)
       // 点赞数量
-      console.log("data", data)
       let likes = data.map((item: any) => item.like)
       let initLike = 0;
       let likeCount = likes.reduce((prev: any, curr: any) => {
@@ -50,7 +49,6 @@ const Home = (props: any) => {
       props.BlogActions.asyncFriendlyListAction('', '', '').then((res: any) => {
         // 获取友链
         let { data } = res.data;
-        console.log("友链：", data);
         setFriendCount(data.length)
       });
       // setList(data);
