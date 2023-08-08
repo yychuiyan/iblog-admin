@@ -58,10 +58,10 @@ axios.interceptors.response.use(
           errMessage = '错误的请求';
           break;
         case 401:
-          errMessage = '未授权，请重新登录';
           localStorage.removeItem('token');
           // 退出登录
-          window.location.href = '#/admin/login';
+          window.location.replace('#/admin/login');
+          errMessage = '未授权，请重新登录';
           break;
         case 403:
           errMessage = '拒绝访问';
