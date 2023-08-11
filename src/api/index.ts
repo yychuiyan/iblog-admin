@@ -28,6 +28,7 @@ import {
   ApothegmAdd,
   ApothegmUpdate,
   ApothegmUpdateStatus,
+  FriendlyUpdateStatus,
 } from '@/types/api';
 
 const baseURL = `/api/v1`;
@@ -218,6 +219,10 @@ const api: Api = {
   // 修改友链
   friendlyUpdate(params: FriendlyUpdate) {
     return axios.put(`${baseURL}/friendly/${params.id}`, params);
+  },
+  // 友链状态
+  friendlyStatusUpdate(params: FriendlyUpdateStatus) {
+    return axios.put(`${baseURL}/friendly/status/${params.id}`, params);
   },
   // 随笔列表
   getEssaylyList(page: number, pageSize: number, content: string) {

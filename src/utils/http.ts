@@ -59,9 +59,11 @@ axios.interceptors.response.use(
           break;
         case 401:
           localStorage.removeItem('token');
+          errMessage = '授权失效，请重新登录';
           // 退出登录
-          window.location.replace('#/admin/login');
-          errMessage = '未授权，请重新登录';
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
           break;
         case 403:
           errMessage = '拒绝访问';

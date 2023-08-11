@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Image, Input, message, Modal, Table, Tooltip } from 'antd';
+import { Button, Form, Image, Input, message, Modal, Switch, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, ExclamationCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
@@ -9,7 +9,7 @@ import MyPagination from '@/components/pagination';
 import dayjs from 'dayjs';
 import UploadImage from '@/components/upload';
 import jwtDecode from 'jwt-decode';
-import { handleNotAdd, handleNotDelete, handleNotUpdate } from '@/utils/prompt';
+import { handleNotAdd, handleNotDelete, handleNotUpdate, handleNotChangeStatus } from '@/utils/prompt';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
@@ -22,6 +22,7 @@ interface DataType {
   updateTime: string;
 }
 interface FriendlyData {
+  status: any;
   avatar: any;
   _id: string;
   totalCount: number;
@@ -57,6 +58,21 @@ const UserInfo = (props: any) => {
       dataIndex: 'desc',
       render: text => {
         return <Tooltip title={text}>{text}</Tooltip>;
+      },
+    },
+    {
+      title: '友链状态',
+      dataIndex: 'status',
+      width: 100,
+      render: (_, record: any) => {
+        return (
+          <Switch
+            checkedChildren={'正常'}
+            unCheckedChildren={'异常'}
+            checked={record.status}
+            onChange={status => role_type ? handleNotChangeStatus() : onChangeStatus(status, record)}
+          />
+        );
       },
     },
     {
@@ -160,6 +176,7 @@ const UserInfo = (props: any) => {
     props.BlogActions.asyncFriendlyInsertAction({
       ...data,
     }).then(() => {
+      message.success('友链添加成功')
       // 重新调用查询接口
       props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: FriendlyData) => {
         let { data, totalCount, page, pageSize } = res.data as unknown as FriendlyData;
@@ -223,7 +240,7 @@ const UserInfo = (props: any) => {
       //@ts-ignore
       id: editData._id,
     }).then(() => {
-      message.success('更新成功');
+      message.success('友链更新成功');
       props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: FriendlyData) => {
         // 获取友链
         let { data, totalCount, page, pageSize } = res.data as unknown as FriendlyData;
@@ -234,6 +251,19 @@ const UserInfo = (props: any) => {
       });
       updateForm.resetFields();
       setIsModalUpdateOpen(false);
+    });
+  };
+  // 更新友链状态
+  const onChangeStatus = (status: boolean, row: FriendlyData) => {
+    props.BlogActions.asyncFriendlyStatusUpdateAction({
+      status: status,
+      id: row._id,
+    }).then((res: { code: number, msg: string }) => {
+      if (res.code === 0) {
+        row.status = !row.status;
+        setList([...list]);
+        message.success(res.msg);
+      }
     });
   };
   // 删除友链

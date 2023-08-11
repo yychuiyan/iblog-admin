@@ -99,6 +99,7 @@ import {
   ApothegmAdd,
   ApothegmUpdate,
   ApothegmUpdateStatus,
+  FriendlyUpdateStatus,
 } from '@/types/api';
 // 登录
 export function asyncLoginAction(data: LoginParams) {
@@ -587,6 +588,17 @@ export const asyncFriendlyUpdateAction = (params: FriendlyUpdate) => {
     dispatch({
       type: FRIENDLY_UPDATE,
       fid: res,
+    });
+    return res;
+  };
+};
+// 更新友链状态
+export const asyncFriendlyStatusUpdateAction = (params: FriendlyUpdateStatus) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.friendlyStatusUpdate(params);
+    dispatch({
+      type: AFFICHE_UPDATE,
+      friendly: res,
     });
     return res;
   };
