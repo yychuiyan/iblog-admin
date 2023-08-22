@@ -144,6 +144,10 @@ interface FriendlyUpdateStatus {
   status: boolean;
   id: string;
 }
+interface FriendlyUpdateChecked {
+  checked: boolean;
+  id: string;
+}
 interface CoverData {
   name: string;
   thumbUrl: string;
@@ -255,6 +259,7 @@ export interface Api {
   friendlyInsert(params: FriendlyAdd): Promise<ApiResponse>;
   friendlyUpdate(params: FriendlyUpdate): Promise<ApiResponse>;
   friendlyStatusUpdate(params: FriendlyUpdateStatus): Promise<ApiResponse>;
+  friendlyCheckedUpdate(params: FriendlyUpdateChecked): Promise<ApiResponse>;
   getEssaylyList(page: number, pageSize: number, content: string): Promise<ApiResponse>;
   essayDelete(id: string): Promise<ApiResponse>;
   essayInsert(params: EssayAdd): Promise<ApiResponse>;

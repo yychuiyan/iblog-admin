@@ -66,6 +66,8 @@ import {
   APOTHEGM_UPDATE,
   APOTHEGM_DELETE,
   APOTHEGM_STATUS,
+  FRIENDLY_CHECKED,
+  FRIENDLY_STATUS,
 } from '@/redux/constants';
 import jwtDecode from 'jwt-decode';
 import {
@@ -100,6 +102,7 @@ import {
   ApothegmUpdate,
   ApothegmUpdateStatus,
   FriendlyUpdateStatus,
+  FriendlyUpdateChecked,
 } from '@/types/api';
 // 登录
 export function asyncLoginAction(data: LoginParams) {
@@ -592,12 +595,23 @@ export const asyncFriendlyUpdateAction = (params: FriendlyUpdate) => {
     return res;
   };
 };
-// 更新友链状态
+// 更新友链网站状态
 export const asyncFriendlyStatusUpdateAction = (params: FriendlyUpdateStatus) => {
   return async (dispatch: Dispatch) => {
     const res = await api.friendlyStatusUpdate(params);
     dispatch({
-      type: AFFICHE_UPDATE,
+      type: FRIENDLY_STATUS,
+      friendly: res,
+    });
+    return res;
+  };
+};
+// 更新友链状态
+export const asyncFriendlyCheckedUpdateAction = (params: FriendlyUpdateChecked) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.friendlyCheckedUpdate(params);
+    dispatch({
+      type: FRIENDLY_CHECKED,
       friendly: res,
     });
     return res;

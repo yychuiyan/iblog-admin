@@ -86,8 +86,10 @@ export const FRIENDLY_DELETE = 'FRIENDLY_DELETE';
 export const FRIENDLY_INSERT = 'FRIENDLY_INSERT';
 // 修改友链
 export const FRIENDLY_UPDATE = 'FRIENDLY_UPDATE';
-// 修改友链状态
+// 修改友链网站状态
 export const FRIENDLY_STATUS = 'FRIENDLY_STATUS';
+// 修改友链状态
+export const FRIENDLY_CHECKED = 'FRIENDLY_CHECKED';
 // 随笔列表
 export const ESSAY_LIST = 'ESSAY_LIST';
 // 删除随笔

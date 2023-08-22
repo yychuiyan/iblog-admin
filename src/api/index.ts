@@ -29,6 +29,7 @@ import {
   ApothegmUpdate,
   ApothegmUpdateStatus,
   FriendlyUpdateStatus,
+  FriendlyUpdateChecked,
 } from '@/types/api';
 
 const baseURL = `/api/v1`;
@@ -220,9 +221,13 @@ const api: Api = {
   friendlyUpdate(params: FriendlyUpdate) {
     return axios.put(`${baseURL}/friendly/${params.id}`, params);
   },
-  // 友链状态
+  // 友链网站状态
   friendlyStatusUpdate(params: FriendlyUpdateStatus) {
     return axios.put(`${baseURL}/friendly/status/${params.id}`, params);
+  },
+  // 友链状态
+  friendlyCheckedUpdate(params: FriendlyUpdateChecked) {
+    return axios.put(`${baseURL}/friendly/checked/${params.id}`, params);
   },
   // 随笔列表
   getEssaylyList(page: number, pageSize: number, content: string) {

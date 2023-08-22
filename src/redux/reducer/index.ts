@@ -44,6 +44,7 @@ import { FriendlyDeleteReducer } from './friendly/delete';
 import { FriendlyInsertReducer } from './friendly/insert';
 import { FriendlyUpdateReducer } from './friendly/update';
 import { FriendlyStatusUpdateReducer } from './friendly/status_update';
+import { FriendlyCheckedUpdateReducer } from './friendly/checked_update';
 import { EssayListReducer } from './essay/list';
 import { EssayDeleteReducer } from './essay/delete';
 import { EssayInsertReducer } from './essay/insert';
@@ -112,6 +113,7 @@ const RootReducer = combineReducers({
   FriendlyInsertReducer,
   FriendlyUpdateReducer,
   FriendlyStatusUpdateReducer,
+  FriendlyCheckedUpdateReducer,
   EssayListReducer,
   EssayDeleteReducer,
   EssayInsertReducer,

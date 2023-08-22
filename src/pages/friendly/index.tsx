@@ -22,6 +22,7 @@ interface DataType {
   updateTime: string;
 }
 interface FriendlyData {
+  checked: any;
   status: any;
   avatar: any;
   _id: string;
@@ -61,7 +62,7 @@ const UserInfo = (props: any) => {
       },
     },
     {
-      title: '友链状态',
+      title: '网站状态',
       dataIndex: 'status',
       width: 100,
       render: (_, record: any) => {
@@ -70,7 +71,22 @@ const UserInfo = (props: any) => {
             checkedChildren={'正常'}
             unCheckedChildren={'异常'}
             checked={record.status}
-            onChange={status => role_type ? handleNotChangeStatus() : onChangeStatus(status, record)}
+            onChange={status => role_type ? handleNotChangeStatus() : record.checked === true ? onChangeStatus(status, record) : message.warning("网站已下线!")}
+          />
+        );
+      },
+    },
+    {
+      title: '友链状态',
+      dataIndex: 'checked',
+      width: 100,
+      render: (_, record: any) => {
+        return (
+          <Switch
+            checkedChildren={'上线'}
+            unCheckedChildren={'下线'}
+            checked={record.checked}
+            onChange={checked => role_type ? handleNotChangeStatus() : record.status === false ? onChangeChecked(checked, record) : message.warning("仅异常网站可执行下线操作!")}
           />
         );
       },
@@ -253,7 +269,7 @@ const UserInfo = (props: any) => {
       setIsModalUpdateOpen(false);
     });
   };
-  // 更新友链状态
+  // 更新友链网站状态
   const onChangeStatus = (status: boolean, row: FriendlyData) => {
     props.BlogActions.asyncFriendlyStatusUpdateAction({
       status: status,
@@ -261,6 +277,19 @@ const UserInfo = (props: any) => {
     }).then((res: { code: number, msg: string }) => {
       if (res.code === 0) {
         row.status = !row.status;
+        setList([...list]);
+        message.success(res.msg);
+      }
+    });
+  };
+  // 更新友链状态
+  const onChangeChecked = (checked: boolean, row: FriendlyData) => {
+    props.BlogActions.asyncFriendlyCheckedUpdateAction({
+      checked: checked,
+      id: row._id,
+    }).then((res: { code: number, msg: string }) => {
+      if (res.code === 0) {
+        row.checked = !row.checked;
         setList([...list]);
         message.success(res.msg);
       }
