@@ -133,6 +133,13 @@ interface FriendlyAdd {
   link: string;
   name: string;
 }
+interface ReaderAdd {
+  cover: string;
+  desc: string;
+  link: string;
+  name: string;
+  status: number;
+}
 interface FriendlyUpdate {
   id: string;
   avatar: string;
@@ -140,11 +147,23 @@ interface FriendlyUpdate {
   link: string;
   name: string;
 }
+interface ReaderUpdate {
+  id: string;
+  cover: string;
+  desc: string;
+  link: string;
+  name: string;
+  status: number;
+}
 interface FriendlyUpdateStatus {
   status: boolean;
   id: string;
 }
 interface FriendlyUpdateChecked {
+  checked: boolean;
+  id: string;
+}
+interface ReaderUpdateChecked {
   checked: boolean;
   id: string;
 }
@@ -282,4 +301,9 @@ export interface Api {
   apothegmUpdate(params: ApothegmUpdate): Promise<ApiResponse>;
   apothegmDelete(id: string): Promise<ApiResponse>;
   apothegmStatusUpdate(params: ApothegmUpdateStatus): Promise<ApiResponse>;
+  getReaderList(page: number, pageSize: number, name: string): Promise<ApiResponse>;
+  readerDelete(id: string): Promise<ApiResponse>;
+  readerInsert(params: ReaderAdd): Promise<ApiResponse>;
+  readerUpdate(params: ReaderUpdate): Promise<ApiResponse>;
+  readerCheckedUpdate(params: ReaderUpdateChecked): Promise<ApiResponse>;
 }

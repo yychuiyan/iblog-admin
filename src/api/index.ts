@@ -30,6 +30,9 @@ import {
   ApothegmUpdateStatus,
   FriendlyUpdateStatus,
   FriendlyUpdateChecked,
+  ReaderAdd,
+  ReaderUpdate,
+  ReaderUpdateChecked,
 } from '@/types/api';
 
 const baseURL = `/api/v1`;
@@ -316,6 +319,26 @@ const api: Api = {
   // 警句状态
   apothegmStatusUpdate(params: ApothegmUpdateStatus) {
     return axios.put(`${baseURL}/apothegm/status/${params.id}`, params);
+  },
+  // 友链列表
+  getReaderList(page: number, pageSize: number, name: string) {
+    return axios.get(`${baseURL}/reader?page=${page}&&pageSize=${pageSize}&&name=${name}`);
+  },
+  // 删除友链
+  readerDelete(id: string) {
+    return axios.delete(`${baseURL}/reader/${id}`);
+  },
+  // 新增友链
+  readerInsert(params: ReaderAdd) {
+    return axios.post(`${baseURL}/reader`, params);
+  },
+  // 修改友链
+  readerUpdate(params: ReaderUpdate) {
+    return axios.put(`${baseURL}/reader/${params.id}`, params);
+  },
+  // 友链状态
+  readerCheckedUpdate(params: ReaderUpdateChecked) {
+    return axios.put(`${baseURL}/reader/checked/${params.id}`, params);
   },
 };
 export default api;

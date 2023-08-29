@@ -68,6 +68,11 @@ import {
   APOTHEGM_STATUS,
   FRIENDLY_CHECKED,
   FRIENDLY_STATUS,
+  READER_LIST,
+  READER_DELETE,
+  READER_INSERT,
+  READER_UPDATE,
+  READER_CHECKED,
 } from '@/redux/constants';
 import jwtDecode from 'jwt-decode';
 import {
@@ -103,6 +108,9 @@ import {
   ApothegmUpdateStatus,
   FriendlyUpdateStatus,
   FriendlyUpdateChecked,
+  ReaderAdd,
+  ReaderUpdate,
+  ReaderUpdateChecked,
 } from '@/types/api';
 // 登录
 export function asyncLoginAction(data: LoginParams) {
@@ -856,6 +864,61 @@ export const asyncApothegmStatusUpdateAction = (params: ApothegmUpdateStatus) =>
     dispatch({
       type: APOTHEGM_STATUS,
       affiche: res,
+    });
+    return res;
+  };
+};
+// 友链列表
+export const asyncReaderListAction = (page: number, pageSize: number, name: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.getReaderList(page, pageSize, name);
+    dispatch({
+      type: READER_LIST,
+      reader: res,
+    });
+    return res;
+  };
+};
+// 删除书籍
+export const asyncReaderDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.readerDelete(id);
+    dispatch({
+      type: READER_DELETE,
+      rid: '',
+    });
+    return res;
+  };
+};
+// 新增友链
+export const asyncReaderInsertAction = (data: ReaderAdd) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.readerInsert(data);
+    dispatch({
+      type: READER_INSERT,
+      reader: {},
+    });
+    return res;
+  };
+};
+// 修改友链
+export const asyncReaderUpdateAction = (params: ReaderUpdate) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.readerUpdate(params);
+    dispatch({
+      type: READER_UPDATE,
+      rid: res,
+    });
+    return res;
+  };
+};
+// 更新友链状态
+export const asyncReaderCheckedUpdateAction = (params: ReaderUpdateChecked) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.readerCheckedUpdate(params);
+    dispatch({
+      type: READER_CHECKED,
+      reader: res,
     });
     return res;
   };

@@ -49,4 +49,5 @@ export interface Action {
   afficheId?: string;
   apothegm?: string[];
   apothegmId?: string;
+  reader?: string[];
 }

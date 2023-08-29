@@ -14,7 +14,8 @@ import {
   UserOutlined,
   RocketOutlined,
   HeartOutlined,
-  VerifiedOutlined
+  VerifiedOutlined,
+  ContactsOutlined
 } from '@ant-design/icons';
 import './index.less';
 import { useEffect, useState } from 'react';
@@ -80,6 +81,8 @@ const SideMenu = (props: any) => {
         return <RocketOutlined />;
       case 'HeartOutlined':
         return <HeartOutlined />
+      case 'ContactsOutlined':
+        return <ContactsOutlined />
       default:
         return null;
     }

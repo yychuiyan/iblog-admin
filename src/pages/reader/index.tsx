@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Image, Input, message, Modal, Switch, Table, Tooltip } from 'antd';
+import { Badge, Button, Form, Image, Input, message, Modal, Select, Space, Switch, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, ExclamationCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
@@ -10,9 +10,12 @@ import dayjs from 'dayjs';
 import UploadImage from '@/components/upload';
 import jwtDecode from 'jwt-decode';
 import { handleNotAdd, handleNotDelete, handleNotUpdate, handleNotChangeStatus } from '@/utils/prompt';
+import TextArea from 'antd/es/input/TextArea';
+import { bookStatus, enums } from '@/utils/enum';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
+  desc: string;
   key: React.Key;
   _id: string;
   username?: string;
@@ -21,31 +24,32 @@ interface DataType {
   createTime: string;
   updateTime: string;
 }
-interface FriendlyData {
+interface ReaderData {
+  avatar: any;
   checked: any;
   status: any;
-  avatar: any;
   _id: string;
   totalCount: number;
   page: number;
   pageSize: number;
   data: DataType[];
 }
-const Friendly = (props: any) => {
+const Reader = (props: any) => {
   const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
   const role_type = token[0].role[0].role_type
   const columns: ColumnsType<DataType> = [
     {
-      title: '昵称',
+      title: '书籍名称',
       dataIndex: 'name',
-      width: 100,
+      width: 200,
     },
     {
-      title: '链接',
-      dataIndex: 'link',
+      title: '作者',
+      dataIndex: 'author',
+      width: 150,
     },
     {
-      title: '头像',
+      title: '封面',
       dataIndex: 'avatar',
       render: (_, record: any) => {
         if (typeof (record.avatar) === 'object') {
@@ -55,38 +59,35 @@ const Friendly = (props: any) => {
       },
     },
     {
-      title: '个人介绍',
+      title: '书籍简介',
       dataIndex: 'desc',
-      render: text => {
-        return <Tooltip title={text}>{text}</Tooltip>;
+      render: (_, record) => {
+        return <p className='introduction' style={{ width: '20rem' }}>{record.desc}</p>;
       },
     },
     {
-      title: '网站状态',
+      title: '阅读状态',
       dataIndex: 'status',
       width: 100,
       render: (_, record: any) => {
         return (
-          <Switch
-            checkedChildren={'正常'}
-            unCheckedChildren={'异常'}
-            checked={record.status}
-            onChange={status => role_type ? handleNotChangeStatus() : record.checked === true ? onChangeStatus(status, record) : message.warning("网站已下线!")}
-          />
+          <Space direction="vertical" style={{ width: '5rem' }}>
+            <Badge status={enums[record.status]} text={bookStatus[record.status]} />
+          </Space>
         );
       },
     },
     {
-      title: '友链状态',
+      title: '书籍状态',
       dataIndex: 'checked',
       width: 100,
       render: (_, record: any) => {
         return (
           <Switch
-            checkedChildren={'上线'}
-            unCheckedChildren={'下线'}
+            checkedChildren={'上架'}
+            unCheckedChildren={'下架'}
             checked={record.checked}
-            onChange={checked => role_type ? handleNotChangeStatus() : record.status === false ? onChangeChecked(checked, record) : message.warning("仅异常网站可执行下线操作!")}
+            onChange={checked => role_type ? handleNotChangeStatus() : onChangeChecked(checked, record)}
           />
         );
       },
@@ -118,9 +119,10 @@ const Friendly = (props: any) => {
               shape="circle"
               icon={<DeleteOutlined />}
               onClick={() => {
-                friendlyDelete(item);
+                readerDelete(item);
               }}
               style={{ marginRight: '5px' }}
+              disabled={item.checked}
             />
             <Button
               type="primary"
@@ -128,7 +130,7 @@ const Friendly = (props: any) => {
               shape="circle"
               icon={<EditOutlined />}
               onClick={() => {
-                friendlyUpdate(item);
+                readerUpdate(item);
               }}
               style={{ marginRight: '5px' }}
             />
@@ -141,7 +143,7 @@ const Friendly = (props: any) => {
   const [form] = Form.useForm();
   // 更新表单
   const [updateForm] = Form.useForm();
-  // 友链列表
+  // 书籍列表
   const [list, setList] = useState<DataType[]>([]);
   // 分页总数
   const [total, setTotal] = useState(0);
@@ -159,11 +161,13 @@ const Friendly = (props: any) => {
   const [imageList, setImageList] = useState<any>();
   // 图片地址
   const [imgUrl, setImgUrl] = useState<any>([]);
-  // 获取友链列表数据
+  // 阅读状态
+  const [readerStatus, setReaderStatus] = useState<any>(0)
+  // 获取书籍列表数据
   useEffect(() => {
-    props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: FriendlyData) => {
-      // 获取友链
-      let { data, totalCount, page, pageSize } = res.data as unknown as FriendlyData;
+    props.BlogActions.asyncReaderListAction(currentPage, pageSize, '').then((res: ReaderData) => {
+      // 获取书籍
+      let { data, totalCount, page, pageSize } = res.data as unknown as ReaderData;
       setList(data);
       setTotal(totalCount);
       setCurrentPage(page);
@@ -171,7 +175,7 @@ const Friendly = (props: any) => {
     });
   }, [currentPage, pageSize, props.BlogActions]);
 
-  // 添加友链
+  // 添加书籍
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -189,13 +193,18 @@ const Friendly = (props: any) => {
     } else {
       data.avatar = imageList;
     }
-    props.BlogActions.asyncFriendlyInsertAction({
-      ...data,
+    if (data.status === "待阅读") {
+      data.status = 0;
+    } else {
+      data.status = readerStatus
+    }
+    props.BlogActions.asyncReaderInsertAction({
+      ...data
     }).then(() => {
-      message.success('友链添加成功')
+      message.success('书籍添加成功')
       // 重新调用查询接口
-      props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: FriendlyData) => {
-        let { data, totalCount, page, pageSize } = res.data as unknown as FriendlyData;
+      props.BlogActions.asyncReaderListAction(currentPage, pageSize, '').then((res: ReaderData) => {
+        let { data, totalCount, page, pageSize } = res.data as unknown as ReaderData;
         setList(data);
         setTotal(totalCount);
         setCurrentPage(page);
@@ -216,9 +225,10 @@ const Friendly = (props: any) => {
     setIsModalUpdateOpen(false);
   };
   // 点击更新
-  const friendlyUpdate = (item: FriendlyData) => {
+  const readerUpdate = (item: ReaderData) => {
     setIsModalUpdateOpen(true);
-    updateForm.setFieldsValue(item);
+    const statusString = item.status.toString();
+    updateForm.setFieldsValue({ ...item, status: statusString });
     if (typeof (item.avatar) === 'string') {
       let data = item.avatar;
       let start = data.indexOf('images');
@@ -230,6 +240,7 @@ const Friendly = (props: any) => {
         },
       ];
     }
+
     setImgUrl(item.avatar);
     setEditData(item);
   };
@@ -239,7 +250,9 @@ const Friendly = (props: any) => {
       return handleNotUpdate();
     }
     let value = updateForm.getFieldsValue();
-
+    if (value.status === "待阅读") {
+      value.status = 0;
+    }
     if (typeof imageList === 'object') {
       value.avatar = imageList.url;
     } else {
@@ -248,18 +261,20 @@ const Friendly = (props: any) => {
     if (imageList === undefined) {
       value.avatar = imgUrl[0].thumbUrl;
     }
-    props.BlogActions.asyncFriendlyUpdateAction({
+    props.BlogActions.asyncReaderUpdateAction({
       name: value.name,
+      author: value.author,
       link: value.link,
       avatar: value.avatar,
+      status: Number(value.status),
       desc: value.desc,
       //@ts-ignore
       id: editData._id,
     }).then(() => {
-      message.success('友链更新成功');
-      props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: FriendlyData) => {
-        // 获取友链
-        let { data, totalCount, page, pageSize } = res.data as unknown as FriendlyData;
+      message.success('书籍更新成功');
+      props.BlogActions.asyncReaderListAction(currentPage, pageSize, '').then((res: ReaderData) => {
+        // 获取书籍
+        let { data, totalCount, page, pageSize } = res.data as unknown as ReaderData;
         setList(data);
         setTotal(totalCount);
         setCurrentPage(page);
@@ -269,22 +284,9 @@ const Friendly = (props: any) => {
       setIsModalUpdateOpen(false);
     });
   };
-  // 更新友链网站状态
-  const onChangeStatus = (status: boolean, row: FriendlyData) => {
-    props.BlogActions.asyncFriendlyStatusUpdateAction({
-      status: status,
-      id: row._id,
-    }).then((res: { code: number, msg: string }) => {
-      if (res.code === 0) {
-        row.status = !row.status;
-        setList([...list]);
-        message.success(res.msg);
-      }
-    });
-  };
-  // 更新友链状态
-  const onChangeChecked = (checked: boolean, row: FriendlyData) => {
-    props.BlogActions.asyncFriendlyCheckedUpdateAction({
+  // 更新书籍状态
+  const onChangeChecked = (checked: boolean, row: ReaderData) => {
+    props.BlogActions.asyncReaderCheckedUpdateAction({
       checked: checked,
       id: row._id,
     }).then((res: { code: number, msg: string }) => {
@@ -295,8 +297,8 @@ const Friendly = (props: any) => {
       }
     });
   };
-  // 删除友链
-  const friendlyDelete = (item: FriendlyData) => {
+  // 删除书籍
+  const readerDelete = (item: ReaderData) => {
     confirm({
       title: '你确定要删除吗?',
       icon: <ExclamationCircleOutlined />,
@@ -306,11 +308,11 @@ const Friendly = (props: any) => {
         }
         // 先将要删除的数据过滤掉再调用接口
         setList(list.filter((it) => it._id !== item._id));
-        message.success('友链删除成功');
-        props.BlogActions.asyncFriendlyDeleteAction(item._id).then(() => {
-          props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: FriendlyData) => {
-            // 获取友链
-            let { data, totalCount, page, pageSize } = res.data as unknown as FriendlyData;
+        message.success('书籍删除成功');
+        props.BlogActions.asyncReaderDeleteAction(item._id).then(() => {
+          props.BlogActions.asyncReaderListAction(currentPage, pageSize, '').then((res: ReaderData) => {
+            // 获取书籍
+            let { data, totalCount, page, pageSize } = res.data as unknown as ReaderData;
             setList(data);
             setTotal(totalCount);
             setCurrentPage(page);
@@ -322,8 +324,8 @@ const Friendly = (props: any) => {
   };
   // 搜索
   const onSearch = (value: string) => {
-    props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, value).then((res: FriendlyData) => {
-      let { data, totalCount, page, pageSize } = res.data as unknown as FriendlyData;
+    props.BlogActions.asyncReaderListAction(currentPage, pageSize, value).then((res: ReaderData) => {
+      let { data, totalCount, page, pageSize } = res.data as unknown as ReaderData;
       setList(data);
       setTotal(totalCount);
       setCurrentPage(page);
@@ -333,9 +335,9 @@ const Friendly = (props: any) => {
   // 跳转页数据显示
   const onChangePage = (page: number, pageSize: number, params = '') => {
     // 重新调用接口将参数传递过去
-    props.BlogActions.asyncFriendlyListAction(page, pageSize, params).then((res: FriendlyData) => {
+    props.BlogActions.asyncReaderListAction(page, pageSize, params).then((res: ReaderData) => {
       // 获取列表数据
-      let { data } = res.data as unknown as FriendlyData;
+      let { data } = res.data as unknown as ReaderData;
       setList(data);
       // 切换行
       setCurrentPage(page);
@@ -351,11 +353,16 @@ const Friendly = (props: any) => {
   const handleRemove = () => {
     setImageList('');
   };
+  // 阅读状态
+  const handleBookStatusChange = (value: string) => {
+
+    setReaderStatus(Number(value))
+  };
   return (
     <div>
       <div className="title">
         <Button type="primary" onClick={showModal} className="btn">
-          添加友链
+          添加书籍
         </Button>
         <Search
           className="search"
@@ -367,7 +374,7 @@ const Friendly = (props: any) => {
       </div>
       <Modal
         open={isModalOpen}
-        title={<div style={{ textAlign: 'left' }}>添加友链</div>}
+        title={<div style={{ textAlign: 'left' }}>添加书籍</div>}
         okText="添加"
         cancelText="取消"
         onCancel={handleCancel}
@@ -376,28 +383,42 @@ const Friendly = (props: any) => {
         }}
       >
         <Form form={form} layout="vertical" name="basic" className="userAddFrom">
-          <Form.Item name="name" label="昵称" rules={[{ required: true, message: '昵称不能为空' }]}>
+          <Form.Item name="name" label="书籍名称" rules={[{ required: true, message: '书籍名称不能为空' }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="link" label="链接" rules={[{ required: true, message: '链接不能为空' }]}>
+          <Form.Item name="author" label="作者名称" rules={[{ required: true, message: '作者名称不能为空' }]}>
             <Input />
+          </Form.Item>
+          <Form.Item name="link" label="详情链接" rules={[{ required: true, message: '详情链接不能为空' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="status" label="阅读状态" initialValue="待阅读">
+            <Select
+              style={{ width: 120 }}
+              onChange={handleBookStatusChange}
+              options={[
+                { value: '0', label: '待阅读' },
+                { value: '1', label: '阅读中' },
+                { value: '2', label: '已读完' },
+              ]}
+            />
           </Form.Item>
           <Form.Item
             name="avatar"
-            label="头像"
-            // rules={[{ required: true, message: '头像不能为空' }]}
+            label="封面"
+          // rules={[{ required: true, message: '头像不能为空' }]}
           >
             {/* @ts-ignore */}
             <UploadImage handleChange={handleChange} handleRemove={handleRemove} />
           </Form.Item>
-          <Form.Item name="desc" label="描述" rules={[{ required: true, message: '描述不能为空' }]}>
-            <Input />
+          <Form.Item name="desc" label="书籍描述" rules={[{ required: true, message: '描述不能为空' }]}>
+            <TextArea rows={6} />
           </Form.Item>
         </Form>
       </Modal>
       <Modal
         open={isModalUpdateOpen}
-        title={<div style={{ textAlign: 'left' }}>更新友链</div>}
+        title={<div style={{ textAlign: 'left' }}>更新书籍</div>}
         okText="更新"
         cancelText="取消"
         onCancel={handleUpdateCancel}
@@ -406,23 +427,37 @@ const Friendly = (props: any) => {
         }}
       >
         <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
-          <Form.Item name="name" label="昵称" rules={[{ required: true, message: '昵称不能为空' }]}>
+          <Form.Item name="name" label="书籍名称" rules={[{ required: true, message: '书籍名称不能为空' }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="link" label="链接" rules={[{ required: true, message: '链接不能为空' }]}>
+          <Form.Item name="author" label="作者名称" rules={[{ required: true, message: '作者名称不能为空' }]}>
             <Input />
+          </Form.Item>
+          <Form.Item name="link" label="详情链接" rules={[{ required: true, message: '详情链接不能为空' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="status" label="阅读状态">
+            <Select
+              style={{ width: 120 }}
+              onChange={handleBookStatusChange}
+              options={[
+                { value: '0', label: '待阅读' },
+                { value: '1', label: '阅读中' },
+                { value: '2', label: '已读完' },
+              ]}
+            />
           </Form.Item>
           <Form.Item
             name="avatar"
-            label="头像"
-            rules={[{ required: true, message: '头像不能为空' }]}
+            label="封面"
+            rules={[{ required: true, message: '封面不能为空' }]}
           >
             {/* @ts-ignore */}
             <UploadImage handleChange={handleChange} imgUrlArr={imgUrl} handleRemove={handleRemove} />
             {/* <Input /> */}
           </Form.Item>
           <Form.Item name="desc" label="描述" rules={[{ required: true, message: '描述不能为空' }]}>
-            <Input />
+            <TextArea rows={6} />
           </Form.Item>
         </Form>
       </Modal>
@@ -450,4 +485,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     BlogActions: bindActionCreators(BlogActions, dispatch),
   };
 };
-export default connect(null, mapDispatchToProps)(Friendly);
+export default connect(null, mapDispatchToProps)(Reader);

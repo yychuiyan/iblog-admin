@@ -133,3 +133,13 @@ export const APOTHEGM_UPDATE = 'APOTHEGM_UPDATE';
 export const APOTHEGM_DELETE = 'APOTHEGM_DELETE';
 // 修改警句状态
 export const APOTHEGM_STATUS = 'APOTHEGM_STATUS';
+// 书籍列表
+export const READER_LIST = 'READER_LIST';
+// 删除书籍
+export const READER_DELETE = 'READER_DELETE';
+// 新增书籍
+export const READER_INSERT = 'READER_INSERT';
+// 修改友链
+export const READER_UPDATE = 'READER_UPDATE';
+// 修改友链状态
+export const READER_CHECKED = 'READER_CHECKED';

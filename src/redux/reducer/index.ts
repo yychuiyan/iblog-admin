@@ -67,6 +67,11 @@ import { ApothegmListReducer } from './apothegm/list';
 import { ApothegmUpdateReducer } from './apothegm/update';
 import { ApothegmStatusUpdateReducer } from './apothegm/status_update';
 import { ApothegmDeleteReducer } from './apothegm/delete';
+import { ReaderListReducer } from './reader/list';
+import { ReaderInsertReducer } from './reader/insert';
+import { ReaderDeleteReducer } from './reader/delete';
+import { ReaderUpdateReducer } from './reader/update';
+import { ReaderCheckedUpdateReducer } from './reader/checked_update';
 const RootReducer = combineReducers({
   LoginReducer,
   RegisterReducer,
@@ -136,5 +141,10 @@ const RootReducer = combineReducers({
   ApothegmUpdateReducer,
   ApothegmStatusUpdateReducer,
   ApothegmDeleteReducer,
+  ReaderListReducer,
+  ReaderInsertReducer,
+  ReaderDeleteReducer,
+  ReaderUpdateReducer,
+  ReaderCheckedUpdateReducer,
 });
 export default RootReducer;
