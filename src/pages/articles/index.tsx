@@ -237,7 +237,7 @@ const ArticleList = (props: any) => {
   // 当前第几页
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   // 获取文章列表数据
   useEffect(() => {
     props.BlogActions.asyncArticleListAction(currentPage, pageSize, '', 0, 0).then((res: ArticleData) => {

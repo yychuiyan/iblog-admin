@@ -320,23 +320,23 @@ const api: Api = {
   apothegmStatusUpdate(params: ApothegmUpdateStatus) {
     return axios.put(`${baseURL}/apothegm/status/${params.id}`, params);
   },
-  // 友链列表
+  // 书籍列表
   getReaderList(page: number, pageSize: number, name: string) {
     return axios.get(`${baseURL}/reader?page=${page}&&pageSize=${pageSize}&&name=${name}`);
   },
-  // 删除友链
+  // 删除书籍
   readerDelete(id: string) {
     return axios.delete(`${baseURL}/reader/${id}`);
   },
-  // 新增友链
+  // 新增书籍
   readerInsert(params: ReaderAdd) {
     return axios.post(`${baseURL}/reader`, params);
   },
-  // 修改友链
+  // 修改书籍
   readerUpdate(params: ReaderUpdate) {
     return axios.put(`${baseURL}/reader/${params.id}`, params);
   },
-  // 友链状态
+  // 书籍状态
   readerCheckedUpdate(params: ReaderUpdateChecked) {
     return axios.put(`${baseURL}/reader/checked/${params.id}`, params);
   },

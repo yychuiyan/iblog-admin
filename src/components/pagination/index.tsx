@@ -27,7 +27,7 @@ const MyPagination = (props: any) => {
           current={currentPage} // 当前页
           pageSize={pageSize} // 每页条数
           total={total} // 数据总数
-          pageSizeOptions={[5, 10, 50, 100]} // 每页显示多少条
+          pageSizeOptions={[5, 15, 50, 100]} // 每页显示多少条
           onChange={onChangePage} // 监听pageSize回调
           showSizeChanger // 展示 pageSize 切换器
           showQuickJumper // 快速跳转至某页

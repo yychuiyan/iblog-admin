@@ -149,7 +149,8 @@ interface FriendlyUpdate {
 }
 interface ReaderUpdate {
   id: string;
-  cover: string;
+  avatar: string;
+  author: string;
   desc: string;
   link: string;
   name: string;

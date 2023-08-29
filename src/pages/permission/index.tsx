@@ -93,7 +93,7 @@ const PermissionList = (props: any) => {
   // 当前第几页
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   // 更新窗口
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
   // 更新表单

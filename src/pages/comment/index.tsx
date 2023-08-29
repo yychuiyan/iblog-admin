@@ -105,7 +105,7 @@ const Comments = (props: any) => {
   // 当前第几页
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(15);
   // 获取评论列表数据
   useEffect(() => {
     props.BlogActions.asyncCommentsAction(currentPage, pageSize, '').then((res: CommentData) => {

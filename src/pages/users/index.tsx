@@ -117,7 +117,7 @@ const UserInfo = (props: any) => {
   // 当前第几页
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   // 图片列表
   const [imageList, setImageList] = useState<any>();
   // 图片地址
