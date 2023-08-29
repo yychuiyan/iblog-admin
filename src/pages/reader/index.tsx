@@ -265,7 +265,7 @@ const Reader = (props: any) => {
       author: value.author,
       link: value.link,
       avatar: value.avatar,
-      status: Number(value.status),
+      status: value.status,
       desc: value.desc,
       //@ts-ignore
       id: editData._id,
