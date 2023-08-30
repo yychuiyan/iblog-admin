@@ -196,7 +196,7 @@ const ArticleList = (props: any) => {
               onClick={() => {
                 onChangePublishStatus(record);
               }}
-              style={{ marginRight: '5px' }}
+              style={{ marginBottom: '2px' }}
             >
               {record.publishStatus === 1 ? <CloudDownloadOutlined /> : <CloudUploadOutlined />}
             </Button>
@@ -210,7 +210,7 @@ const ArticleList = (props: any) => {
                   onClick={() => {
                     props.history.push(`/admin/article/update/${record._id}`);
                   }}
-                  style={{ marginRight: '5px' }}
+                  style={{ marginBottom: '2px' }}
                 />
                 <Button
                   type="primary"
@@ -221,7 +221,7 @@ const ArticleList = (props: any) => {
                   onClick={() => {
                     articleDelete(record);
                   }}
-                  style={{ marginRight: '5px' }}
+                  style={{ marginBottom: '2px' }}
                 />
               </>
             )}

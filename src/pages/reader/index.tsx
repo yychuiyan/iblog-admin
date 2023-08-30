@@ -80,7 +80,7 @@ const Reader = (props: any) => {
     {
       title: '书籍状态',
       dataIndex: 'checked',
-      width: 100,
+      width: 150,
       render: (_, record: any) => {
         return (
           <Switch
@@ -366,7 +366,7 @@ const Reader = (props: any) => {
         <Search
           className="search"
           allowClear
-          placeholder="请输入想要查询的昵称"
+          placeholder="请输入想要查询的书籍名称"
           onSearch={onSearch}
           enterButton
         />

@@ -84,14 +84,14 @@ const Message = (props: any) => {
         return dayjs(time * 1000).format('YYYY-MM-DD HH:mm:ss');
       },
     },
-    {
-      title: '审核时间',
-      dataIndex: 'auditTime',
-      width: 100,
-      render: time => {
-        return time && dayjs(time * 1000).format('YYYY-MM-DD HH:mm:ss');
-      },
-    },
+    // {
+    //   title: '审核时间',
+    //   dataIndex: 'auditTime',
+    //   width: 100,
+    //   render: time => {
+    //     return time && dayjs(time * 1000).format('YYYY-MM-DD HH:mm:ss');
+    //   },
+    // },
     {
       title: '操作',
       key: 'action',
