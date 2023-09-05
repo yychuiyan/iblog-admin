@@ -50,4 +50,6 @@ export interface Action {
   apothegm?: string[];
   apothegmId?: string;
   reader?: string[];
+  nav?: string[];
+  nid?: string;
 }

@@ -28,6 +28,9 @@ const Essay = lazy(() => import('@/pages/essay'));
 const Reader = lazy(() => import('@/pages/reader'));
 const Affiche = lazy(() => import('@/pages/affiche'));
 const Apothegm = lazy(() => import('@/pages/apothegm'));
+const FE_Project = lazy(() => import('@/pages/navigation/fe-project'));
+const FE_Tools = lazy(() => import('@/pages/navigation/fe-tools'));
+const FE_Website = lazy(() => import('@/pages/navigation/fe-website'));
 const { Content } = Layout;
 const LayoutIndex = (props: any) => {
   NProgress.start();
@@ -70,6 +73,9 @@ const LayoutIndex = (props: any) => {
                 <Route path="/admin/reader" component={Reader}></Route>
                 <Route path="/admin/affiche" component={Affiche}></Route>
                 <Route path="/admin/apothegm" component={Apothegm}></Route>
+                <Route path="/admin/project/list" component={FE_Project}></Route>
+                <Route path="/admin/tools/list" component={FE_Tools}></Route>
+                <Route path="/admin/website/list" component={FE_Website}></Route>
                 <Route path="*" component={NotFound}></Route>
               </Switch>
             </Spin>

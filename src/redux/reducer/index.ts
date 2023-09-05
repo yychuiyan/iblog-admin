@@ -72,6 +72,11 @@ import { ReaderInsertReducer } from './reader/insert';
 import { ReaderDeleteReducer } from './reader/delete';
 import { ReaderUpdateReducer } from './reader/update';
 import { ReaderCheckedUpdateReducer } from './reader/checked_update';
+import { NavigationUpdateReducer } from './navigation/update';
+import { NavigationStatusUpdateReducer } from './navigation/status_update';
+import { NavigationListReducer } from './navigation/list';
+import { NavigationInsertReducer } from './navigation/insert';
+import { NavigationDeleteReducer } from './navigation/delete';
 const RootReducer = combineReducers({
   LoginReducer,
   RegisterReducer,
@@ -146,5 +151,10 @@ const RootReducer = combineReducers({
   ReaderDeleteReducer,
   ReaderUpdateReducer,
   ReaderCheckedUpdateReducer,
+  NavigationDeleteReducer,
+  NavigationInsertReducer,
+  NavigationListReducer,
+  NavigationStatusUpdateReducer,
+  NavigationUpdateReducer,
 });
 export default RootReducer;

@@ -133,6 +133,13 @@ interface FriendlyAdd {
   link: string;
   name: string;
 }
+// 导航列表
+interface NavigationAdd {
+  avatar: string;
+  desc: string;
+  link: string;
+  title: string;
+}
 interface ReaderAdd {
   cover: string;
   desc: string;
@@ -147,6 +154,13 @@ interface FriendlyUpdate {
   link: string;
   name: string;
 }
+interface NavigationUpdate {
+  id: string;
+  avatar: string;
+  desc: string;
+  link: string;
+  title: string;
+}
 interface ReaderUpdate {
   id: string;
   avatar: string;
@@ -157,6 +171,10 @@ interface ReaderUpdate {
   status: number;
 }
 interface FriendlyUpdateStatus {
+  status: boolean;
+  id: string;
+}
+interface NavigationUpdateStatus {
   status: boolean;
   id: string;
 }
@@ -307,4 +325,9 @@ export interface Api {
   readerInsert(params: ReaderAdd): Promise<ApiResponse>;
   readerUpdate(params: ReaderUpdate): Promise<ApiResponse>;
   readerCheckedUpdate(params: ReaderUpdateChecked): Promise<ApiResponse>;
+  getNavigationList(page: number, pageSize: number, name: string): Promise<ApiResponse>;
+  navigationDelete(id: string): Promise<ApiResponse>;
+  navigationInsert(params: NavigationAdd): Promise<ApiResponse>;
+  navigationUpdate(params: NavigationUpdate): Promise<ApiResponse>;
+  navigationStatusUpdate(params: NavigationUpdateStatus): Promise<ApiResponse>;
 }

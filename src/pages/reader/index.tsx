@@ -252,13 +252,14 @@ const Reader = (props: any) => {
     if (value.status === "待阅读") {
       value.status = 0;
     }
-    if (typeof imageList === 'object') {
-      value.avatar = imageList.url;
+    if (typeof imageList === 'undefined') {
+      value.avatar = "http://dummyimage.com/100x100"
     } else {
-      value.avatar = imageList;
-    }
-    if (imageList === undefined) {
-      value.avatar = imgUrl[0].thumbUrl;
+      if (typeof imageList === 'object') {
+        value.avatar = imageList.url;
+      } else {
+        value.avatar = imageList;
+      }
     }
     props.BlogActions.asyncReaderUpdateAction({
       name: value.name,

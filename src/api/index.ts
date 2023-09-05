@@ -33,6 +33,9 @@ import {
   ReaderAdd,
   ReaderUpdate,
   ReaderUpdateChecked,
+  NavigationAdd,
+  NavigationUpdate,
+  NavigationUpdateStatus,
 } from '@/types/api';
 
 const baseURL = `/api/v1`;
@@ -339,6 +342,26 @@ const api: Api = {
   // 书籍状态
   readerCheckedUpdate(params: ReaderUpdateChecked) {
     return axios.put(`${baseURL}/reader/checked/${params.id}`, params);
+  },
+  // 导航列表
+  getNavigationList(page: number, pageSize: number, name: string) {
+    return axios.get(`${baseURL}/navigation?page=${page}&&pageSize=${pageSize}&&name=${name}`);
+  },
+  // 删除导航
+  navigationDelete(id: string) {
+    return axios.delete(`${baseURL}/navigation/${id}`);
+  },
+  // 新增导航
+  navigationInsert(params: NavigationAdd) {
+    return axios.post(`${baseURL}/navigation`, params);
+  },
+  // 修改友链
+  navigationUpdate(params: NavigationUpdate) {
+    return axios.put(`${baseURL}/navigation/${params.id}`, params);
+  },
+  // 导航网站状态
+  navigationStatusUpdate(params: NavigationUpdateStatus) {
+    return axios.put(`${baseURL}/navigation/status/${params.id}`, params);
   },
 };
 export default api;

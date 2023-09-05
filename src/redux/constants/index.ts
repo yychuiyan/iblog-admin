@@ -139,7 +139,17 @@ export const READER_LIST = 'READER_LIST';
 export const READER_DELETE = 'READER_DELETE';
 // 新增书籍
 export const READER_INSERT = 'READER_INSERT';
-// 修改友链
+// 修改书籍
 export const READER_UPDATE = 'READER_UPDATE';
-// 修改友链状态
+// 修改书籍状态
 export const READER_CHECKED = 'READER_CHECKED';
+// 导航列表
+export const NAVIGATION_LIST = 'NAVIGATION_LIST';
+// 删除导航
+export const NAVIGATION_DELETE = 'NAVIGATION_DELETE';
+// 新增导航
+export const NAVIGATION_INSERT = 'NAVIGATION_INSERT';
+// 修改导航
+export const NAVIGATION_UPDATE = 'NAVIGATION_UPDATE';
+// 修改导航网站状态
+export const NAVIGATION_STATUS = 'NAVIGATION_STATUS';

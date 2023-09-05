@@ -73,6 +73,10 @@ import {
   READER_INSERT,
   READER_UPDATE,
   READER_CHECKED,
+  NAVIGATION_LIST,
+  NAVIGATION_DELETE,
+  NAVIGATION_UPDATE,
+  NAVIGATION_STATUS,
 } from '@/redux/constants';
 import jwtDecode from 'jwt-decode';
 import {
@@ -111,6 +115,9 @@ import {
   ReaderAdd,
   ReaderUpdate,
   ReaderUpdateChecked,
+  NavigationAdd,
+  NavigationUpdate,
+  NavigationUpdateStatus,
 } from '@/types/api';
 // 登录
 export function asyncLoginAction(data: LoginParams) {
@@ -890,7 +897,7 @@ export const asyncReaderDeleteAction = (id: string) => {
     return res;
   };
 };
-// 新增友链
+// 新增书籍
 export const asyncReaderInsertAction = (data: ReaderAdd) => {
   return async (dispatch: Dispatch) => {
     const res = await api.readerInsert(data);
@@ -901,7 +908,7 @@ export const asyncReaderInsertAction = (data: ReaderAdd) => {
     return res;
   };
 };
-// 修改友链
+// 修改书籍
 export const asyncReaderUpdateAction = (params: ReaderUpdate) => {
   return async (dispatch: Dispatch) => {
     const res = await api.readerUpdate(params);
@@ -912,13 +919,68 @@ export const asyncReaderUpdateAction = (params: ReaderUpdate) => {
     return res;
   };
 };
-// 更新友链状态
+// 更新书籍状态
 export const asyncReaderCheckedUpdateAction = (params: ReaderUpdateChecked) => {
   return async (dispatch: Dispatch) => {
     const res = await api.readerCheckedUpdate(params);
     dispatch({
       type: READER_CHECKED,
       reader: res,
+    });
+    return res;
+  };
+};
+// 导航列表
+export const asyncNavigationListAction = (page: number, pageSize: number, name: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.getNavigationList(page, pageSize, name);
+    dispatch({
+      type: NAVIGATION_LIST,
+      nav: res,
+    });
+    return res;
+  };
+};
+// 删除导航
+export const asyncNavigationDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.navigationDelete(id);
+    dispatch({
+      type: NAVIGATION_DELETE,
+      nid: '',
+    });
+    return res;
+  };
+};
+// 新增导航
+export const asyncNavigationInsertAction = (data: NavigationAdd) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.navigationInsert(data);
+    dispatch({
+      type: FRIENDLY_INSERT,
+      nav: {},
+    });
+    return res;
+  };
+};
+// 修改导航
+export const asyncNavigationUpdateAction = (params: NavigationUpdate) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.navigationUpdate(params);
+    dispatch({
+      type: NAVIGATION_UPDATE,
+      nid: res,
+    });
+    return res;
+  };
+};
+// 更新导航网站状态
+export const asyncNavigationStatusUpdateAction = (params: NavigationUpdateStatus) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.navigationStatusUpdate(params);
+    dispatch({
+      type: NAVIGATION_STATUS,
+      nav: res,
     });
     return res;
   };
