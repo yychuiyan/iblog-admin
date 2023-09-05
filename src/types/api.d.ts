@@ -325,7 +325,7 @@ export interface Api {
   readerInsert(params: ReaderAdd): Promise<ApiResponse>;
   readerUpdate(params: ReaderUpdate): Promise<ApiResponse>;
   readerCheckedUpdate(params: ReaderUpdateChecked): Promise<ApiResponse>;
-  getNavigationList(page: number, pageSize: number, name: string): Promise<ApiResponse>;
+  getNavigationList(page: number, pageSize: number, title: string): Promise<ApiResponse>;
   navigationDelete(id: string): Promise<ApiResponse>;
   navigationInsert(params: NavigationAdd): Promise<ApiResponse>;
   navigationUpdate(params: NavigationUpdate): Promise<ApiResponse>;

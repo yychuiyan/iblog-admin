@@ -74,7 +74,7 @@ const FE_Tools = (props: any) => {
       },
     },
     {
-      title: '项目状态',
+      title: '工具状态',
       dataIndex: 'status',
       width: 100,
       render: (_, record: any) => {
@@ -159,7 +159,7 @@ const FE_Tools = (props: any) => {
   // 获取工具管理数据
   useEffect(() => {
     props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '').then((res: NavigationData) => {
-      // 获取项目
+      // 获取工具
       let { data, totalCount, page, pageSize } = res.data as unknown as NavigationData;
       let filterData = data.filter((item: any) => item.classify === "工具管理")
       setList(filterData);
@@ -195,7 +195,7 @@ const FE_Tools = (props: any) => {
       classify: "工具管理",
       ...data,
     }).then(() => {
-      message.success('项目添加成功')
+      message.success('工具添加成功')
       // 重新调用查询接口
       props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '').then((res: NavigationData) => {
         let { data, totalCount, page, pageSize } = res.data as unknown as NavigationData;
@@ -261,9 +261,9 @@ const FE_Tools = (props: any) => {
       //@ts-ignore
       id: editData._id,
     }).then(() => {
-      message.success('项目更新成功');
+      message.success('工具更新成功');
       props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '').then((res: NavigationData) => {
-        // 获取项目
+        // 获取工具
         let { data, totalCount, page, pageSize } = res.data as unknown as NavigationData;
         let filterData = data.filter((item: any) => item.classify === "工具管理")
         setList(filterData);
@@ -275,7 +275,7 @@ const FE_Tools = (props: any) => {
       setIsModalUpdateOpen(false);
     });
   };
-  // 更新项目网站状态
+  // 更新工具网站状态
   const onChangeStatus = (status: boolean, row: NavigationData) => {
     props.BlogActions.asyncNavigationStatusUpdateAction({
       status: status,
@@ -288,7 +288,7 @@ const FE_Tools = (props: any) => {
       }
     });
   };
-  // 删除项目
+  // 删除工具
   const navigationDelete = (item: NavigationData) => {
     confirm({
       title: '你确定要删除吗?',
@@ -299,10 +299,10 @@ const FE_Tools = (props: any) => {
         }
         // 先将要删除的数据过滤掉再调用接口
         setList(list.filter((it) => it._id !== item._id));
-        message.success('项目删除成功');
+        message.success('工具删除成功');
         props.BlogActions.asyncNavigationDeleteAction(item._id).then(() => {
           props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '').then((res: NavigationData) => {
-            // 获取项目
+            // 获取工具
             let { data, totalCount, page, pageSize } = res.data as unknown as NavigationData;
             let filterData = data.filter((item: any) => item.classify === "工具管理")
             setList(filterData);
@@ -316,9 +316,10 @@ const FE_Tools = (props: any) => {
   };
   // 搜索
   const onSearch = (value: string) => {
-    props.BlogActions.asyncnavigationListAction(currentPage, pageSize, value).then((res: NavigationData) => {
+    props.BlogActions.asyncNavigationListAction(currentPage, pageSize, value).then((res: NavigationData) => {
       let { data, totalCount, page, pageSize } = res.data as unknown as NavigationData;
-      setList(data);
+      let filterData = data.filter((item: any) => item.classify === "工具管理")
+      setList(filterData);
       setTotal(totalCount);
       setCurrentPage(page);
       setPageSize(pageSize);
@@ -327,10 +328,11 @@ const FE_Tools = (props: any) => {
   // 跳转页数据显示
   const onChangePage = (page: number, pageSize: number, params = '') => {
     // 重新调用接口将参数传递过去
-    props.BlogActions.asyncnavigationListAction(page, pageSize, params).then((res: NavigationData) => {
+    props.BlogActions.asyncNavigationListAction(page, pageSize, params).then((res: NavigationData) => {
       // 获取列表数据
       let { data } = res.data as unknown as NavigationData;
-      setList(data);
+      let filterData = data.filter((item: any) => item.classify === "工具管理")
+      setList(filterData);
       // 切换行
       setCurrentPage(page);
       // 根据页面数据显示页码
@@ -354,7 +356,7 @@ const FE_Tools = (props: any) => {
         <Search
           className="search"
           allowClear
-          placeholder="请输入想要查询的昵称"
+          placeholder="请输入想要查询的工具名称"
           onSearch={onSearch}
           enterButton
         />
@@ -391,7 +393,7 @@ const FE_Tools = (props: any) => {
       </Modal>
       <Modal
         open={isModalUpdateOpen}
-        title={<div style={{ textAlign: 'left' }}>更新项目</div>}
+        title={<div style={{ textAlign: 'left' }}>更新工具</div>}
         okText="更新"
         cancelText="取消"
         onCancel={handleUpdateCancel}

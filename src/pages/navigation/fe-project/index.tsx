@@ -316,9 +316,10 @@ const FE_Project = (props: any) => {
   };
   // 搜索
   const onSearch = (value: string) => {
-    props.BlogActions.asyncnavigationListAction(currentPage, pageSize, value).then((res: NavigationData) => {
+    props.BlogActions.asyncNavigationListAction(currentPage, pageSize, value).then((res: NavigationData) => {
       let { data, totalCount, page, pageSize } = res.data as unknown as NavigationData;
-      setList(data);
+      let filterData = data.filter((item: any) => item.classify === "项目列表")
+      setList(filterData);
       setTotal(totalCount);
       setCurrentPage(page);
       setPageSize(pageSize);
@@ -327,10 +328,11 @@ const FE_Project = (props: any) => {
   // 跳转页数据显示
   const onChangePage = (page: number, pageSize: number, params = '') => {
     // 重新调用接口将参数传递过去
-    props.BlogActions.asyncnavigationListAction(page, pageSize, params).then((res: NavigationData) => {
+    props.BlogActions.asyncNavigationListAction(page, pageSize, params).then((res: NavigationData) => {
       // 获取列表数据
       let { data } = res.data as unknown as NavigationData;
-      setList(data);
+      let filterData = data.filter((item: any) => item.classify === "项目列表")
+      setList(filterData);
       // 切换行
       setCurrentPage(page);
       // 根据页面数据显示页码
@@ -354,7 +356,7 @@ const FE_Project = (props: any) => {
         <Search
           className="search"
           allowClear
-          placeholder="请输入想要查询的昵称"
+          placeholder="请输入想要查询的项目名称"
           onSearch={onSearch}
           enterButton
         />
