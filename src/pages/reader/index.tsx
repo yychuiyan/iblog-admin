@@ -258,6 +258,9 @@ const Reader = (props: any) => {
     if (Array.isArray(value.avatar)) {
       value.avatar = value.avatar[0].thumbUrl
     }
+    if (typeof value.avatar === 'object') {
+      value.avatar = value.avatar.url
+    }
     props.BlogActions.asyncReaderUpdateAction({
       name: value.name,
       author: value.author,
