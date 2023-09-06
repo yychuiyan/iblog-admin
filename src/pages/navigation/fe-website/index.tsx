@@ -74,6 +74,14 @@ const FE_Website = (props: any) => {
       },
     },
     {
+      title: '二级分类',
+      dataIndex: 'category',
+      width: 100,
+      render: text => {
+        return <Tooltip title={text}>{text}</Tooltip>;
+      },
+    },
+    {
       title: '常用网站状态',
       dataIndex: 'status',
       width: 100,
@@ -257,6 +265,7 @@ const FE_Website = (props: any) => {
       link: value.link,
       avatar: value.avatar,
       desc: value.desc,
+      category: value.category,
       classify: "常用网站",
       //@ts-ignore
       id: editData._id,
@@ -378,6 +387,9 @@ const FE_Website = (props: any) => {
           <Form.Item name="link" label="链接" rules={[{ required: true, message: '链接不能为空' }]}>
             <Input />
           </Form.Item>
+          <Form.Item name="category" label="二级分类" rules={[{ required: true, message: '二级分类不能为空' }]}>
+            <Input />
+          </Form.Item>
           <Form.Item
             name="avatar"
             label="封面"
@@ -406,6 +418,9 @@ const FE_Website = (props: any) => {
             <Input />
           </Form.Item>
           <Form.Item name="link" label="链接" rules={[{ required: true, message: '链接不能为空' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="category" label="二级分类" rules={[{ required: true, message: '二级分类不能为空' }]}>
             <Input />
           </Form.Item>
           <Form.Item
