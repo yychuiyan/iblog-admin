@@ -242,15 +242,13 @@ const FE_Project = (props: any) => {
       return handleNotUpdate();
     }
     let value = updateForm.getFieldsValue();
-    if (typeof imageList === 'undefined') {
-      value.avatar = "http://dummyimage.com/100x100"
-    } else {
-      if (typeof imageList === 'object') {
-        value.avatar = imageList.url;
-      } else {
-        value.avatar = imageList;
-      }
+    if (Boolean(imageList)) {
+      value.avatar = imageList
     }
+    if (Array.isArray(value.avatar)) {
+      value.avatar = value.avatar[0].thumbUrl
+    }
+
     props.BlogActions.asyncNavigationUpdateAction({
       title: value.title,
       link: value.link,
