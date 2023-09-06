@@ -931,9 +931,14 @@ export const asyncReaderCheckedUpdateAction = (params: ReaderUpdateChecked) => {
   };
 };
 // 导航列表
-export const asyncNavigationListAction = (page: number, pageSize: number, title: string) => {
+export const asyncNavigationListAction = (
+  page: number,
+  pageSize: number,
+  title: string,
+  classify: string
+) => {
   return async (dispatch: Dispatch) => {
-    const res = await api.getNavigationList(page, pageSize, title);
+    const res = await api.getNavigationList(page, pageSize, title, classify);
     dispatch({
       type: NAVIGATION_LIST,
       nav: res,

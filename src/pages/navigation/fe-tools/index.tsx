@@ -158,11 +158,10 @@ const FE_Tools = (props: any) => {
   const [imgUrl, setImgUrl] = useState<any>([]);
   // 获取工具管理数据
   useEffect(() => {
-    props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '').then((res: NavigationData) => {
+    props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '', '工具管理').then((res: NavigationData) => {
       // 获取工具
-      let { data, totalCount, page, pageSize } = res.data as unknown as NavigationData;
-      let filterData = data.filter((item: any) => item.classify === "工具管理")
-      setList(filterData);
+      let { data, page, totalCount, pageSize } = res.data as unknown as NavigationData;
+      setList(data);
       setTotal(totalCount);
       setCurrentPage(page);
       setPageSize(pageSize);
@@ -198,10 +197,9 @@ const FE_Tools = (props: any) => {
     }).then(() => {
       message.success('工具添加成功')
       // 重新调用查询接口
-      props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '').then((res: NavigationData) => {
-        let { data, totalCount, page, pageSize } = res.data as unknown as NavigationData;
-        let filterData = data.filter((item: any) => item.classify === "工具管理")
-        setList(filterData);
+      props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '', '工具管理').then((res: NavigationData) => {
+        let { data, page, totalCount, pageSize } = res.data as unknown as NavigationData;
+        setList(data);
         setTotal(totalCount);
         setCurrentPage(page);
         setPageSize(pageSize);
@@ -264,11 +262,10 @@ const FE_Tools = (props: any) => {
       id: editData._id,
     }).then(() => {
       message.success('工具更新成功');
-      props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '').then((res: NavigationData) => {
+      props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '', '工具管理').then((res: NavigationData) => {
         // 获取工具
-        let { data, totalCount, page, pageSize } = res.data as unknown as NavigationData;
-        let filterData = data.filter((item: any) => item.classify === "工具管理")
-        setList(filterData);
+        let { data, page, totalCount, pageSize } = res.data as unknown as NavigationData;
+        setList(data);
         setTotal(totalCount);
         setCurrentPage(page);
         setPageSize(pageSize);
@@ -303,11 +300,10 @@ const FE_Tools = (props: any) => {
         setList(list.filter((it) => it._id !== item._id));
         message.success('工具删除成功');
         props.BlogActions.asyncNavigationDeleteAction(item._id).then(() => {
-          props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '').then((res: NavigationData) => {
+          props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '', '工具管理').then((res: NavigationData) => {
             // 获取工具
-            let { data, totalCount, page, pageSize } = res.data as unknown as NavigationData;
-            let filterData = data.filter((item: any) => item.classify === "工具管理")
-            setList(filterData);
+            let { data, page, totalCount, pageSize } = res.data as unknown as NavigationData;
+            setList(data);
             setTotal(totalCount);
             setCurrentPage(page);
             setPageSize(pageSize);
@@ -318,10 +314,9 @@ const FE_Tools = (props: any) => {
   };
   // 搜索
   const onSearch = (value: string) => {
-    props.BlogActions.asyncNavigationListAction(currentPage, pageSize, value).then((res: NavigationData) => {
-      let { data, totalCount, page, pageSize } = res.data as unknown as NavigationData;
-      let filterData = data.filter((item: any) => item.classify === "工具管理")
-      setList(filterData);
+    props.BlogActions.asyncNavigationListAction(currentPage, pageSize, value, '工具管理').then((res: NavigationData) => {
+      let { data, page, totalCount, pageSize } = res.data as unknown as NavigationData;
+      setList(data);
       setTotal(totalCount);
       setCurrentPage(page);
       setPageSize(pageSize);
@@ -330,11 +325,10 @@ const FE_Tools = (props: any) => {
   // 跳转页数据显示
   const onChangePage = (page: number, pageSize: number, params = '') => {
     // 重新调用接口将参数传递过去
-    props.BlogActions.asyncNavigationListAction(page, pageSize, params).then((res: NavigationData) => {
+    props.BlogActions.asyncNavigationListAction(page, pageSize, params, '工具管理').then((res: NavigationData) => {
       // 获取列表数据
       let { data } = res.data as unknown as NavigationData;
-      let filterData = data.filter((item: any) => item.classify === "工具管理")
-      setList(filterData);
+      setList(data);
       // 切换行
       setCurrentPage(page);
       // 根据页面数据显示页码

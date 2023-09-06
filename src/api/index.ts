@@ -344,8 +344,10 @@ const api: Api = {
     return axios.put(`${baseURL}/reader/checked/${params.id}`, params);
   },
   // 导航列表
-  getNavigationList(page: number, pageSize: number, title: string) {
-    return axios.get(`${baseURL}/navigation?page=${page}&&pageSize=${pageSize}&&title=${title}`);
+  getNavigationList(page: number, pageSize: number, title: string, classify: string) {
+    return axios.get(
+      `${baseURL}/navigation?page=${page}&&pageSize=${pageSize}&&title=${title}&&classify=${classify}`
+    );
   },
   // 删除导航
   navigationDelete(id: string) {
