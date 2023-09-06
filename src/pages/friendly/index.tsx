@@ -247,7 +247,7 @@ const Friendly = (props: any) => {
       value.avatar = value.avatar[0].thumbUrl
     }
     if (typeof value.avatar === 'object') {
-      value.avatar = value.avatar.url
+      value.avatar = value.avatar?.url
     }
     props.BlogActions.asyncFriendlyUpdateAction({
       name: value.name,
