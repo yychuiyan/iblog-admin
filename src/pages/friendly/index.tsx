@@ -378,10 +378,10 @@ const Friendly = (props: any) => {
       >
         <Form form={form} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="name" label="昵称" rules={[{ required: true, message: '昵称不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入昵称" />
           </Form.Item>
           <Form.Item name="link" label="链接" rules={[{ required: true, message: '链接不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入链接信息" />
           </Form.Item>
           <Form.Item
             name="avatar"
@@ -392,7 +392,7 @@ const Friendly = (props: any) => {
             <UploadImage handleChange={handleChange} handleRemove={handleRemove} />
           </Form.Item>
           <Form.Item name="desc" label="描述" rules={[{ required: true, message: '描述不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入描述信息" />
           </Form.Item>
         </Form>
       </Modal>
@@ -408,10 +408,10 @@ const Friendly = (props: any) => {
       >
         <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="name" label="昵称" rules={[{ required: true, message: '昵称不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入昵称" />
           </Form.Item>
           <Form.Item name="link" label="链接" rules={[{ required: true, message: '链接不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入链接信息" />
           </Form.Item>
           <Form.Item
             name="avatar"
@@ -423,7 +423,7 @@ const Friendly = (props: any) => {
             {/* <Input /> */}
           </Form.Item>
           <Form.Item name="desc" label="描述" rules={[{ required: true, message: '描述不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入描述信息" />
           </Form.Item>
         </Form>
       </Modal>

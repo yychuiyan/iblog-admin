@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Image, Input, message, Modal, Switch, Table, Tooltip } from 'antd';
+import { Button, Form, Image, Input, message, Modal, Select, Switch, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, ExclamationCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
@@ -12,7 +12,10 @@ import jwtDecode from 'jwt-decode';
 import { handleNotAdd, handleNotDelete, handleNotUpdate, handleNotChangeStatus } from '@/utils/prompt';
 const { confirm } = Modal;
 const { Search } = Input;
+const { Option } = Select;
+const { TextArea } = Input;
 interface DataType {
+  name: any;
   link: string;
   key: React.Key;
   _id: string;
@@ -164,6 +167,15 @@ const FE_Website = (props: any) => {
   const [imageList, setImageList] = useState<any>();
   // 图片地址
   const [imgUrl, setImgUrl] = useState<any>([]);
+  // 分类信息
+  const [categoryList, setCategoryList] = useState<DataType[]>([]);
+  // 获取分类列表
+  useEffect(() => {
+    props.BlogActions.asyncNavigationCategoriesAction(currentPage, pageSize, '').then((res: NavigationData) => {
+      let { data } = res.data as unknown as NavigationData;
+      setCategoryList(data);
+    });
+  }, [currentPage, pageSize, props.BlogActions]);
   // 获取常用网站数据
   useEffect(() => {
     props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '', '常用网站').then((res: NavigationData) => {
@@ -376,13 +388,28 @@ const FE_Website = (props: any) => {
       >
         <Form form={form} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="title" label="网站名称" rules={[{ required: true, message: '网站名称不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入网站名称" />
           </Form.Item>
           <Form.Item name="link" label="链接" rules={[{ required: true, message: '链接不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入链接信息" />
           </Form.Item>
-          <Form.Item name="category" label="二级分类" rules={[{ required: true, message: '二级分类不能为空' }]}>
-            <Input />
+          <Form.Item
+            label="二级分类"
+            name="category"
+            rules={[{ required: true, message: '二级分类不能为空' }]}
+          >
+            <Select
+              showSearch
+              style={{ width: '100%' }}
+              placeholder="请选择二级分类信息"
+              optionFilterProp="children"
+            >
+              {categoryList.map((item) => (
+                <Option value={item.name} key={item._id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
           <Form.Item
             name="avatar"
@@ -393,7 +420,7 @@ const FE_Website = (props: any) => {
             <UploadImage handleChange={handleChange} handleRemove={handleRemove} />
           </Form.Item>
           <Form.Item name="desc" label="描述" rules={[{ required: true, message: '描述不能为空' }]}>
-            <Input />
+            <TextArea rows={4} placeholder="请输入描述信息" />
           </Form.Item>
         </Form>
       </Modal>
@@ -409,10 +436,10 @@ const FE_Website = (props: any) => {
       >
         <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="title" label="网站名称" rules={[{ required: true, message: '网站名称不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入网站名称" />
           </Form.Item>
           <Form.Item name="link" label="链接" rules={[{ required: true, message: '链接不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入链接信息" />
           </Form.Item>
           <Form.Item name="category" label="二级分类" rules={[{ required: true, message: '二级分类不能为空' }]}>
             <Input />
@@ -427,7 +454,7 @@ const FE_Website = (props: any) => {
             {/* <Input /> */}
           </Form.Item>
           <Form.Item name="desc" label="描述" rules={[{ required: true, message: '描述不能为空' }]}>
-            <Input />
+            <TextArea rows={4} placeholder="请输入描述信息" />
           </Form.Item>
         </Form>
       </Modal>

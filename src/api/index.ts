@@ -36,6 +36,7 @@ import {
   NavigationAdd,
   NavigationUpdate,
   NavigationUpdateStatus,
+  NavigationCategoryUpdate,
 } from '@/types/api';
 
 const baseURL = `/api/v1`;
@@ -364,6 +365,22 @@ const api: Api = {
   // 导航网站状态
   navigationStatusUpdate(params: NavigationUpdateStatus) {
     return axios.put(`${baseURL}/navigation/status/${params.id}`, params);
+  },
+  // 获取导航分类列表
+  getNavigationCategories(page, pageSize, name) {
+    return axios.get(`${baseURL}/navigation-category?page=${page}&&pageSize=${pageSize}&&name=${name}`);
+  },
+  // 新增导航分类
+  navigationCategoryAdd(name: string) {
+    return axios.post(`${baseURL}/navigation-category`, name);
+  },
+  // 删除导航分类
+  navigationCategoryDelete(id: string) {
+    return axios.delete(`${baseURL}/navigation-category/${id}`);
+  },
+  // 更新导航分类
+  navigationCategoryUpdate(params: NavigationCategoryUpdate) {
+    return axios.put(`${baseURL}/navigation-category/${params.id}`, params);
   },
 };
 export default api;

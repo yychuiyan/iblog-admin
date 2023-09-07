@@ -77,6 +77,10 @@ import { NavigationStatusUpdateReducer } from './navigation/status_update';
 import { NavigationListReducer } from './navigation/list';
 import { NavigationInsertReducer } from './navigation/insert';
 import { NavigationDeleteReducer } from './navigation/delete';
+import { NavigationCategoriesReducer } from './navigationCategories/list';
+import { NavigationCategoryAddReducer } from './navigationCategories/add';
+import { NavigationCategoryDeleteReducer } from './navigationCategories/delete';
+import { NavigationCategoryUpdateReducer } from './navigationCategories/update';
 const RootReducer = combineReducers({
   LoginReducer,
   RegisterReducer,
@@ -156,5 +160,9 @@ const RootReducer = combineReducers({
   NavigationListReducer,
   NavigationStatusUpdateReducer,
   NavigationUpdateReducer,
+  NavigationCategoriesReducer,
+  NavigationCategoryAddReducer,
+  NavigationCategoryDeleteReducer,
+  NavigationCategoryUpdateReducer,
 });
 export default RootReducer;

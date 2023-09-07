@@ -77,6 +77,10 @@ import {
   NAVIGATION_DELETE,
   NAVIGATION_UPDATE,
   NAVIGATION_STATUS,
+  NAVIGATION_CATEGORY_UPDATE,
+  NAVIGATION_CATEGORY_DELETE,
+  NAVIGATION_CATEGORY_ADD,
+  NAVIGATION_CATEGORY_LIST,
 } from '@/redux/constants';
 import jwtDecode from 'jwt-decode';
 import {
@@ -118,6 +122,7 @@ import {
   NavigationAdd,
   NavigationUpdate,
   NavigationUpdateStatus,
+  NavigationCategoryUpdate,
 } from '@/types/api';
 // 登录
 export function asyncLoginAction(data: LoginParams) {
@@ -986,6 +991,51 @@ export const asyncNavigationStatusUpdateAction = (params: NavigationUpdateStatus
     dispatch({
       type: NAVIGATION_STATUS,
       nav: res,
+    });
+    return res;
+  };
+};
+// 获取导航分类
+export const asyncNavigationCategoriesAction = (page: number, pageSize: number, name: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.getNavigationCategories(page, pageSize, name);
+    dispatch({
+      type: NAVIGATION_CATEGORY_LIST,
+      categories: res,
+    });
+    return res;
+  };
+};
+
+// 新增导航分类
+export const asyncNavigationCategoryAddAction = (data: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.navigationCategoryAdd(data);
+    dispatch({
+      type: NAVIGATION_CATEGORY_ADD,
+      categories: {},
+    });
+    return res;
+  };
+};
+// 删除导航分类
+export const asyncNavigationCategoryDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.navigationCategoryDelete(id);
+    dispatch({
+      type: NAVIGATION_CATEGORY_DELETE,
+      categoryId: '',
+    });
+    return res;
+  };
+};
+// 更新导航分类
+export const asyncNavigationCategoryUpdateAction = (params: NavigationCategoryUpdate) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.navigationCategoryUpdate(params);
+    dispatch({
+      type: NAVIGATION_CATEGORY_UPDATE,
+      categories: res,
     });
     return res;
   };

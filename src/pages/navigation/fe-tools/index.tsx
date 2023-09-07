@@ -12,6 +12,7 @@ import jwtDecode from 'jwt-decode';
 import { handleNotAdd, handleNotDelete, handleNotUpdate, handleNotChangeStatus } from '@/utils/prompt';
 const { confirm } = Modal;
 const { Search } = Input;
+const { TextArea } = Input;
 interface DataType {
   link: string;
   key: React.Key;
@@ -369,10 +370,10 @@ const FE_Tools = (props: any) => {
       >
         <Form form={form} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="title" label="工具名称" rules={[{ required: true, message: '工具名称不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入工具名称" />
           </Form.Item>
           <Form.Item name="link" label="链接" rules={[{ required: true, message: '链接不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入链接信息" />
           </Form.Item>
           <Form.Item
             name="avatar"
@@ -383,7 +384,7 @@ const FE_Tools = (props: any) => {
             <UploadImage handleChange={handleChange} handleRemove={handleRemove} />
           </Form.Item>
           <Form.Item name="desc" label="描述" rules={[{ required: true, message: '描述不能为空' }]}>
-            <Input />
+            <TextArea rows={4} placeholder="请输入描述信息" />
           </Form.Item>
         </Form>
       </Modal>
@@ -399,10 +400,10 @@ const FE_Tools = (props: any) => {
       >
         <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="title" label="工具名称" rules={[{ required: true, message: '工具名称不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入工具名称" />
           </Form.Item>
           <Form.Item name="link" label="链接" rules={[{ required: true, message: '链接不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入链接信息" />
           </Form.Item>
           <Form.Item
             name="avatar"
@@ -414,7 +415,7 @@ const FE_Tools = (props: any) => {
             {/* <Input /> */}
           </Form.Item>
           <Form.Item name="desc" label="描述" rules={[{ required: true, message: '描述不能为空' }]}>
-            <Input />
+            <TextArea rows={4} placeholder="请输入描述信息" />
           </Form.Item>
         </Form>
       </Modal>

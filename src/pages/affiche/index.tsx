@@ -290,7 +290,7 @@ const AfficheList = (props: any) => {
       >
         <Form form={form} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="content" label="公告内容" rules={[{ required: true, message: '内容不能为空' }]}>
-            <TextArea rows={5} />
+            <TextArea rows={5} placeholder="请输入公告内容" />
           </Form.Item>
         </Form>
       </Modal>
@@ -306,7 +306,7 @@ const AfficheList = (props: any) => {
       >
         <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="content" label="公告内容" rules={[{ required: true, message: '内容不能为空' }]}>
-            <TextArea rows={5} />
+            <TextArea rows={5} placeholder="请输入公告内容" />
           </Form.Item>
         </Form>
       </Modal>

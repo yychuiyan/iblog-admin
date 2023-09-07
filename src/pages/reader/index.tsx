@@ -384,13 +384,13 @@ const Reader = (props: any) => {
       >
         <Form form={form} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="name" label="书籍名称" rules={[{ required: true, message: '书籍名称不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入书籍名称" />
           </Form.Item>
           <Form.Item name="author" label="作者名称" rules={[{ required: true, message: '作者名称不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入作者名称" />
           </Form.Item>
           <Form.Item name="link" label="详情链接" rules={[{ required: true, message: '详情链接不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入详情链接" />
           </Form.Item>
           <Form.Item name="status" label="阅读状态" initialValue="待阅读">
             <Select
@@ -412,7 +412,7 @@ const Reader = (props: any) => {
             <UploadImage handleChange={handleChange} handleRemove={handleRemove} />
           </Form.Item>
           <Form.Item name="desc" label="书籍描述" rules={[{ required: true, message: '描述不能为空' }]}>
-            <TextArea rows={6} />
+            <TextArea rows={6} placeholder="请输入描述信息" />
           </Form.Item>
         </Form>
       </Modal>
@@ -428,13 +428,13 @@ const Reader = (props: any) => {
       >
         <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="name" label="书籍名称" rules={[{ required: true, message: '书籍名称不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入书籍名称" />
           </Form.Item>
           <Form.Item name="author" label="作者名称" rules={[{ required: true, message: '作者名称不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入作者名称" />
           </Form.Item>
           <Form.Item name="link" label="详情链接" rules={[{ required: true, message: '详情链接不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入详情链接" />
           </Form.Item>
           <Form.Item name="status" label="阅读状态">
             <Select
@@ -457,7 +457,7 @@ const Reader = (props: any) => {
             {/* <Input /> */}
           </Form.Item>
           <Form.Item name="desc" label="描述" rules={[{ required: true, message: '描述不能为空' }]}>
-            <TextArea rows={6} />
+            <TextArea rows={6} placeholder="请输入描述信息" />
           </Form.Item>
         </Form>
       </Modal>

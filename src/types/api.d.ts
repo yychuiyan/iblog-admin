@@ -57,6 +57,13 @@ interface CategoryUpdate {
   createTime: string;
   updateTime: string;
 }
+// 更新导航分类
+interface NavigationCategoryUpdate {
+  id: string;
+  name: string;
+  createTime: string;
+  updateTime: string;
+}
 interface TagsUpdate {
   id: string;
   name: string;
@@ -257,9 +264,9 @@ export interface Api {
   adminUpdate(params: AdminUpdate): Promise<ApiResponse>;
   adminStatusUpdate(params: AdminUpdateStatus): Promise<ApiResponse>;
   getUserList(page: number, pageSize: number, username: string): Promise<ApiResponse>;
-  getCategories(page: number, pageSize: number, name: string): Promise<ApiResponse>;
   userUpdate(params: UserUpdate): Promise<ApiResponse>;
   userDelete(id: string): Promise<ApiResponse>;
+  getCategories(page: number, pageSize: number, name: string): Promise<ApiResponse>;
   categoryAdd(name: string): Promise<ApiResponse>;
   categoryDelete(id: string): Promise<ApiResponse>;
   categoryUpdate(params: CategoryUpdate): Promise<ApiResponse>;
@@ -335,4 +342,8 @@ export interface Api {
   navigationInsert(params: NavigationAdd): Promise<ApiResponse>;
   navigationUpdate(params: NavigationUpdate): Promise<ApiResponse>;
   navigationStatusUpdate(params: NavigationUpdateStatus): Promise<ApiResponse>;
+  getNavigationCategories(page: number, pageSize: number, name: string): Promise<ApiResponse>;
+  navigationCategoryAdd(name: string): Promise<ApiResponse>;
+  navigationCategoryDelete(id: string): Promise<ApiResponse>;
+  navigationCategoryUpdate(params: NavigationCategoryUpdate): Promise<ApiResponse>;
 }

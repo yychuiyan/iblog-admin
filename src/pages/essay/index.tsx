@@ -332,7 +332,7 @@ const Essay = (props: any) => {
             <Editor
               preview={false}
               subfield={false}
-              placeholder="请撰写文章"
+              placeholder="请撰写随笔内容"
               ref={editorRef}
               addImg={file => addImg(file)}
             />
@@ -366,7 +366,7 @@ const Essay = (props: any) => {
             <Editor
               preview={false}
               subfield={false}
-              placeholder="请撰写文章"
+              placeholder="请撰写随笔内容"
               ref={editorRef}
               addImg={file => addImg(file)}
             />

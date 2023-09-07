@@ -297,10 +297,10 @@ const ApothegmList = (props: any) => {
       >
         <Form form={form} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="author" label="作者" rules={[{ required: true, message: '作者不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入作者名称" />
           </Form.Item>
-          <Form.Item name="content" label="内容" rules={[{ required: true, message: '内容不能为空' }]}>
-            <TextArea rows={5} />
+          <Form.Item name="content" label="警句内容" rules={[{ required: true, message: '内容不能为空' }]}>
+            <TextArea rows={5} placeholder="请输入警句内容" />
           </Form.Item>
         </Form>
       </Modal>
@@ -316,10 +316,10 @@ const ApothegmList = (props: any) => {
       >
         <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="author" label="作者" rules={[{ required: true, message: '作者不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入作者名称" />
           </Form.Item>
           <Form.Item name="content" label="警句内容" rules={[{ required: true, message: '内容不能为空' }]}>
-            <TextArea rows={5} />
+            <TextArea rows={5} placeholder="请输入警句内容" />
           </Form.Item>
         </Form>
       </Modal>

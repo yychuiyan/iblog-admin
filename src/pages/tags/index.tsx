@@ -385,7 +385,7 @@ const ArticleTag = (props: any) => {
             label="名称"
             rules={[{ required: true, message: '标签名称不能为空' }]}
           >
-            <Input />
+            <Input placeholder="请输入标签名称" />
           </Form.Item>
         </Form>
       </Modal>

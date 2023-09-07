@@ -15,7 +15,6 @@ interface DataType {
   key?: React.Key;
   _id: string;
   name: string;
-  articleNum: Number;
   createTime: string;
   updateTime: string;
 }
@@ -116,7 +115,7 @@ interface DataType {
   key?: React.Key;
   name: string;
 }
-const ArticleCategory = (props: any) => {
+const NavigationCategory = (props: any) => {
   const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
   const role_type = token[0].role[0].role_type
   // 保存
@@ -126,7 +125,6 @@ const ArticleCategory = (props: any) => {
         return {
           _id: item._id,
           name: record.name,
-          articleNum: record.articleNum,
           createTime: record.createTime,
           updateTime: record.updateTime,
         };
@@ -136,12 +134,12 @@ const ArticleCategory = (props: any) => {
     setList(rawData);
     // message.success("更新成功")
     // 执行更新
-    props.BlogActions.asyncCategoryUpdateAction({
+    props.BlogActions.asyncNavigationCategoryUpdateAction({
       name: record.name,
       id: record._id,
     }).then(() => {
       // 刷新列表数据
-      props.BlogActions.asyncCategoriesAction(currentPage, pageSize, '').then((res: CategoryData) => {
+      props.BlogActions.asyncNavigationCategoriesAction(currentPage, pageSize, '').then((res: CategoryData) => {
         // 获取分类
         let { data, totalCount, page, pageSize } = res.data;
 
@@ -165,12 +163,6 @@ const ArticleCategory = (props: any) => {
         title: '分类名称',
         handleSave: role_type ? handleNotUpdate : handleSave,
       }),
-    },
-    {
-      title: '文章数量',
-      dataIndex: 'articleNum',
-      key: 'articleNum',
-      width: '10rem'
     },
     {
       title: '创建时间',
@@ -224,7 +216,7 @@ const ArticleCategory = (props: any) => {
 
   // 获取分类列表数据
   useEffect(() => {
-    props.BlogActions.asyncCategoriesAction(currentPage, pageSize, '').then((res: CategoryData) => {
+    props.BlogActions.asyncNavigationCategoriesAction(currentPage, pageSize, '').then((res: CategoryData) => {
       // 获取分类
       let { data, totalCount, page, pageSize } = res.data;
       setList(data);
@@ -250,11 +242,11 @@ const ArticleCategory = (props: any) => {
     message.success('分类新增成功');
     form.resetFields();
     setIsModalOpen(false);
-    props.BlogActions.asyncCategoryAddAction({
+    props.BlogActions.asyncNavigationCategoryAddAction({
       name: data.title,
     }).then(() => {
       // 重新调用查询接口
-      props.BlogActions.asyncCategoriesAction(currentPage, pageSize, '').then((res: CategoryData) => {
+      props.BlogActions.asyncNavigationCategoriesAction(currentPage, pageSize, '').then((res: CategoryData) => {
         let { data } = res.data;
         setList(data);
       });
@@ -274,20 +266,20 @@ const ArticleCategory = (props: any) => {
         if (role_type) {
           return handleNotDelete();
         }
-        props.BlogActions.asyncCategoryDeleteAction(item._id).then((res: { code: number; } | undefined) => {
+        props.BlogActions.asyncNavigationCategoryDeleteAction(item._id).then((res: { code: number; } | undefined) => {
           if (res === undefined) {
             message.error('分类删除失败,请稍后再试');
             return false;
           }
           if (res.code === 40001) {
-            message.error('文章中有关联该分类信息，请解绑后再次执行删除操作');
+            message.error('导航中有关联该分类信息，请解绑后再次执行删除操作');
             return false;
           }
 
           // 先将要删除的数据过滤掉再调用接口
           setList(list.filter((it: { _id: string | undefined }) => it._id !== item._id));
           message.success('分类删除成功');
-          props.BlogActions.asyncCategoriesAction(currentPage, pageSize, '').then((res: CategoryData) => {
+          props.BlogActions.asyncNavigationCategoriesAction(currentPage, pageSize, '').then((res: CategoryData) => {
             // 获取分类
             let { data, totalCount, page, pageSize } = res.data;
             setList(data);
@@ -301,7 +293,7 @@ const ArticleCategory = (props: any) => {
   };
   // 搜索
   const onSearch = (value: string) => {
-    props.BlogActions.asyncCategoriesAction(currentPage, pageSize, value).then((res: CategoryData) => {
+    props.BlogActions.asyncNavigationCategoriesAction(currentPage, pageSize, value).then((res: CategoryData) => {
       let { data, totalCount, page, pageSize } = res.data;
       setList(data);
       setTotal(totalCount);
@@ -312,7 +304,7 @@ const ArticleCategory = (props: any) => {
   // 跳转页数据显示
   const onChangePage = (page: number, pageSize: number, params = '') => {
     // 重新调用接口将参数传递过去
-    props.BlogActions.asyncCategoriesAction(page, pageSize, params).then((res: CategoryData) => {
+    props.BlogActions.asyncNavigationCategoriesAction(page, pageSize, params).then((res: CategoryData) => {
       // 获取列表数据
       let { data } = res.data;
       setList(data);
@@ -386,4 +378,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     BlogActions: bindActionCreators(BlogActions, dispatch),
   };
 };
-export default connect(null, mapDispatchToProps)(ArticleCategory);
+export default connect(null, mapDispatchToProps)(NavigationCategory);
