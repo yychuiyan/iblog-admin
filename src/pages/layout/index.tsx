@@ -59,14 +59,14 @@ const LayoutIndex = (props: any) => {
                 <Route path="/admin/home" component={Home}></Route>
                 <Route path="/admin/article/list" component={ArticleList}></Route>
                 <Route path="/admin/permission/list" component={PermissionList}></Route>
-                <Route path="/admin/rule/list" component={RuleList}></Route>
+                <Route path="/admin/permission/rule" component={RuleList}></Route>
                 <Route path="/admin/article/category" component={Category}></Route>
                 <Route path="/admin/article/tags" component={Tags}></Route>
                 <Route path="/admin/article/insert" component={ArticleAdd}></Route>
                 <Route path="/admin/article/update/:id" component={ArticleUpdate}></Route>
                 <Route path="/admin/article/comment" component={Comment}></Route>
                 <Route path="/admin/about" component={About}></Route>
-                <Route path="/admin/manage/list" component={Administrator}></Route>
+                <Route path="/admin/permission/admin" component={Administrator}></Route>
                 <Route path="/admin/user/list" component={UserInfo}></Route>
                 <Route path="/admin/message" component={Message}></Route>
                 <Route path="/admin/friendly" component={Friendly}></Route>
@@ -74,10 +74,10 @@ const LayoutIndex = (props: any) => {
                 <Route path="/admin/reader" component={Reader}></Route>
                 <Route path="/admin/affiche" component={Affiche}></Route>
                 <Route path="/admin/apothegm" component={Apothegm}></Route>
-                <Route path="/admin/project/list" component={FE_Project}></Route>
-                <Route path="/admin/tools/list" component={FE_Tools}></Route>
-                <Route path="/admin/website/list" component={FE_Website}></Route>
-                <Route path="/admin/navigation_category" component={NavigationCategory}></Route>
+                <Route path="/admin/navigation/project" component={FE_Project}></Route>
+                <Route path="/admin/navigation/tools" component={FE_Tools}></Route>
+                <Route path="/admin/navigation/website" component={FE_Website}></Route>
+                <Route path="/admin/navigation/category" component={NavigationCategory}></Route>
                 <Route path="*" component={NotFound}></Route>
               </Switch>
             </Spin>

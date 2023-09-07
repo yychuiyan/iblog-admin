@@ -441,8 +441,23 @@ const FE_Website = (props: any) => {
           <Form.Item name="link" label="链接" rules={[{ required: true, message: '链接不能为空' }]}>
             <Input placeholder="请输入链接信息" />
           </Form.Item>
-          <Form.Item name="category" label="二级分类" rules={[{ required: true, message: '二级分类不能为空' }]}>
-            <Input />
+          <Form.Item
+            label="分类"
+            name="category"
+            rules={[{ required: true, message: '分类不能为空' }]}
+          >
+            <Select
+              showSearch
+              style={{ width: '100%' }}
+              placeholder="请选择分类信息"
+              optionFilterProp="children"
+            >
+              {categoryList.map((item: any) => (
+                <Option value={item.name} key={item._id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
           <Form.Item
             name="avatar"

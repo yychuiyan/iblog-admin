@@ -2,7 +2,7 @@ import { Layout, Menu } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
-import { withRouter } from 'react-router-dom';
+import { useLocation, withRouter } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import {
   HomeOutlined,
@@ -41,6 +41,9 @@ const SideMenu = (props: any) => {
   const { role } = token[0]
   // 路由列表
   const [items, setItems] = useState<DataType[]>([])
+  const location = useLocation()
+  // 默认展开路由
+  // const [openKeys, setOpenKeys] = useState<any[]>()
   // 获取权限列表
   useEffect(() => {
     props.BlogActions.asyncRightsListAction().then((res: any) => {
@@ -94,8 +97,18 @@ const SideMenu = (props: any) => {
   const selectKeys = [props.location.pathname];
 
   // 截取路由信息，折叠页面自动打开
-  const openKeys = ['/admin/' + props.location.pathname.split('/')[2]];
+  const pathname = location.pathname;
+  const openKeys = ['/admin/' + pathname.split('/')[2]];
+  console.log("openKeys", openKeys);
 
+  // useEffect(() => {
+  //   const pathname = location.pathname;
+  //   // const parentPath = pathname.split('/').slice(0, -1).join('/');
+  //   const openKeys = ['/admin/' + pathname.split('/')[2]];
+  //   console.log("openKeys", openKeys);
+
+  //   setOpenKeys([openKeys]);
+  // }, [location.pathname])
   // 获取路由列表
   // 点击切换路由
   const handleItemClick = (e: { keyPath: any[]; }) => {
