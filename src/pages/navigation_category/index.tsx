@@ -45,6 +45,12 @@ const NavigationCategory = (props: any) => {
       width: '20rem',
     },
     {
+      title: '网站数量',
+      dataIndex: 'navigationNum',
+      key: 'navigationNum',
+      width: '20rem',
+    },
+    {
       title: '创建时间',
       dataIndex: 'createTime',
       key: 'createTime',
@@ -135,13 +141,13 @@ const NavigationCategory = (props: any) => {
     await form.validateFields();
     // 获取表单值
     const data = form.getFieldsValue();
-    message.success('分类新增成功');
-    form.resetFields();
-    setIsModalOpen(false);
     props.BlogActions.asyncNavigationCategoryAddAction({
       name: data.title,
       index: data.index,
     }).then(() => {
+      message.success('分类新增成功');
+      form.resetFields();
+      setIsModalOpen(false);
       // 重新调用查询接口
       props.BlogActions.asyncNavigationCategoriesAction(currentPage, pageSize, '').then((res: CategoryData) => {
         let { data } = res.data;

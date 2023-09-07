@@ -185,7 +185,7 @@ const FE_Project = (props: any) => {
     }
     props.BlogActions.asyncNavigationInsertAction({
       classify: "项目列表",
-      category: "默认",
+      category: "其他",
       ...data,
     }).then(() => {
       message.success('项目添加成功')
@@ -250,7 +250,7 @@ const FE_Project = (props: any) => {
       avatar: value.avatar,
       desc: value.desc,
       classify: "项目列表",
-      category: "默认",
+      category: "其他",
       //@ts-ignore
       id: editData._id,
     }).then(() => {

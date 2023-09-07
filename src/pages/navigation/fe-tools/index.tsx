@@ -185,7 +185,7 @@ const FE_Tools = (props: any) => {
     }
     props.BlogActions.asyncNavigationInsertAction({
       classify: "工具管理",
-      category: "默认",
+      category: "其他",
       ...data,
     }).then(() => {
       message.success('工具添加成功')
@@ -250,7 +250,7 @@ const FE_Tools = (props: any) => {
       avatar: value.avatar,
       desc: value.desc,
       classify: "工具管理",
-      category: "默认",
+      category: "其他",
       //@ts-ignore
       id: editData._id,
     }).then(() => {

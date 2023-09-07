@@ -182,6 +182,8 @@ const FE_Website = (props: any) => {
   const [imgUrl, setImgUrl] = useState<any>([]);
   // 分类信息
   const [categoryList, setCategoryList] = useState<DataType[]>([]);
+  // 当前分类名称
+  const [categoryName, setCategoryName] = useState<String>()
   // 获取分类列表
   useEffect(() => {
     props.BlogActions.asyncNavigationCategoriesAction(currentPage, pageSize, '').then((res: NavigationData) => {
@@ -230,6 +232,8 @@ const FE_Website = (props: any) => {
       ...data,
     }).then(() => {
       message.success('常用网站添加成功')
+      form.resetFields();
+      setIsModalOpen(false);
       // 重新调用查询接口
       props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '', '常用网站').then((res: NavigationData) => {
         let { data, totalCount, page, pageSize } = res.data as unknown as NavigationData;
@@ -239,8 +243,6 @@ const FE_Website = (props: any) => {
         setPageSize(pageSize);
       });
     });
-    form.resetFields();
-    setIsModalOpen(false);
   };
   // 关闭窗口
   const handleCancel = () => {
@@ -285,18 +287,21 @@ const FE_Website = (props: any) => {
     if (typeof value.avatar === 'object') {
       value.avatar = value.avatar?.url
     }
+    const result = categoryList.filter(item => item.name === categoryName)
     props.BlogActions.asyncNavigationUpdateAction({
       title: value.title,
       link: value.link,
       avatar: value.avatar,
       desc: value.desc,
       category: value.category,
-      index: value.index,
+      index: result[0]?.index,
       classify: "常用网站",
       //@ts-ignore
       id: editData._id,
     }).then(() => {
       message.success('常用网站更新成功');
+      updateForm.resetFields();
+      setIsModalUpdateOpen(false);
       props.BlogActions.asyncNavigationListAction(currentPage, pageSize, '', '常用网站').then((res: NavigationData) => {
         // 获取常用网站
         let { data, totalCount, page, pageSize } = res.data as unknown as NavigationData;
@@ -305,10 +310,12 @@ const FE_Website = (props: any) => {
         setCurrentPage(page);
         setPageSize(pageSize);
       });
-      updateForm.resetFields();
-      setIsModalUpdateOpen(false);
     });
   };
+  // 选中分类
+  const handleChangeCategory = (name: string) => {
+    setCategoryName(name)
+  }
   // 更新常用网站网站状态
   const onChangeStatus = (status: boolean, row: NavigationData) => {
     props.BlogActions.asyncNavigationStatusUpdateAction({
@@ -467,6 +474,7 @@ const FE_Website = (props: any) => {
               style={{ width: '100%' }}
               placeholder="请选择分类信息"
               optionFilterProp="children"
+              onChange={handleChangeCategory}
             >
               {categoryList.map((item: any) => (
                 <Option value={item.name} key={item._id}>
