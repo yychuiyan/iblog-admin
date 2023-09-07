@@ -60,14 +60,20 @@ const FE_Website = (props: any) => {
       title: '链接',
       dataIndex: 'link',
       render: (_, record) => {
-        return <p className='link' style={{ width: '10rem' }}>{record.link}</p>;
+        return (
+          <div className='link' style={{ width: '10rem' }}>
+            <Tooltip title={record.link}>{record.link}</Tooltip>
+          </div>
+        )
       },
     },
     {
       title: '描述',
       dataIndex: 'desc',
       render: (_, record) => {
-        return <p className='link' style={{ width: '10rem' }}>{record.desc}</p>;
+        return <div className='link' style={{ width: '10rem' }}>
+          <Tooltip title={record.desc}>{record.desc}</Tooltip>
+        </div>;
       },
     },
     {
@@ -217,8 +223,10 @@ const FE_Website = (props: any) => {
         data.avatar = imageList;
       }
     }
+    const result = categoryList.filter(item => item.name === data.category)
     props.BlogActions.asyncNavigationInsertAction({
       classify: "常用网站",
+      index: result[0]?.index,
       ...data,
     }).then(() => {
       message.success('常用网站添加成功')
@@ -283,6 +291,7 @@ const FE_Website = (props: any) => {
       avatar: value.avatar,
       desc: value.desc,
       category: value.category,
+      index: value.index,
       classify: "常用网站",
       //@ts-ignore
       id: editData._id,
