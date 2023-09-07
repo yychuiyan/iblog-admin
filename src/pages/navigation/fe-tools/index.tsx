@@ -67,14 +67,6 @@ const FE_Tools = (props: any) => {
       },
     },
     {
-      title: '所属分类',
-      dataIndex: 'classify',
-      width: 100,
-      render: text => {
-        return <Tooltip title={text}>{text}</Tooltip>;
-      },
-    },
-    {
       title: '工具状态',
       dataIndex: 'status',
       width: 100,

@@ -67,14 +67,6 @@ const FE_Project = (props: any) => {
       },
     },
     {
-      title: '所属分类',
-      dataIndex: 'classify',
-      width: 100,
-      render: text => {
-        return <Tooltip title={text}>{text}</Tooltip>;
-      },
-    },
-    {
       title: '项目状态',
       dataIndex: 'status',
       width: 100,

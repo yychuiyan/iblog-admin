@@ -61,6 +61,7 @@ interface CategoryUpdate {
 interface NavigationCategoryUpdate {
   id: string;
   name: string;
+  index: number;
   createTime: string;
   updateTime: string;
 }

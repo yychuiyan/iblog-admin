@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Image, Input, message, Modal, Select, Switch, Table, Tooltip } from 'antd';
+import { Button, Form, Image, Input, message, Modal, Select, Switch, Table, Tag, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, ExclamationCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
@@ -15,6 +15,8 @@ const { Search } = Input;
 const { Option } = Select;
 const { TextArea } = Input;
 interface DataType {
+  index: string;
+  desc: string;
   name: any;
   link: string;
   key: React.Key;
@@ -58,26 +60,18 @@ const FE_Website = (props: any) => {
       title: '链接',
       dataIndex: 'link',
       render: (_, record) => {
-        return <p className='link' style={{ width: '15rem' }}>{record.link}</p>;
+        return <p className='link' style={{ width: '10rem' }}>{record.link}</p>;
       },
     },
     {
       title: '描述',
       dataIndex: 'desc',
-      render: text => {
-        return <Tooltip title={text}>{text}</Tooltip>;
+      render: (_, record) => {
+        return <p className='link' style={{ width: '10rem' }}>{record.desc}</p>;
       },
     },
     {
       title: '所属分类',
-      dataIndex: 'classify',
-      width: 100,
-      render: text => {
-        return <Tooltip title={text}>{text}</Tooltip>;
-      },
-    },
-    {
-      title: '二级分类',
       dataIndex: 'category',
       width: 100,
       render: text => {
@@ -85,7 +79,20 @@ const FE_Website = (props: any) => {
       },
     },
     {
-      title: '常用网站状态',
+      title: '索引',
+      dataIndex: 'index',
+      width: 100,
+      render: (_, record) => {
+        return (
+          <Tag style={{ marginRight: 10 }} key={record._id}>
+            {record.index}
+          </Tag>
+        )
+      },
+
+    },
+    {
+      title: '状态',
       dataIndex: 'status',
       width: 100,
       render: (_, record: any) => {
@@ -476,7 +483,7 @@ const FE_Website = (props: any) => {
       <Table
         columns={columns}
         dataSource={list}
-        scroll={{ y: 'calc(100vh - 240px)', x: true }}
+        scroll={{ y: 'calc(100vh - 260px)', x: true }}
         rowKey={(item) => {
           return item._id + Date.now();
         }}

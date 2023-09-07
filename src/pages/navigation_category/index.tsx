@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Button, Form, FormInstance, Input, InputRef, message, Modal, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Form, Input, InputNumber, message, Modal, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ExclamationCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
@@ -19,6 +19,8 @@ interface DataType {
   updateTime: string;
 }
 interface CategoryData {
+  index: any;
+  name: any;
   data: {
     data: DataType[];
     totalCount: number;
@@ -26,143 +28,21 @@ interface CategoryData {
     pageSize: number;
   };
 }
-const EditableContext = React.createContext<FormInstance<any> | null>(null);
-interface EditableRowProps {
-  index: number;
-}
-const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
-  const [form] = Form.useForm();
-  return (
-    <Form form={form} component={false}>
-      <EditableContext.Provider value={form}>
-        <tr {...props} />
-      </EditableContext.Provider>
-    </Form>
-  );
-};
-
-interface EditableCellProps {
-  title: React.ReactNode;
-  editable: boolean;
-  children: React.ReactNode;
-  dataIndex: keyof DataType;
-  record: DataType;
-  handleSave: (record: DataType) => void;
-}
-
-const EditableCell: React.FC<EditableCellProps> = ({
-  title,
-  editable,
-  children,
-  dataIndex,
-  record,
-  handleSave,
-  ...restProps
-}) => {
-  const [editing, setEditing] = useState(false);
-  const inputRef = useRef<InputRef>(null);
-  const form = useContext(EditableContext)!;
-
-  useEffect(() => {
-    if (editing) {
-      inputRef.current!.focus();
-    }
-  }, [editing]);
-
-  const toggleEdit = () => {
-    setEditing(!editing);
-    form.setFieldsValue({ [dataIndex]: record[dataIndex] });
-  };
-
-  const save = async () => {
-    try {
-      const values = await form.validateFields();
-
-      toggleEdit();
-      handleSave({ ...record, ...values });
-    } catch (errInfo) {
-      return errInfo;
-    }
-  };
-
-  let childNode = children;
-
-  if (editable) {
-    childNode = editing ? (
-      <Form.Item
-        style={{ margin: 0 }}
-        name={dataIndex}
-        rules={[
-          {
-            required: true,
-            message: `${title} is required.`,
-          },
-        ]}
-      >
-        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
-      </Form.Item>
-    ) : (
-      <div className="editable-cell-value-wrap" style={{ paddingRight: 24 }} onClick={toggleEdit}>
-        {children}
-      </div>
-    );
-  }
-
-  return <td {...restProps}>{childNode}</td>;
-};
-
-interface DataType {
-  key?: React.Key;
-  name: string;
-}
 const NavigationCategory = (props: any) => {
   const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
   const role_type = token[0].role[0].role_type
-  // 保存
-  const handleSave = (record: DataType) => {
-    let rawData = list.map((item: DataType) => {
-      if (item._id === record._id) {
-        return {
-          _id: item._id,
-          name: record.name,
-          createTime: record.createTime,
-          updateTime: record.updateTime,
-        };
-      }
-      return item;
-    });
-    setList(rawData);
-    // message.success("更新成功")
-    // 执行更新
-    props.BlogActions.asyncNavigationCategoryUpdateAction({
-      name: record.name,
-      id: record._id,
-    }).then(() => {
-      // 刷新列表数据
-      props.BlogActions.asyncNavigationCategoriesAction(currentPage, pageSize, '').then((res: CategoryData) => {
-        // 获取分类
-        let { data, totalCount, page, pageSize } = res.data;
 
-        setList(data);
-        setTotal(totalCount);
-        setCurrentPage(page);
-        setPageSize(pageSize);
-      });
-    });
-  };
   const columns: ColumnsType<DataType> = [
     {
-      title: '分类名称(点击可编辑)',
+      title: '分类名称',
       dataIndex: 'name',
-      key: 'name',
       width: '20rem',
-      onCell: (record: DataType) => ({
-        record,
-        editable: true,
-        dataIndex: 'name',
-        title: '分类名称',
-        handleSave: role_type ? handleNotUpdate : handleSave,
-      }),
+    },
+    {
+      title: '分类索引',
+      dataIndex: 'index',
+      key: 'index',
+      width: '20rem',
     },
     {
       title: '创建时间',
@@ -196,6 +76,16 @@ const NavigationCategory = (props: any) => {
               }}
               style={{ marginRight: '5px' }}
             />
+            <Button
+              type="primary"
+              ghost
+              shape="circle"
+              icon={<EditOutlined />}
+              onClick={() => {
+                categoryUpdate(item);
+              }}
+              style={{ marginRight: '5px' }}
+            />
           </div>
         );
       },
@@ -203,6 +93,8 @@ const NavigationCategory = (props: any) => {
   ];
   // 表单数据
   const [form] = Form.useForm();
+  // 更新表单
+  const [updateForm] = Form.useForm();
   // 分类列表
   const [list, setList] = useState<DataType[]>([]);
   // 分页总数
@@ -213,7 +105,10 @@ const NavigationCategory = (props: any) => {
   const [pageSize, setPageSize] = useState(15);
   // 窗口
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  // 更新窗口
+  const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
+  // 更新的数据
+  const [editItems, setEditItems] = useState<any>([])
   // 获取分类列表数据
   useEffect(() => {
     props.BlogActions.asyncNavigationCategoriesAction(currentPage, pageSize, '').then((res: CategoryData) => {
@@ -230,6 +125,7 @@ const NavigationCategory = (props: any) => {
   const showModal = () => {
     setIsModalOpen(true);
   };
+
   // 点击确定按钮
   const handleConfirm = async () => {
     if (role_type) {
@@ -244,6 +140,7 @@ const NavigationCategory = (props: any) => {
     setIsModalOpen(false);
     props.BlogActions.asyncNavigationCategoryAddAction({
       name: data.title,
+      index: data.index,
     }).then(() => {
       // 重新调用查询接口
       props.BlogActions.asyncNavigationCategoriesAction(currentPage, pageSize, '').then((res: CategoryData) => {
@@ -252,10 +149,47 @@ const NavigationCategory = (props: any) => {
       });
     });
   };
+  // 点击更新
+  const categoryUpdate = (item: CategoryData) => {
+    updateForm.setFieldsValue({ name: item.name, index: item.index });
+    setIsModalUpdateOpen(true);
+    setEditItems(item)
+  };
+  // 更新操作
+  const handleUpdateConfirm = () => {
+    if (role_type) {
+      return handleNotUpdate();
+    }
+    let value = updateForm.getFieldsValue();
+    // 执行更新
+    props.BlogActions.asyncNavigationCategoryUpdateAction({
+      name: value.name,
+      index: value.index,
+      id: editItems._id,
+    }).then(() => {
+      message.success("导航分类更新成功")
+      // 刷新列表数据
+      props.BlogActions.asyncNavigationCategoriesAction(currentPage, pageSize, '').then((res: CategoryData) => {
+        // 获取分类
+        let { data, totalCount, page, pageSize } = res.data;
+        setList(data);
+        setTotal(totalCount);
+        setCurrentPage(page);
+        setPageSize(pageSize);
+      });
+    });
+    updateForm.resetFields();
+    setIsModalUpdateOpen(false);
+  };
   // 关闭窗口
   const handleCancel = () => {
     form.resetFields();
     setIsModalOpen(false);
+  };
+  // 关闭窗口
+  const handleUpdateCancel = () => {
+    updateForm.resetFields();
+    setIsModalUpdateOpen(false);
   };
   // 删除分类
   const categoryDelete = (item: { _id: string; }) => {
@@ -346,6 +280,41 @@ const NavigationCategory = (props: any) => {
           >
             <Input placeholder="请输入分类名称" />
           </Form.Item>
+          <Form.Item
+            name="index"
+            label="分类索引"
+            rules={[{ required: true, message: '分类索引不能为空' }]}
+          >
+            <InputNumber min={1} max={500} />
+          </Form.Item>
+        </Form>
+      </Modal>
+      {/* 更新操作 */}
+      <Modal
+        open={isModalUpdateOpen}
+        title={<div style={{ textAlign: 'left' }}>更新书籍</div>}
+        okText="更新"
+        cancelText="取消"
+        onCancel={handleUpdateCancel}
+        onOk={() => {
+          handleUpdateConfirm();
+        }}
+      >
+        <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
+          <Form.Item
+            name="name"
+            label="名称"
+            rules={[{ required: true, message: '分类名称不能为空' }]}
+          >
+            <Input placeholder="请输入分类名称" />
+          </Form.Item>
+          <Form.Item
+            name="index"
+            label="分类索引"
+            rules={[{ required: true, message: '分类索引不能为空' }]}
+          >
+            <InputNumber min={1} max={500} />
+          </Form.Item>
         </Form>
       </Modal>
       <Table
@@ -356,12 +325,6 @@ const NavigationCategory = (props: any) => {
           return item._id + Date.now();
         }}
         pagination={false}
-        components={{
-          body: {
-            row: EditableRow,
-            cell: EditableCell,
-          },
-        }}
       />
       <MyPagination
         pageSize={pageSize}

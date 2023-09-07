@@ -99,16 +99,6 @@ const SideMenu = (props: any) => {
   // 截取路由信息，折叠页面自动打开
   const pathname = location.pathname;
   const openKeys = ['/admin/' + pathname.split('/')[2]];
-  console.log("openKeys", openKeys);
-
-  // useEffect(() => {
-  //   const pathname = location.pathname;
-  //   // const parentPath = pathname.split('/').slice(0, -1).join('/');
-  //   const openKeys = ['/admin/' + pathname.split('/')[2]];
-  //   console.log("openKeys", openKeys);
-
-  //   setOpenKeys([openKeys]);
-  // }, [location.pathname])
   // 获取路由列表
   // 点击切换路由
   const handleItemClick = (e: { keyPath: any[]; }) => {
