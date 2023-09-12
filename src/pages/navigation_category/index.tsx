@@ -69,6 +69,7 @@ const NavigationCategory = (props: any) => {
     {
       title: '操作',
       key: 'action',
+      className: 'handle_btn',
       render: item => {
         return (
           <div>
