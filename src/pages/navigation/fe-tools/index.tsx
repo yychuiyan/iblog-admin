@@ -56,7 +56,11 @@ const FE_Tools = (props: any) => {
       title: '链接',
       dataIndex: 'link',
       render: (_, record) => {
-        return <p className='link' style={{ width: '15rem' }}>{record.link}</p>;
+        return (
+          <p className="link" style={{ width: '15rem' }}>
+            <Tooltip title={record.link}>{record.link}</Tooltip>
+          </p>
+        );
       },
     },
     {
