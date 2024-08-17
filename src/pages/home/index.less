@@ -1,0 +1,57 @@
+.home{
+  width: 100%;
+  height: 100%;
+  .home_nav{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+    width: 100%;
+    padding:2px;
+    div{
+      display:flex;
+      flex-direction: column;
+      width: 20%;
+      height: 100%;
+      margin: 3px;
+      cursor: pointer;
+      color:aliceblue;
+      border-radius: 5px;
+      background-color: blueviolet;
+      transition: background-color 0.3s ease;
+    }
+    /* 添加鼠标悬浮样式 */
+    div:hover {
+      background-color: navy;
+    }
+    .home_nav_title{
+      font-size: 18px;
+      padding: 10px 10px 0px 10px;
+      font-weight: 700;
+    }
+    .home_nav_num{
+      position: relative;
+      left: 48%;
+      top: 10%;
+      width:100px;
+      font-size: 35px;
+    }
+  }
+  .home_content{
+    height: 100%;
+    width: 100%;
+    padding:5px 5px 5px 10px;
+    margin-top:10px;
+    background-color:chocolate;
+    border-radius: 10px;
+    color:aliceblue;
+    .home_category{
+      width: 40%;
+      height: 100%;
+      cursor: pointer;
+      color:aliceblue;
+      border-radius: 5px;
+    }
+  }
+}
+

@@ -2,20 +2,28 @@ import { Layout, Menu } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as BlogActions from '@/redux/actionCreator';
-import { withRouter } from 'react-router-dom';
+import { useLocation, withRouter } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import {
-  // HomeOutlined,
-  // HighlightOutlined,
-  // MessageOutlined,
-  // EditOutlined,
-  // LinkedinOutlined,
-  // NotificationOutlined,
-  // UserOutlined
+  HomeOutlined,
+  HighlightOutlined,
+  MessageOutlined,
+  EditOutlined,
+  LinkedinOutlined,
+  NotificationOutlined,
+  UserOutlined,
+  RocketOutlined,
+  HeartOutlined,
+  VerifiedOutlined,
+  ContactsOutlined,
+  SketchOutlined
 } from '@ant-design/icons';
 import './index.less';
 import { useEffect, useState } from 'react';
 interface DataType {
+  label: any;
+  // label: string;
+  icon: string;
   rightsid: any;
   key: React.Key;
   _id: string;
@@ -27,96 +35,15 @@ interface DataType {
   updatetime: number;
   children: DataType[] | string;
 }
-// interface RightsData {
-//   data: DataType[];
-// }
 const { Sider } = Layout;
-// const items = [
-//   {
-//     key: '/admin/home',
-//     icon: <HomeOutlined />,
-//     label: '首页',
-//   },
-//   {
-//     key: '/admin/article',
-//     icon: <HighlightOutlined />,
-//     label: '文章管理',
-//     children: [
-//       {
-//         key: '/admin/article/list',
-//         label: '文章列表',
-//       },
-//       {
-//         key: '/admin/article/insert',
-//         label: '编写文章',
-//       },
-//       {
-//         key: '/admin/article/comment',
-//         label: '评论管理',
-//       },
-//       {
-//         key: '/admin/article/category',
-//         label: '文章分类',
-//       },
-//       {
-//         key: '/admin/article/tags',
-//         label: '标签信息',
-//       },
-//     ],
-//   },
-//   {
-//     key: '/admin/permission',
-//     icon: <HighlightOutlined />,
-//     label: '权限管理',
-//     children: [
-//       {
-//         key: '/admin/permission/list',
-//         label: '权限列表',
-//       },
-//       {
-//         key: '/admin/rule/list',
-//         label: '角色管理',
-//       }
-//     ],
-//   },
-
-//   {
-//     key: '/admin/userinfo',
-//     icon: <UserOutlined />,
-//     label: '用户管理',
-//   },
-//   {
-//     key: '/admin/message',
-//     icon: <MessageOutlined />,
-//     label: '留言管理',
-//   },
-//   {
-//     key: '/admin/friendly',
-//     icon: <LinkedinOutlined />,
-//     label: '友链管理',
-//   },
-//   {
-//     key: '/admin/essay',
-//     icon: <EditOutlined />,
-//     label: '随笔',
-//   },
-//   {
-//     key: '/admin/about',
-//     icon: <NotificationOutlined />,
-//     label: '关于管理',
-//   },
-// ];
-// icon
-// const iconList = {
-//   '/admin/home': <HomeOutlined />,
-// }
-
 const SideMenu = (props: any) => {
   const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
   const { role } = token[0]
-
   // 路由列表
   const [items, setItems] = useState<DataType[]>([])
+  const location = useLocation()
+  // 默认展开路由
+  // const [openKeys, setOpenKeys] = useState<any[]>()
   // 获取权限列表
   useEffect(() => {
     props.BlogActions.asyncRightsListAction().then((res: any) => {
@@ -132,18 +59,46 @@ const SideMenu = (props: any) => {
         }
       })
       let dataFilter = data.filter((data: DataType) => data.pagepermission === 1 && role[0].rights.includes(data.key))
-
       setItems(dataFilter);
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.BlogActions]);
-
+  const renderIcon = (icon: string) => {
+    switch (icon) {
+      case 'HomeOutlined':
+        return <HomeOutlined />;
+      case 'HighlightOutlined':
+        return <HighlightOutlined />;
+      case 'VerifiedOutlined':
+        return <VerifiedOutlined />;
+      case 'UserOutlined':
+        return <UserOutlined />;
+      case 'MessageOutlined':
+        return <MessageOutlined />;
+      case 'LinkedinOutlined':
+        return <LinkedinOutlined />;
+      case 'EditOutlined':
+        return <EditOutlined />;
+      case 'NotificationOutlined':
+        return <NotificationOutlined />;
+      case 'RocketOutlined':
+        return <RocketOutlined />;
+      case 'HeartOutlined':
+        return <HeartOutlined />
+      case 'ContactsOutlined':
+        return <ContactsOutlined />
+      case 'SketchOutlined':
+        return <SketchOutlined />
+      default:
+        return null;
+    }
+  };
   // 获取动态路由信息
   const selectKeys = [props.location.pathname];
 
   // 截取路由信息，折叠页面自动打开
-  const openKeys = ['/admin/' + props.location.pathname.split('/')[2]];
-
+  const pathname = location.pathname;
+  const openKeys = ['/admin/' + pathname.split('/')[2]];
   // 获取路由列表
   // 点击切换路由
   const handleItemClick = (e: { keyPath: any[]; }) => {
@@ -155,23 +110,29 @@ const SideMenu = (props: any) => {
     <Sider trigger={null} collapsible collapsed={props.isCollapsed} style={{ userSelect: 'none' }}>
       <div className="logo">
         {
-          props.isCollapsed ? <div className="logo_text_hide">炊烟</div> :
+          props.isCollapsed ? <div className="logo_text_hide">
+            <img src="https://yychuiyan.com/assets/avatar-8540a345.webp" alt="" style={{ borderRadius: '50%', height: '35px', width: '35px', marginTop: '8px' }} />
+          </div> :
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', left: '25px' }}>
               <img src="https://yychuiyan.com/assets/avatar-8540a345.webp" alt="" style={{ borderRadius: '50%' }} />
               <div className="logo_text">夜雨炊烟</div>
             </div>
         }
-
       </div>
       <Menu
         theme="dark"
         mode="inline"
+        className='sidemeun'
         defaultSelectedKeys={['/admin/home']}
         selectedKeys={selectKeys}
         onClick={handleItemClick}
         defaultOpenKeys={openKeys}
-        items={items}
-      ></Menu>
+        items={items.map((item: DataType) => ({
+          ...item,
+          icon: renderIcon(item.icon),
+        }))}
+      >
+      </Menu>
     </Sider>
   );
 };

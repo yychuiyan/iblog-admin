@@ -76,6 +76,8 @@ const ArticleUpdate = (props: any) => {
   const [viewCount, setViewCount] = useState()
   // 评论数量
   const [commentCount, setCommentCount] = useState()
+  // 点赞数量
+  const [likeCount, setLikeCount] = useState()
   // 定义ref
   const editorRef = useRef<any>();
 
@@ -94,6 +96,7 @@ const ArticleUpdate = (props: any) => {
         },
       ];
       setImgUrl(res.data.cover);
+      setLikeCount(res.data.like)
       setViewCount(res.data.views)
       setCommentCount(res.data.comment)
       setUpdateTime(res.data.updateTime);
@@ -165,7 +168,7 @@ const ArticleUpdate = (props: any) => {
       status: 1,
       views: viewCount,
       comment: commentCount,
-      like: 0,
+      like: likeCount,
       isComment: isComment,
       isLike: isLike,
       isTop: isTop,
@@ -179,11 +182,10 @@ const ArticleUpdate = (props: any) => {
       }, 500);
     });
   };
-  // 新增数据
+  // 点击更新数据
   const onPublish = async () => {
     await form.validateFields();
     let formData = await form.getFieldsValue();
-
     // 表单数据
     // 获取表单值
     if (typeof imageList === 'object') {
@@ -201,7 +203,7 @@ const ArticleUpdate = (props: any) => {
       status: 1,
       views: viewCount,
       comment: commentCount,
-      like: 0,
+      like: likeCount,
       isComment: isComment,
       isLike: isLike,
       isTop: isTop,
@@ -241,13 +243,7 @@ const ArticleUpdate = (props: any) => {
   };
   return (
     <>
-      <Save
-        time={updateTime}
-        onRefresh={onRefresh}
-        onDraft={onDraft}
-        onPublish={onPublish}
-        onBack={onBack}
-      />
+
       <div className="about" style={{ height: 'calc(100vh - 174px)', overflow: 'auto' }}>
         修改文章
         <Form form={form}>
@@ -354,6 +350,13 @@ const ArticleUpdate = (props: any) => {
           </Row>
         </Form>
       </div>
+      <Save
+        time={updateTime}
+        onRefresh={onRefresh}
+        onDraft={onDraft}
+        onPublish={onPublish}
+        onBack={onBack}
+      />
     </>
   );
 };

@@ -134,7 +134,7 @@ const Adminstrator = (props: any) => {
   // 当前第几页
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   // 窗口
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -317,17 +317,17 @@ const Adminstrator = (props: any) => {
         <Form form={form} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item
             name="username"
-            label="用户名称"
-            rules={[{ required: true, message: '用户名称不能为空' }]}
+            label="管理员名称"
+            rules={[{ required: true, message: '管理员名称不能为空' }]}
           >
-            <Input />
+            <Input placeholder="请输入管理员名称" />
           </Form.Item>
           <Form.Item
             name="password"
-            label="用户密码"
-            rules={[{ required: true, message: '用户密码不能为空' }]}
+            label="管理员密码"
+            rules={[{ required: true, message: '管理员密码不能为空' }]}
           >
-            <Input type='password' />
+            <Input type='password' placeholder="请输入管理员密码" />
           </Form.Item>
           <Form.Item
             name="role_id"
@@ -338,6 +338,7 @@ const Adminstrator = (props: any) => {
               // defaultValue=""
               // style={{ width: 120 }}
               // onChange={handleChange}
+              placeholder="请选择角色信息"
               options={roleName}
             />
           </Form.Item>
@@ -357,10 +358,10 @@ const Adminstrator = (props: any) => {
         <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item
             name="username"
-            label="用户名称"
-            rules={[{ required: true, message: '用户名称不能为空' }]}
+            label="管理员名称"
+            rules={[{ required: true, message: '管理员名称不能为空' }]}
           >
-            <Input />
+            <Input placeholder="请输入管理员名称" />
           </Form.Item>
           <Form.Item
             name="role_id"

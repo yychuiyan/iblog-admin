@@ -38,7 +38,9 @@ const AfficheList = (props: any) => {
       title: '公告内容',
       dataIndex: 'content',
       render: (_, record) => {
-        return <p className='introduction' style={{ width: '12rem' }}>{record.content}</p>;
+        return <p className='introduction' style={{ width: '35rem' }}>
+          <span>{record.content}</span>
+        </p>;
       },
     },
     {
@@ -112,7 +114,7 @@ const AfficheList = (props: any) => {
   // 当前第几页
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   // 窗口
   const [isModalOpen, setIsModalOpen] = useState(false);
   // 更新窗口
@@ -271,7 +273,7 @@ const AfficheList = (props: any) => {
         <Search
           className="search"
           allowClear
-          placeholder="请输入公告"
+          placeholder="请输入公告内容"
           onSearch={onSearch}
           enterButton
         />
@@ -288,7 +290,7 @@ const AfficheList = (props: any) => {
       >
         <Form form={form} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="content" label="公告内容" rules={[{ required: true, message: '内容不能为空' }]}>
-            <TextArea rows={5} />
+            <TextArea rows={5} placeholder="请输入公告内容" />
           </Form.Item>
         </Form>
       </Modal>
@@ -304,7 +306,7 @@ const AfficheList = (props: any) => {
       >
         <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="content" label="公告内容" rules={[{ required: true, message: '内容不能为空' }]}>
-            <TextArea rows={5} />
+            <TextArea rows={5} placeholder="请输入公告内容" />
           </Form.Item>
         </Form>
       </Modal>

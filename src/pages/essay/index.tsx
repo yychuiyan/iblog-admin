@@ -40,7 +40,7 @@ const Essay = (props: any) => {
       title: '随笔',
       dataIndex: 'content',
       render: (_, record) => {
-        return <p className='introduction' style={{ width: '12rem' }}>{record.content}</p>;
+        return <p className='introduction' style={{ width: '40rem' }}>{record.content}</p>;
       },
     },
     {
@@ -100,7 +100,7 @@ const Essay = (props: any) => {
   // 当前第几页
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   // 窗口
   const [isModalOpen, setIsModalOpen] = useState(false);
   // 更新窗口
@@ -307,7 +307,7 @@ const Essay = (props: any) => {
         <Search
           className="search"
           allowClear
-          placeholder="请输入随笔"
+          placeholder="请输入想要查询的随笔"
           onSearch={onSearch}
           enterButton
         />
@@ -332,7 +332,7 @@ const Essay = (props: any) => {
             <Editor
               preview={false}
               subfield={false}
-              placeholder="请撰写文章"
+              placeholder="请撰写随笔内容"
               ref={editorRef}
               addImg={file => addImg(file)}
             />
@@ -366,7 +366,7 @@ const Essay = (props: any) => {
             <Editor
               preview={false}
               subfield={false}
-              placeholder="请撰写文章"
+              placeholder="请撰写随笔内容"
               ref={editorRef}
               addImg={file => addImg(file)}
             />

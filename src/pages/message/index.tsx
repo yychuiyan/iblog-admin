@@ -84,14 +84,14 @@ const Message = (props: any) => {
         return dayjs(time * 1000).format('YYYY-MM-DD HH:mm:ss');
       },
     },
-    {
-      title: '审核时间',
-      dataIndex: 'auditTime',
-      width: 100,
-      render: time => {
-        return time && dayjs(time * 1000).format('YYYY-MM-DD HH:mm:ss');
-      },
-    },
+    // {
+    //   title: '审核时间',
+    //   dataIndex: 'auditTime',
+    //   width: 100,
+    //   render: time => {
+    //     return time && dayjs(time * 1000).format('YYYY-MM-DD HH:mm:ss');
+    //   },
+    // },
     {
       title: '操作',
       key: 'action',
@@ -131,7 +131,7 @@ const Message = (props: any) => {
   // 当前第几页
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   // 窗口
   const [isModalOpen, setIsModalOpen] = useState(false);
   // 表单数据

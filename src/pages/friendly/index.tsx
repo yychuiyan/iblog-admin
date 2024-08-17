@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Image, Input, message, Modal, Table, Tooltip } from 'antd';
+import { Button, Form, Image, Input, message, Modal, Switch, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, ExclamationCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
@@ -9,7 +9,7 @@ import MyPagination from '@/components/pagination';
 import dayjs from 'dayjs';
 import UploadImage from '@/components/upload';
 import jwtDecode from 'jwt-decode';
-import { handleNotAdd, handleNotDelete, handleNotUpdate } from '@/utils/prompt';
+import { handleNotAdd, handleNotDelete, handleNotUpdate, handleNotChangeStatus } from '@/utils/prompt';
 const { confirm } = Modal;
 const { Search } = Input;
 interface DataType {
@@ -22,6 +22,8 @@ interface DataType {
   updateTime: string;
 }
 interface FriendlyData {
+  checked: any;
+  status: any;
   avatar: any;
   _id: string;
   totalCount: number;
@@ -29,7 +31,7 @@ interface FriendlyData {
   pageSize: number;
   data: DataType[];
 }
-const UserInfo = (props: any) => {
+const Friendly = (props: any) => {
   const token = jwtDecode(localStorage.getItem('token') as string) as object | any;
   const role_type = token[0].role[0].role_type
   const columns: ColumnsType<DataType> = [
@@ -57,6 +59,36 @@ const UserInfo = (props: any) => {
       dataIndex: 'desc',
       render: text => {
         return <Tooltip title={text}>{text}</Tooltip>;
+      },
+    },
+    {
+      title: '网站状态',
+      dataIndex: 'status',
+      width: 100,
+      render: (_, record: any) => {
+        return (
+          <Switch
+            checkedChildren={'正常'}
+            unCheckedChildren={'异常'}
+            checked={record.status}
+            onChange={status => role_type ? handleNotChangeStatus() : record.checked === true ? onChangeStatus(status, record) : message.warning("网站已下线!")}
+          />
+        );
+      },
+    },
+    {
+      title: '友链状态',
+      dataIndex: 'checked',
+      width: 100,
+      render: (_, record: any) => {
+        return (
+          <Switch
+            checkedChildren={'上线'}
+            unCheckedChildren={'下线'}
+            checked={record.checked}
+            onChange={checked => role_type ? handleNotChangeStatus() : record.status === false ? onChangeChecked(checked, record) : message.warning("仅异常网站可执行下线操作!")}
+          />
+        );
       },
     },
     {
@@ -116,7 +148,7 @@ const UserInfo = (props: any) => {
   // 当前第几页
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   // 窗口
   const [isModalOpen, setIsModalOpen] = useState(false);
   // 更新窗口
@@ -160,6 +192,7 @@ const UserInfo = (props: any) => {
     props.BlogActions.asyncFriendlyInsertAction({
       ...data,
     }).then(() => {
+      message.success('友链添加成功')
       // 重新调用查询接口
       props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: FriendlyData) => {
         let { data, totalCount, page, pageSize } = res.data as unknown as FriendlyData;
@@ -207,13 +240,14 @@ const UserInfo = (props: any) => {
     }
     let value = updateForm.getFieldsValue();
 
-    if (typeof imageList === 'object') {
-      value.avatar = imageList.url;
-    } else {
-      value.avatar = imageList;
+    if (Boolean(imageList)) {
+      value.avatar = imageList
     }
-    if (imageList === undefined) {
-      value.avatar = imgUrl[0].thumbUrl;
+    if (Array.isArray(value.avatar)) {
+      value.avatar = value.avatar[0].thumbUrl
+    }
+    if (typeof value.avatar === 'object') {
+      value.avatar = value.avatar?.url
     }
     props.BlogActions.asyncFriendlyUpdateAction({
       name: value.name,
@@ -223,7 +257,7 @@ const UserInfo = (props: any) => {
       //@ts-ignore
       id: editData._id,
     }).then(() => {
-      message.success('更新成功');
+      message.success('友链更新成功');
       props.BlogActions.asyncFriendlyListAction(currentPage, pageSize, '').then((res: FriendlyData) => {
         // 获取友链
         let { data, totalCount, page, pageSize } = res.data as unknown as FriendlyData;
@@ -234,6 +268,32 @@ const UserInfo = (props: any) => {
       });
       updateForm.resetFields();
       setIsModalUpdateOpen(false);
+    });
+  };
+  // 更新友链网站状态
+  const onChangeStatus = (status: boolean, row: FriendlyData) => {
+    props.BlogActions.asyncFriendlyStatusUpdateAction({
+      status: status,
+      id: row._id,
+    }).then((res: { code: number, msg: string }) => {
+      if (res.code === 0) {
+        row.status = !row.status;
+        setList([...list]);
+        message.success(res.msg);
+      }
+    });
+  };
+  // 更新友链状态
+  const onChangeChecked = (checked: boolean, row: FriendlyData) => {
+    props.BlogActions.asyncFriendlyCheckedUpdateAction({
+      checked: checked,
+      id: row._id,
+    }).then((res: { code: number, msg: string }) => {
+      if (res.code === 0) {
+        row.checked = !row.checked;
+        setList([...list]);
+        message.success(res.msg);
+      }
     });
   };
   // 删除友链
@@ -274,7 +334,7 @@ const UserInfo = (props: any) => {
   // 跳转页数据显示
   const onChangePage = (page: number, pageSize: number, params = '') => {
     // 重新调用接口将参数传递过去
-    props.BlogActions.asyncUserListAction(page, pageSize, params).then((res: FriendlyData) => {
+    props.BlogActions.asyncFriendlyListAction(page, pageSize, params).then((res: FriendlyData) => {
       // 获取列表数据
       let { data } = res.data as unknown as FriendlyData;
       setList(data);
@@ -288,6 +348,10 @@ const UserInfo = (props: any) => {
   const handleChange = (data: string) => {
     setImageList(data);
   };
+  // 获取移除的图片信息
+  const handleRemove = () => {
+    setImageList('');
+  };
   return (
     <div>
       <div className="title">
@@ -297,7 +361,7 @@ const UserInfo = (props: any) => {
         <Search
           className="search"
           allowClear
-          placeholder="请输入昵称"
+          placeholder="请输入想要查询的昵称"
           onSearch={onSearch}
           enterButton
         />
@@ -314,10 +378,10 @@ const UserInfo = (props: any) => {
       >
         <Form form={form} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="name" label="昵称" rules={[{ required: true, message: '昵称不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入昵称" />
           </Form.Item>
           <Form.Item name="link" label="链接" rules={[{ required: true, message: '链接不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入链接信息" />
           </Form.Item>
           <Form.Item
             name="avatar"
@@ -325,10 +389,10 @@ const UserInfo = (props: any) => {
             // rules={[{ required: true, message: '头像不能为空' }]}
           >
             {/* @ts-ignore */}
-            <UploadImage handleChange={handleChange} />
+            <UploadImage handleChange={handleChange} handleRemove={handleRemove} />
           </Form.Item>
           <Form.Item name="desc" label="描述" rules={[{ required: true, message: '描述不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入描述信息" />
           </Form.Item>
         </Form>
       </Modal>
@@ -344,10 +408,10 @@ const UserInfo = (props: any) => {
       >
         <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="name" label="昵称" rules={[{ required: true, message: '昵称不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入昵称" />
           </Form.Item>
           <Form.Item name="link" label="链接" rules={[{ required: true, message: '链接不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入链接信息" />
           </Form.Item>
           <Form.Item
             name="avatar"
@@ -355,11 +419,11 @@ const UserInfo = (props: any) => {
             rules={[{ required: true, message: '头像不能为空' }]}
           >
             {/* @ts-ignore */}
-            <UploadImage handleChange={handleChange} imgUrlArr={imgUrl} />
+            <UploadImage handleChange={handleChange} imgUrlArr={imgUrl} handleRemove={handleRemove} />
             {/* <Input /> */}
           </Form.Item>
           <Form.Item name="desc" label="描述" rules={[{ required: true, message: '描述不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入描述信息" />
           </Form.Item>
         </Form>
       </Modal>
@@ -387,4 +451,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     BlogActions: bindActionCreators(BlogActions, dispatch),
   };
 };
-export default connect(null, mapDispatchToProps)(UserInfo);
+export default connect(null, mapDispatchToProps)(Friendly);

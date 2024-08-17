@@ -66,6 +66,21 @@ import {
   APOTHEGM_UPDATE,
   APOTHEGM_DELETE,
   APOTHEGM_STATUS,
+  FRIENDLY_CHECKED,
+  FRIENDLY_STATUS,
+  READER_LIST,
+  READER_DELETE,
+  READER_INSERT,
+  READER_UPDATE,
+  READER_CHECKED,
+  NAVIGATION_LIST,
+  NAVIGATION_DELETE,
+  NAVIGATION_UPDATE,
+  NAVIGATION_STATUS,
+  NAVIGATION_CATEGORY_UPDATE,
+  NAVIGATION_CATEGORY_DELETE,
+  NAVIGATION_CATEGORY_ADD,
+  NAVIGATION_CATEGORY_LIST,
 } from '@/redux/constants';
 import jwtDecode from 'jwt-decode';
 import {
@@ -99,6 +114,15 @@ import {
   ApothegmAdd,
   ApothegmUpdate,
   ApothegmUpdateStatus,
+  FriendlyUpdateStatus,
+  FriendlyUpdateChecked,
+  ReaderAdd,
+  ReaderUpdate,
+  ReaderUpdateChecked,
+  NavigationAdd,
+  NavigationUpdate,
+  NavigationUpdateStatus,
+  NavigationCategoryUpdate,
 } from '@/types/api';
 // 登录
 export function asyncLoginAction(data: LoginParams) {
@@ -591,6 +615,28 @@ export const asyncFriendlyUpdateAction = (params: FriendlyUpdate) => {
     return res;
   };
 };
+// 更新友链网站状态
+export const asyncFriendlyStatusUpdateAction = (params: FriendlyUpdateStatus) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.friendlyStatusUpdate(params);
+    dispatch({
+      type: FRIENDLY_STATUS,
+      friendly: res,
+    });
+    return res;
+  };
+};
+// 更新友链状态
+export const asyncFriendlyCheckedUpdateAction = (params: FriendlyUpdateChecked) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.friendlyCheckedUpdate(params);
+    dispatch({
+      type: FRIENDLY_CHECKED,
+      friendly: res,
+    });
+    return res;
+  };
+};
 // 随笔列表
 export const asyncEssayListAction = (page: number, pageSize: number, content: string) => {
   return async (dispatch: Dispatch) => {
@@ -830,6 +876,166 @@ export const asyncApothegmStatusUpdateAction = (params: ApothegmUpdateStatus) =>
     dispatch({
       type: APOTHEGM_STATUS,
       affiche: res,
+    });
+    return res;
+  };
+};
+// 友链列表
+export const asyncReaderListAction = (page: number, pageSize: number, name: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.getReaderList(page, pageSize, name);
+    dispatch({
+      type: READER_LIST,
+      reader: res,
+    });
+    return res;
+  };
+};
+// 删除书籍
+export const asyncReaderDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.readerDelete(id);
+    dispatch({
+      type: READER_DELETE,
+      rid: '',
+    });
+    return res;
+  };
+};
+// 新增书籍
+export const asyncReaderInsertAction = (data: ReaderAdd) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.readerInsert(data);
+    dispatch({
+      type: READER_INSERT,
+      reader: {},
+    });
+    return res;
+  };
+};
+// 修改书籍
+export const asyncReaderUpdateAction = (params: ReaderUpdate) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.readerUpdate(params);
+    dispatch({
+      type: READER_UPDATE,
+      rid: res,
+    });
+    return res;
+  };
+};
+// 更新书籍状态
+export const asyncReaderCheckedUpdateAction = (params: ReaderUpdateChecked) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.readerCheckedUpdate(params);
+    dispatch({
+      type: READER_CHECKED,
+      reader: res,
+    });
+    return res;
+  };
+};
+// 导航列表
+export const asyncNavigationListAction = (
+  page: number,
+  pageSize: number,
+  title: string,
+  classify: string
+) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.getNavigationList(page, pageSize, title, classify);
+    dispatch({
+      type: NAVIGATION_LIST,
+      nav: res,
+    });
+    return res;
+  };
+};
+// 删除导航
+export const asyncNavigationDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.navigationDelete(id);
+    dispatch({
+      type: NAVIGATION_DELETE,
+      nid: '',
+    });
+    return res;
+  };
+};
+// 新增导航
+export const asyncNavigationInsertAction = (data: NavigationAdd) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.navigationInsert(data);
+    dispatch({
+      type: FRIENDLY_INSERT,
+      nav: {},
+    });
+    return res;
+  };
+};
+// 修改导航
+export const asyncNavigationUpdateAction = (params: NavigationUpdate) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.navigationUpdate(params);
+    dispatch({
+      type: NAVIGATION_UPDATE,
+      nid: res,
+    });
+    return res;
+  };
+};
+// 更新导航网站状态
+export const asyncNavigationStatusUpdateAction = (params: NavigationUpdateStatus) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.navigationStatusUpdate(params);
+    dispatch({
+      type: NAVIGATION_STATUS,
+      nav: res,
+    });
+    return res;
+  };
+};
+// 获取导航分类
+export const asyncNavigationCategoriesAction = (page: number, pageSize: number, name: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.getNavigationCategories(page, pageSize, name);
+    dispatch({
+      type: NAVIGATION_CATEGORY_LIST,
+      categories: res,
+    });
+    return res;
+  };
+};
+
+// 新增导航分类
+export const asyncNavigationCategoryAddAction = (data: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.navigationCategoryAdd(data);
+    dispatch({
+      type: NAVIGATION_CATEGORY_ADD,
+      categories: {},
+    });
+    return res;
+  };
+};
+// 删除导航分类
+export const asyncNavigationCategoryDeleteAction = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.navigationCategoryDelete(id);
+    dispatch({
+      type: NAVIGATION_CATEGORY_DELETE,
+      categoryId: '',
+    });
+    return res;
+  };
+};
+// 更新导航分类
+export const asyncNavigationCategoryUpdateAction = (params: NavigationCategoryUpdate) => {
+  return async (dispatch: Dispatch) => {
+    const res = await api.navigationCategoryUpdate(params);
+    dispatch({
+      type: NAVIGATION_CATEGORY_UPDATE,
+      categories: res,
     });
     return res;
   };

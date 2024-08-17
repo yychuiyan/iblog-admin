@@ -162,6 +162,7 @@ const ArticleTag = (props: any) => {
       title: '标签名称(点击可编辑)',
       dataIndex: 'name',
       key: 'name',
+      width: '20rem',
       onCell: (record) => ({
         record,
         editable: record.status,
@@ -174,6 +175,7 @@ const ArticleTag = (props: any) => {
       title: '文章数量',
       dataIndex: 'articleNum',
       key: 'articleNum',
+      width: '10rem'
     },
     {
       title: '标签状态',
@@ -237,7 +239,7 @@ const ArticleTag = (props: any) => {
   // 当前第几页
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   // 窗口
   const [isModalOpen, setIsModalOpen] = useState(false);
   // 获取标签列表数据
@@ -383,14 +385,14 @@ const ArticleTag = (props: any) => {
             label="名称"
             rules={[{ required: true, message: '标签名称不能为空' }]}
           >
-            <Input />
+            <Input placeholder="请输入标签名称" />
           </Form.Item>
         </Form>
       </Modal>
       <Table
         columns={columns}
         dataSource={list}
-        scroll={{ y: 'calc(100vh - 240px)', x: true }}
+        scroll={{ y: 'calc(100vh - 260px)', x: true }}
         rowKey={(item) => {
           return item._id + Date.now();
         }}

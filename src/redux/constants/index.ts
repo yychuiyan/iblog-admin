@@ -86,6 +86,10 @@ export const FRIENDLY_DELETE = 'FRIENDLY_DELETE';
 export const FRIENDLY_INSERT = 'FRIENDLY_INSERT';
 // 修改友链
 export const FRIENDLY_UPDATE = 'FRIENDLY_UPDATE';
+// 修改友链网站状态
+export const FRIENDLY_STATUS = 'FRIENDLY_STATUS';
+// 修改友链状态
+export const FRIENDLY_CHECKED = 'FRIENDLY_CHECKED';
 // 随笔列表
 export const ESSAY_LIST = 'ESSAY_LIST';
 // 删除随笔
@@ -129,3 +133,31 @@ export const APOTHEGM_UPDATE = 'APOTHEGM_UPDATE';
 export const APOTHEGM_DELETE = 'APOTHEGM_DELETE';
 // 修改警句状态
 export const APOTHEGM_STATUS = 'APOTHEGM_STATUS';
+// 书籍列表
+export const READER_LIST = 'READER_LIST';
+// 删除书籍
+export const READER_DELETE = 'READER_DELETE';
+// 新增书籍
+export const READER_INSERT = 'READER_INSERT';
+// 修改书籍
+export const READER_UPDATE = 'READER_UPDATE';
+// 修改书籍状态
+export const READER_CHECKED = 'READER_CHECKED';
+// 导航列表
+export const NAVIGATION_LIST = 'NAVIGATION_LIST';
+// 删除导航
+export const NAVIGATION_DELETE = 'NAVIGATION_DELETE';
+// 新增导航
+export const NAVIGATION_INSERT = 'NAVIGATION_INSERT';
+// 修改导航
+export const NAVIGATION_UPDATE = 'NAVIGATION_UPDATE';
+// 修改导航网站状态
+export const NAVIGATION_STATUS = 'NAVIGATION_STATUS';
+// 获取导航分类
+export const NAVIGATION_CATEGORY_LIST = 'NAVIGATION_CATEGORY_LIST';
+// 新增导航分类
+export const NAVIGATION_CATEGORY_ADD = 'NAVIGATION_CATEGORY_ADD';
+// 删除导航分类
+export const NAVIGATION_CATEGORY_DELETE = 'NAVIGATION_CATEGORY_DELETE';
+// 更新导航分类
+export const NAVIGATION_CATEGORY_UPDATE = 'NAVIGATION_CATEGORY_UPDATE';

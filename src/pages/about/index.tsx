@@ -98,7 +98,6 @@ const About = (props: any) => {
   };
   return (
     <>
-      <Save time={updateTime} onRefresh={onRefresh} onSave={submit} />
       <div style={{ height: 'calc(100vh - 180px)', overflow: 'auto' }}>
         <div style={{ marginBottom: '5px', display: 'flex', alignItems: 'center' }}>
           {isChecked ? (
@@ -133,6 +132,7 @@ const About = (props: any) => {
           )}
         </Form>
       </div>
+      <Save time={updateTime} onRefresh={onRefresh} onSave={submit} />
     </>
   );
 };

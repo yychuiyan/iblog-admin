@@ -28,6 +28,15 @@ import {
   ApothegmAdd,
   ApothegmUpdate,
   ApothegmUpdateStatus,
+  FriendlyUpdateStatus,
+  FriendlyUpdateChecked,
+  ReaderAdd,
+  ReaderUpdate,
+  ReaderUpdateChecked,
+  NavigationAdd,
+  NavigationUpdate,
+  NavigationUpdateStatus,
+  NavigationCategoryUpdate,
 } from '@/types/api';
 
 const baseURL = `/api/v1`;
@@ -219,6 +228,14 @@ const api: Api = {
   friendlyUpdate(params: FriendlyUpdate) {
     return axios.put(`${baseURL}/friendly/${params.id}`, params);
   },
+  // 友链网站状态
+  friendlyStatusUpdate(params: FriendlyUpdateStatus) {
+    return axios.put(`${baseURL}/friendly/status/${params.id}`, params);
+  },
+  // 友链状态
+  friendlyCheckedUpdate(params: FriendlyUpdateChecked) {
+    return axios.put(`${baseURL}/friendly/checked/${params.id}`, params);
+  },
   // 随笔列表
   getEssaylyList(page: number, pageSize: number, content: string) {
     return axios.get(`${baseURL}/essay?page=${page}&&pageSize=${pageSize}&&content=${content}`);
@@ -306,6 +323,64 @@ const api: Api = {
   // 警句状态
   apothegmStatusUpdate(params: ApothegmUpdateStatus) {
     return axios.put(`${baseURL}/apothegm/status/${params.id}`, params);
+  },
+  // 书籍列表
+  getReaderList(page: number, pageSize: number, name: string) {
+    return axios.get(`${baseURL}/reader?page=${page}&&pageSize=${pageSize}&&name=${name}`);
+  },
+  // 删除书籍
+  readerDelete(id: string) {
+    return axios.delete(`${baseURL}/reader/${id}`);
+  },
+  // 新增书籍
+  readerInsert(params: ReaderAdd) {
+    return axios.post(`${baseURL}/reader`, params);
+  },
+  // 修改书籍
+  readerUpdate(params: ReaderUpdate) {
+    return axios.put(`${baseURL}/reader/${params.id}`, params);
+  },
+  // 书籍状态
+  readerCheckedUpdate(params: ReaderUpdateChecked) {
+    return axios.put(`${baseURL}/reader/checked/${params.id}`, params);
+  },
+  // 导航列表
+  getNavigationList(page: number, pageSize: number, title: string, classify: string) {
+    return axios.get(
+      `${baseURL}/navigation?page=${page}&&pageSize=${pageSize}&&title=${title}&&classify=${classify}`
+    );
+  },
+  // 删除导航
+  navigationDelete(id: string) {
+    return axios.delete(`${baseURL}/navigation/${id}`);
+  },
+  // 新增导航
+  navigationInsert(params: NavigationAdd) {
+    return axios.post(`${baseURL}/navigation`, params);
+  },
+  // 修改友链
+  navigationUpdate(params: NavigationUpdate) {
+    return axios.put(`${baseURL}/navigation/${params.id}`, params);
+  },
+  // 导航网站状态
+  navigationStatusUpdate(params: NavigationUpdateStatus) {
+    return axios.put(`${baseURL}/navigation/status/${params.id}`, params);
+  },
+  // 获取导航分类列表
+  getNavigationCategories(page, pageSize, name) {
+    return axios.get(`${baseURL}/navigation/category?page=${page}&&pageSize=${pageSize}&&name=${name}`);
+  },
+  // 新增导航分类
+  navigationCategoryAdd(name: string) {
+    return axios.post(`${baseURL}/navigation/category`, name);
+  },
+  // 删除导航分类
+  navigationCategoryDelete(id: string) {
+    return axios.delete(`${baseURL}/navigation/category/${id}`);
+  },
+  // 更新导航分类
+  navigationCategoryUpdate(params: NavigationCategoryUpdate) {
+    return axios.put(`${baseURL}/navigation/category/${params.id}`, params);
   },
 };
 export default api;

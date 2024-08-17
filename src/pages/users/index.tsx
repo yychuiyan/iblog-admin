@@ -39,14 +39,17 @@ const UserInfo = (props: any) => {
     {
       title: '用户名',
       dataIndex: 'username',
+      width: '10rem'
     },
     {
       title: '用户类型',
-      dataIndex: 'provider'
+      dataIndex: 'provider',
+      width: '6rem'
     },
     {
       title: '邮箱',
       dataIndex: 'email',
+      width: '15rem'
     },
     {
       title: '头像',
@@ -114,7 +117,7 @@ const UserInfo = (props: any) => {
   // 当前第几页
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   // 图片列表
   const [imageList, setImageList] = useState<any>();
   // 图片地址

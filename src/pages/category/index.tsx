@@ -157,6 +157,7 @@ const ArticleCategory = (props: any) => {
       title: '分类名称(点击可编辑)',
       dataIndex: 'name',
       key: 'name',
+      width: '20rem',
       onCell: (record: DataType) => ({
         record,
         editable: true,
@@ -169,6 +170,7 @@ const ArticleCategory = (props: any) => {
       title: '文章数量',
       dataIndex: 'articleNum',
       key: 'articleNum',
+      width: '10rem'
     },
     {
       title: '创建时间',
@@ -216,7 +218,7 @@ const ArticleCategory = (props: any) => {
   // 当前第几页
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   // 窗口
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -350,7 +352,7 @@ const ArticleCategory = (props: any) => {
             label="名称"
             rules={[{ required: true, message: '分类名称不能为空' }]}
           >
-            <Input />
+            <Input placeholder="请输入分类名称" />
           </Form.Item>
         </Form>
       </Modal>

@@ -25,8 +25,13 @@ const ArticleUpdate = lazy(() => import('@/pages/articles/update'));
 const Message = lazy(() => import('@/pages/message'));
 const Friendly = lazy(() => import('@/pages/friendly'));
 const Essay = lazy(() => import('@/pages/essay'));
+const Reader = lazy(() => import('@/pages/reader'));
 const Affiche = lazy(() => import('@/pages/affiche'));
 const Apothegm = lazy(() => import('@/pages/apothegm'));
+const FE_Project = lazy(() => import('@/pages/navigation/fe-project'));
+const FE_Tools = lazy(() => import('@/pages/navigation/fe-tools'));
+const FE_Website = lazy(() => import('@/pages/navigation/fe-website'));
+const NavigationCategory = lazy(() => import('@/pages/navigation_category'));
 const { Content } = Layout;
 const LayoutIndex = (props: any) => {
   NProgress.start();
@@ -54,20 +59,25 @@ const LayoutIndex = (props: any) => {
                 <Route path="/admin/home" component={Home}></Route>
                 <Route path="/admin/article/list" component={ArticleList}></Route>
                 <Route path="/admin/permission/list" component={PermissionList}></Route>
-                <Route path="/admin/rule/list" component={RuleList}></Route>
+                <Route path="/admin/permission/rule" component={RuleList}></Route>
                 <Route path="/admin/article/category" component={Category}></Route>
                 <Route path="/admin/article/tags" component={Tags}></Route>
                 <Route path="/admin/article/insert" component={ArticleAdd}></Route>
                 <Route path="/admin/article/update/:id" component={ArticleUpdate}></Route>
                 <Route path="/admin/article/comment" component={Comment}></Route>
                 <Route path="/admin/about" component={About}></Route>
-                <Route path="/admin/manage/list" component={Administrator}></Route>
+                <Route path="/admin/permission/admin" component={Administrator}></Route>
                 <Route path="/admin/user/list" component={UserInfo}></Route>
                 <Route path="/admin/message" component={Message}></Route>
                 <Route path="/admin/friendly" component={Friendly}></Route>
                 <Route path="/admin/essay" component={Essay}></Route>
+                <Route path="/admin/reader" component={Reader}></Route>
                 <Route path="/admin/affiche" component={Affiche}></Route>
                 <Route path="/admin/apothegm" component={Apothegm}></Route>
+                <Route path="/admin/navigation/project" component={FE_Project}></Route>
+                <Route path="/admin/navigation/tools" component={FE_Tools}></Route>
+                <Route path="/admin/navigation/website" component={FE_Website}></Route>
+                <Route path="/admin/navigation/category" component={NavigationCategory}></Route>
                 <Route path="*" component={NotFound}></Route>
               </Switch>
             </Spin>

@@ -43,6 +43,8 @@ import { FriendlyListReducer } from './friendly/list';
 import { FriendlyDeleteReducer } from './friendly/delete';
 import { FriendlyInsertReducer } from './friendly/insert';
 import { FriendlyUpdateReducer } from './friendly/update';
+import { FriendlyStatusUpdateReducer } from './friendly/status_update';
+import { FriendlyCheckedUpdateReducer } from './friendly/checked_update';
 import { EssayListReducer } from './essay/list';
 import { EssayDeleteReducer } from './essay/delete';
 import { EssayInsertReducer } from './essay/insert';
@@ -65,6 +67,20 @@ import { ApothegmListReducer } from './apothegm/list';
 import { ApothegmUpdateReducer } from './apothegm/update';
 import { ApothegmStatusUpdateReducer } from './apothegm/status_update';
 import { ApothegmDeleteReducer } from './apothegm/delete';
+import { ReaderListReducer } from './reader/list';
+import { ReaderInsertReducer } from './reader/insert';
+import { ReaderDeleteReducer } from './reader/delete';
+import { ReaderUpdateReducer } from './reader/update';
+import { ReaderCheckedUpdateReducer } from './reader/checked_update';
+import { NavigationUpdateReducer } from './navigation/update';
+import { NavigationStatusUpdateReducer } from './navigation/status_update';
+import { NavigationListReducer } from './navigation/list';
+import { NavigationInsertReducer } from './navigation/insert';
+import { NavigationDeleteReducer } from './navigation/delete';
+import { NavigationCategoriesReducer } from './navigationCategories/list';
+import { NavigationCategoryAddReducer } from './navigationCategories/add';
+import { NavigationCategoryDeleteReducer } from './navigationCategories/delete';
+import { NavigationCategoryUpdateReducer } from './navigationCategories/update';
 const RootReducer = combineReducers({
   LoginReducer,
   RegisterReducer,
@@ -110,6 +126,8 @@ const RootReducer = combineReducers({
   FriendlyDeleteReducer,
   FriendlyInsertReducer,
   FriendlyUpdateReducer,
+  FriendlyStatusUpdateReducer,
+  FriendlyCheckedUpdateReducer,
   EssayListReducer,
   EssayDeleteReducer,
   EssayInsertReducer,
@@ -132,5 +150,19 @@ const RootReducer = combineReducers({
   ApothegmUpdateReducer,
   ApothegmStatusUpdateReducer,
   ApothegmDeleteReducer,
+  ReaderListReducer,
+  ReaderInsertReducer,
+  ReaderDeleteReducer,
+  ReaderUpdateReducer,
+  ReaderCheckedUpdateReducer,
+  NavigationDeleteReducer,
+  NavigationInsertReducer,
+  NavigationListReducer,
+  NavigationStatusUpdateReducer,
+  NavigationUpdateReducer,
+  NavigationCategoriesReducer,
+  NavigationCategoryAddReducer,
+  NavigationCategoryDeleteReducer,
+  NavigationCategoryUpdateReducer,
 });
 export default RootReducer;

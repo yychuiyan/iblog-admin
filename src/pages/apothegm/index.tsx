@@ -39,14 +39,14 @@ const ApothegmList = (props: any) => {
       title: '作者',
       dataIndex: 'author',
       render: (_, record) => {
-        return <p className='introduction' style={{ width: '12rem' }}>{record.author}</p>;
+        return <p className='introduction' style={{ width: '6rem' }}>{record.author}</p>;
       },
     },
     {
       title: '内容',
       dataIndex: 'content',
       render: (_, record) => {
-        return <p className='introduction' style={{ width: '12rem' }}>{record.content}</p>;
+        return <p className='introduction' style={{ width: '20rem' }}>{record.content}</p>;
       },
     },
     {
@@ -120,7 +120,7 @@ const ApothegmList = (props: any) => {
   // 当前第几页
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   // 窗口
   const [isModalOpen, setIsModalOpen] = useState(false);
   // 更新窗口
@@ -280,7 +280,7 @@ const ApothegmList = (props: any) => {
         <Search
           className="search"
           allowClear
-          placeholder="请输入作者"
+          placeholder="请输入作者名称"
           onSearch={onSearch}
           enterButton
         />
@@ -297,10 +297,10 @@ const ApothegmList = (props: any) => {
       >
         <Form form={form} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="author" label="作者" rules={[{ required: true, message: '作者不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入作者名称" />
           </Form.Item>
-          <Form.Item name="content" label="内容" rules={[{ required: true, message: '内容不能为空' }]}>
-            <TextArea rows={5} />
+          <Form.Item name="content" label="警句内容" rules={[{ required: true, message: '内容不能为空' }]}>
+            <TextArea rows={5} placeholder="请输入警句内容" />
           </Form.Item>
         </Form>
       </Modal>
@@ -316,10 +316,10 @@ const ApothegmList = (props: any) => {
       >
         <Form form={updateForm} layout="vertical" name="basic" className="userAddFrom">
           <Form.Item name="author" label="作者" rules={[{ required: true, message: '作者不能为空' }]}>
-            <Input />
+            <Input placeholder="请输入作者名称" />
           </Form.Item>
           <Form.Item name="content" label="警句内容" rules={[{ required: true, message: '内容不能为空' }]}>
-            <TextArea rows={5} />
+            <TextArea rows={5} placeholder="请输入警句内容" />
           </Form.Item>
         </Form>
       </Modal>

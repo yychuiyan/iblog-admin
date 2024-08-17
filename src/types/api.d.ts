@@ -57,6 +57,14 @@ interface CategoryUpdate {
   createTime: string;
   updateTime: string;
 }
+// 更新导航分类
+interface NavigationCategoryUpdate {
+  id: string;
+  name: string;
+  index: number;
+  createTime: string;
+  updateTime: string;
+}
 interface TagsUpdate {
   id: string;
   name: string;
@@ -133,12 +141,58 @@ interface FriendlyAdd {
   link: string;
   name: string;
 }
+// 导航列表
+interface NavigationAdd {
+  avatar: string;
+  desc: string;
+  link: string;
+  title: string;
+}
+interface ReaderAdd {
+  cover: string;
+  desc: string;
+  link: string;
+  name: string;
+  status: number;
+}
 interface FriendlyUpdate {
   id: string;
   avatar: string;
   desc: string;
   link: string;
   name: string;
+}
+interface NavigationUpdate {
+  id: string;
+  avatar: string;
+  desc: string;
+  link: string;
+  title: string;
+}
+interface ReaderUpdate {
+  id: string;
+  avatar: string;
+  author: string;
+  desc: string;
+  link: string;
+  name: string;
+  status: number;
+}
+interface FriendlyUpdateStatus {
+  status: boolean;
+  id: string;
+}
+interface NavigationUpdateStatus {
+  status: boolean;
+  id: string;
+}
+interface FriendlyUpdateChecked {
+  checked: boolean;
+  id: string;
+}
+interface ReaderUpdateChecked {
+  checked: boolean;
+  id: string;
 }
 interface CoverData {
   name: string;
@@ -211,9 +265,9 @@ export interface Api {
   adminUpdate(params: AdminUpdate): Promise<ApiResponse>;
   adminStatusUpdate(params: AdminUpdateStatus): Promise<ApiResponse>;
   getUserList(page: number, pageSize: number, username: string): Promise<ApiResponse>;
-  getCategories(page: number, pageSize: number, name: string): Promise<ApiResponse>;
   userUpdate(params: UserUpdate): Promise<ApiResponse>;
   userDelete(id: string): Promise<ApiResponse>;
+  getCategories(page: number, pageSize: number, name: string): Promise<ApiResponse>;
   categoryAdd(name: string): Promise<ApiResponse>;
   categoryDelete(id: string): Promise<ApiResponse>;
   categoryUpdate(params: CategoryUpdate): Promise<ApiResponse>;
@@ -250,6 +304,8 @@ export interface Api {
   friendlyDelete(id: string): Promise<ApiResponse>;
   friendlyInsert(params: FriendlyAdd): Promise<ApiResponse>;
   friendlyUpdate(params: FriendlyUpdate): Promise<ApiResponse>;
+  friendlyStatusUpdate(params: FriendlyUpdateStatus): Promise<ApiResponse>;
+  friendlyCheckedUpdate(params: FriendlyUpdateChecked): Promise<ApiResponse>;
   getEssaylyList(page: number, pageSize: number, content: string): Promise<ApiResponse>;
   essayDelete(id: string): Promise<ApiResponse>;
   essayInsert(params: EssayAdd): Promise<ApiResponse>;
@@ -272,4 +328,23 @@ export interface Api {
   apothegmUpdate(params: ApothegmUpdate): Promise<ApiResponse>;
   apothegmDelete(id: string): Promise<ApiResponse>;
   apothegmStatusUpdate(params: ApothegmUpdateStatus): Promise<ApiResponse>;
+  getReaderList(page: number, pageSize: number, name: string): Promise<ApiResponse>;
+  readerDelete(id: string): Promise<ApiResponse>;
+  readerInsert(params: ReaderAdd): Promise<ApiResponse>;
+  readerUpdate(params: ReaderUpdate): Promise<ApiResponse>;
+  readerCheckedUpdate(params: ReaderUpdateChecked): Promise<ApiResponse>;
+  getNavigationList(
+    page: number,
+    pageSize: number,
+    title: string,
+    classify: string
+  ): Promise<ApiResponse>;
+  navigationDelete(id: string): Promise<ApiResponse>;
+  navigationInsert(params: NavigationAdd): Promise<ApiResponse>;
+  navigationUpdate(params: NavigationUpdate): Promise<ApiResponse>;
+  navigationStatusUpdate(params: NavigationUpdateStatus): Promise<ApiResponse>;
+  getNavigationCategories(page: number, pageSize: number, name: string): Promise<ApiResponse>;
+  navigationCategoryAdd(name: string): Promise<ApiResponse>;
+  navigationCategoryDelete(id: string): Promise<ApiResponse>;
+  navigationCategoryUpdate(params: NavigationCategoryUpdate): Promise<ApiResponse>;
 }

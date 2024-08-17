@@ -127,6 +127,15 @@ const ArticleList = (props: any) => {
       },
     },
     {
+      title: '点赞',
+      dataIndex: 'like',
+      align: 'center',
+      width: 100,
+      render: (_, record) => {
+        return <p style={{ width: '5rem' }}>{record.like}</p>;
+      },
+    },
+    {
       title: '置顶',
       dataIndex: 'isTop',
       render: (_, record) => {
@@ -187,7 +196,7 @@ const ArticleList = (props: any) => {
               onClick={() => {
                 onChangePublishStatus(record);
               }}
-              style={{ marginRight: '5px' }}
+              style={{ marginBottom: '2px' }}
             >
               {record.publishStatus === 1 ? <CloudDownloadOutlined /> : <CloudUploadOutlined />}
             </Button>
@@ -201,7 +210,7 @@ const ArticleList = (props: any) => {
                   onClick={() => {
                     props.history.push(`/admin/article/update/${record._id}`);
                   }}
-                  style={{ marginRight: '5px' }}
+                  style={{ marginBottom: '2px' }}
                 />
                 <Button
                   type="primary"
@@ -212,7 +221,7 @@ const ArticleList = (props: any) => {
                   onClick={() => {
                     articleDelete(record);
                   }}
-                  style={{ marginRight: '5px' }}
+                  style={{ marginBottom: '2px' }}
                 />
               </>
             )}
@@ -228,7 +237,7 @@ const ArticleList = (props: any) => {
   // 当前第几页
   const [currentPage, setCurrentPage] = useState(1);
   // 每页显示条数
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   // 获取文章列表数据
   useEffect(() => {
     props.BlogActions.asyncArticleListAction(currentPage, pageSize, '', 0, 0).then((res: ArticleData) => {
@@ -373,7 +382,6 @@ const ArticleList = (props: any) => {
           />
         </div>
       </div>
-      <div className='table'>
       <Table
         columns={columns}
         dataSource={list}
@@ -383,15 +391,12 @@ const ArticleList = (props: any) => {
         }}
         pagination={false}
       />
-      </div>
-      <div>
       <MyPagination
         pageSize={pageSize}
         currentPage={currentPage}
         total={total}
         onChange={onChangePage}
       ></MyPagination>
-      </div>
     </div>
   );
 };
