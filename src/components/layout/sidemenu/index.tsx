@@ -95,11 +95,9 @@ const SideMenu = (props: any) => {
   };
   // 获取动态路由信息
   const selectKeys = [props.location.pathname];
-
   // 截取路由信息，折叠页面自动打开
   const pathname = location.pathname;
   const openKeys = ['/admin/' + pathname.split('/')[2]];
-  // 获取路由列表
   // 点击切换路由
   const handleItemClick = (e: { keyPath: any[]; }) => {
     let path = e.keyPath[0];
