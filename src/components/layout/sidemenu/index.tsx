@@ -109,20 +109,37 @@ const SideMenu = (props: any) => {
     // 折叠展开
     <Sider trigger={null} collapsible collapsed={props.isCollapsed} style={{ userSelect: 'none' }}>
       <div className="logo">
-        {
-          props.isCollapsed ? <div className="logo_text_hide">
-            <img src="https://yychuiyan.com/assets/avatar-8540a345.webp" alt="" style={{ borderRadius: '50%', height: '35px', width: '35px', marginTop: '8px' }} />
-          </div> :
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', left: '25px' }}>
-              <img src="https://yychuiyan.com/assets/avatar-8540a345.webp" alt="" style={{ borderRadius: '50%' }} />
-              <div className="logo_text">夜雨炊烟</div>
-            </div>
-        }
+        {props.isCollapsed ? (
+          <div className="logo_text_hide">
+            <img
+              src="https://cos.yychuiyan.com/iblogs/avatar1530.webp"
+              alt=""
+              style={{ borderRadius: '50%', height: '35px', width: '35px', marginTop: '8px' }}
+            />
+          </div>
+        ) : (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              position: 'relative',
+              left: '25px',
+            }}
+          >
+            <img
+              src="https://cos.yychuiyan.com/iblogs/avatar1530.webp"
+              alt=""
+              style={{ borderRadius: '50%' }}
+            />
+            <div className="logo_text">夜雨炊烟</div>
+          </div>
+        )}
       </div>
       <Menu
         theme="dark"
         mode="inline"
-        className='sidemeun'
+        className="sidemeun"
         defaultSelectedKeys={['/admin/home']}
         selectedKeys={selectKeys}
         onClick={handleItemClick}
@@ -131,8 +148,7 @@ const SideMenu = (props: any) => {
           ...item,
           icon: renderIcon(item.icon),
         }))}
-      >
-      </Menu>
+      ></Menu>
     </Sider>
   );
 };
