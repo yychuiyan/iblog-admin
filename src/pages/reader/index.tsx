@@ -156,13 +156,13 @@ const Reader = (props: any) => {
   // 更新窗口
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
   // 保存当前更新的数据
-  const [editData, setEditData] = useState({});
+  const [editData, setEditData] = useState<any>();
   // 图片列表
   const [imageList, setImageList] = useState<any>();
   // 图片地址
   const [imgUrl, setImgUrl] = useState<any>([]);
   // 阅读状态
-  const [readerStatus, setReaderStatus] = useState<any>(0)
+  const [readerStatus, setReaderStatus] = useState<any>(0);
   // 获取书籍列表数据
   useEffect(() => {
     props.BlogActions.asyncReaderListAction(currentPage, pageSize, '').then((res: ReaderData) => {
@@ -182,7 +182,7 @@ const Reader = (props: any) => {
   // 点击确定按钮
   const handleConfirm = async () => {
     if (role_type) {
-      return handleNotAdd()
+      return handleNotAdd();
     }
     // 校验form值 校验通过后获取值
     await form.validateFields();
@@ -193,15 +193,15 @@ const Reader = (props: any) => {
     } else {
       data.avatar = imageList;
     }
-    if (data.status === "待阅读") {
+    if (data.status === '待阅读') {
       data.status = 0;
     } else {
-      data.status = readerStatus
+      data.status = readerStatus;
     }
     props.BlogActions.asyncReaderInsertAction({
-      ...data
+      ...data,
     }).then(() => {
-      message.success('书籍添加成功')
+      message.success('书籍添加成功');
       // 重新调用查询接口
       props.BlogActions.asyncReaderListAction(currentPage, pageSize, '').then((res: ReaderData) => {
         let { data, totalCount, page, pageSize } = res.data as unknown as ReaderData;
@@ -229,7 +229,7 @@ const Reader = (props: any) => {
     setIsModalUpdateOpen(true);
     const statusString = item.status.toString();
     updateForm.setFieldsValue({ ...item, status: statusString });
-    if (typeof (item.avatar) === 'string') {
+    if (typeof item.avatar === 'string') {
       let data = item.avatar;
       let start = data.indexOf('images');
       let name = data.substring(start);
@@ -249,17 +249,12 @@ const Reader = (props: any) => {
       return handleNotUpdate();
     }
     let value = updateForm.getFieldsValue();
-    if (value.status === "待阅读") {
+
+    if (value.status === '待阅读') {
       value.status = 0;
     }
-    if (Boolean(imageList)) {
-      value.avatar = imageList
-    }
-    if (Array.isArray(value.avatar)) {
-      value.avatar = value.avatar[0].thumbUrl
-    }
-    if (typeof value.avatar === 'object') {
-      value.avatar = value.avatar?.url
+    if (imageList) {
+      value.avatar = imageList;
     }
     props.BlogActions.asyncReaderUpdateAction({
       name: value.name,
@@ -280,6 +275,7 @@ const Reader = (props: any) => {
         setCurrentPage(page);
         setPageSize(pageSize);
       });
+      setImageList('');
       updateForm.resetFields();
       setIsModalUpdateOpen(false);
     });
